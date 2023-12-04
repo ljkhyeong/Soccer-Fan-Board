@@ -1,4 +1,4 @@
-package jkproject.domain;
+package jkproject.soccer.domain.entity;
 
 import java.time.LocalDateTime;
 
