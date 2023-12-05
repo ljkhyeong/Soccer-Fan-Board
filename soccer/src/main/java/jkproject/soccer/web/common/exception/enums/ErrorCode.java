@@ -1,12 +1,13 @@
-package jkproject.soccer.web.common.exception;
+package jkproject.soccer.web.common.exception.enums;
 
 import org.springframework.http.HttpStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum ErrorCode {
 
 	INVALID_STUDENT_ID(HttpStatus.BAD_REQUEST, "존재하지 않는 회원");
