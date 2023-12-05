@@ -1,4 +1,4 @@
-package jkproject.soccer.api.dto.common.response;
+package jkproject.soccer.api.common.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,8 @@ public class Response<T> {
 
 	private String resultCode;
 	private T result;
+
+	// TODO 스프링의 메시지 컨버터가 해당 객체를 JSON으로 변환해서 Response를 줘야함.
 
 	public static Response<Void> error(String errorCode) {
 		return new Response<>(errorCode, null);
@@ -25,5 +27,5 @@ public class Response<T> {
 	public static <T> Response<T> success(T result) {
 		return new Response<>("SUCCESS", result);
 	}
-	
+
 }
