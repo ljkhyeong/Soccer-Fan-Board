@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jkproject.soccer.api.dto.user.request.UserUpdateRequestDto;
 import jkproject.soccer.domain.entity.BaseTimeEntity;
 import jkproject.soccer.domain.entity.board.comment.Comment;
 import jkproject.soccer.domain.entity.board.post.Post;
@@ -41,12 +42,16 @@ public class User extends BaseTimeEntity {
 	private List<Comment> comments = new ArrayList<>();
 
 	@Builder
-	public User(String loginId, String password, String nickname, String email, String phoneNumber, List<Post> posts) {
+	public User(String loginId, String password, String nickname, String email, String phoneNumber) {
 		this.loginId = loginId;
 		this.password = password;
 		this.nickname = nickname;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.posts = posts;
+	}
+
+	public void updateUserData(UserUpdateRequestDto requestDto) {
+		nickname = requestDto.getNickname();
+		password = requestDto.getPassword();
 	}
 }

@@ -1,23 +1,36 @@
 package jkproject.soccer.domain.service.user;
 
+import org.springframework.context.ApplicationContextException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jkproject.soccer.api.dto.user.UserAuthenticationDto;
 import jkproject.soccer.api.dto.user.request.UserCreateRequestDto;
+import jkproject.soccer.api.dto.user.request.UserUpdateRequestDto;
+import jkproject.soccer.domain.entity.user.User;
 import jkproject.soccer.domain.repository.user.UserRepository;
+import jkproject.soccer.web.common.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
-
+	// TODO 생성자 주입, 필드 주입, 세터 주입의 차이점 장단점.
 	private final UserRepository userRepository;
 
 	public void createUser(UserCreateRequestDto requestDto) {
 		userRepository.save(requestDto.toEntity());
 	}
-	// TODO 생성자 주입, 필드 주입, 세터 주입의 차이점 장단점.
 
+	public void updateUser(UserUpdateRequestDto requestDto, UserAuthenticationDto userDto) {
+		User foundUser = userRepository.findById(userDto.getUserId())
+			.orElseThrow(() -> new ApplicationContextException(ErrorCode.NON_EXISTENT_USER_ID.getMessage()));
+		//TODO Exception 클래스 생성하고 바꿔줘야함. 일단 임시로 이렇게
+
+		foundUser.updateUserData(requestDto);
+		userDto.setNickname(requestDto.getNickname());
+		//TODO 변경한 사항에만 적용하도록 리팩토링 필요. 사용자는 비번 안바꿨는데 실수로 바뀔 가능성 존재
+	}
 
 }
