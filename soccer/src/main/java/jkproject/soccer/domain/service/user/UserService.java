@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jkproject.soccer.api.dto.user.UserAuthenticationDto;
 import jkproject.soccer.api.dto.user.request.UserCreateRequestDto;
 import jkproject.soccer.api.dto.user.request.UserUpdateRequestDto;
+import jkproject.soccer.api.dto.user.response.UserCreateResponseDto;
 import jkproject.soccer.domain.entity.user.User;
 import jkproject.soccer.domain.repository.user.UserRepository;
 import jkproject.soccer.web.common.exception.enums.ErrorCode;
@@ -19,8 +20,9 @@ public class UserService {
 	// TODO 생성자 주입, 필드 주입, 세터 주입의 차이점 장단점.
 	private final UserRepository userRepository;
 
-	public void createUser(UserCreateRequestDto requestDto) {
-		userRepository.save(requestDto.toEntity());
+	public UserCreateResponseDto createUser(UserCreateRequestDto requestDto) {
+		User savedUser = userRepository.save(requestDto.toEntity());
+		return UserCreateResponseDto.from(savedUser);
 	}
 
 	public void updateUser(UserUpdateRequestDto requestDto, UserAuthenticationDto userDto) {

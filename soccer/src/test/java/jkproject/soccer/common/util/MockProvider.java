@@ -9,10 +9,10 @@ public class MockProvider {
 
 	public static User getMockUser() {
 		return User.builder()
-			.loginId("testUser")
+			.loginId("test")
 			.password("password")
 			.nickname("안녕")
-			.email("hihi@naver.com")
+			.email("test@test.com")
 			.phoneNumber("010-2222-3333")
 			.build();
 	}

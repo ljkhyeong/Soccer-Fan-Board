@@ -1,5 +1,6 @@
 package jkproject.soccer.api.dto.user;
 
+import jkproject.soccer.domain.entity.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,4 +25,13 @@ public class UserAuthenticationDto {
 		this.nickname = nickname;
 		this.email = email;
 	}
+
+	public static UserAuthenticationDto from(User user) {
+		return UserAuthenticationDto.builder()
+			.loginId(user.getLoginId())
+			.nickname(user.getNickname())
+			.email(user.getEmail())
+			.build();
+	}
+
 }
