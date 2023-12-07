@@ -34,6 +34,9 @@ public class UserService {
 	}
 
 	public void deleteUser(UserAuthenticationDto userDto) {
-		userRepository.deleteById(userDto.getUserId());
+		User foundUser = userRepository.findById(userDto.getUserId())
+			.orElseThrow(() -> new ApplicationContextException(ErrorCode.NON_EXISTENT_USER_ID.getMessage()));
+
+		userRepository.delete(foundUser);
 	}
 }
