@@ -33,4 +33,7 @@ public class UserService {
 		//TODO 변경한 사항에만 적용하도록 리팩토링 필요. 사용자는 비번 안바꿨는데 실수로 바뀔 가능성 존재
 	}
 
+	public void deleteUser(UserAuthenticationDto userDto) {
+		userRepository.deleteById(userDto.getUserId());
+	}
 }
