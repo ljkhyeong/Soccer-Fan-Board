@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jkproject.soccer.api.dto.board.post.request.PostCreateRequestDto;
 import jkproject.soccer.api.dto.board.post.response.PostListResponseDto;
 import jkproject.soccer.domain.entity.board.post.Post;
 import jkproject.soccer.domain.repository.board.post.PostRepository;
@@ -21,5 +22,11 @@ public class PostService {
 		Page<Post> posts = postRepository.findAll(pageable);
 
 		return posts.map(PostListResponseDto::from);
+	}
+
+	@Transactional
+	public void createPost(PostCreateRequestDto requestDto) {
+		Post post = requestDto.toEntity();
+		postRepository.save(post);
 	}
 }
