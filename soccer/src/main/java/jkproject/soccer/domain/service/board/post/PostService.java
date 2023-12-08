@@ -1,14 +1,17 @@
 package jkproject.soccer.domain.service.board.post;
 
+import org.springframework.context.ApplicationContextException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jkproject.soccer.api.dto.board.post.request.PostCreateRequestDto;
+import jkproject.soccer.api.dto.board.post.response.PostDetailResponseDto;
 import jkproject.soccer.api.dto.board.post.response.PostListResponseDto;
 import jkproject.soccer.domain.entity.board.post.Post;
 import jkproject.soccer.domain.repository.board.post.PostRepository;
+import jkproject.soccer.web.common.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -28,5 +31,12 @@ public class PostService {
 	public void createPost(PostCreateRequestDto requestDto) {
 		Post post = requestDto.toEntity();
 		postRepository.save(post);
+	}
+
+	public PostDetailResponseDto readPost(Long postId) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new ApplicationContextException(ErrorCode.NON_EXISTENT_POST_ID.getMessage()));
+
+		return PostDetailResponseDto.from(post);
 	}
 }

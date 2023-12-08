@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PostListResponseDto {
-	Long postId;
-	String title;
+	private Long postId;
+	private String title;
 
 	public static PostListResponseDto from(Post post) {
 		return PostListResponseDto.builder()
