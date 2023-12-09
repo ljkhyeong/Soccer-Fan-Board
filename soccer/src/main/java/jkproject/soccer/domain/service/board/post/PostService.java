@@ -29,6 +29,7 @@ public class PostService {
 
 	@Transactional
 	public void createPost(PostCreateRequestDto requestDto) {
+		//TODO User 넣어야함
 		Post post = requestDto.toEntity();
 		postRepository.save(post);
 	}

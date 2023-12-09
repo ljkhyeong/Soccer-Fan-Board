@@ -30,6 +30,7 @@ public class CommentService {
 		return comments.map(CommentListResponseDto::from);
 	}
 
+	@Transactional
 	public void createComment(Long postId, CommentCreateRequestDto requestDto) {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new ApplicationContextException(ErrorCode.NON_EXISTENT_POST_ID.getMessage()));
