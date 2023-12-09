@@ -33,7 +33,9 @@ public class Comment extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "comment_id")
 	private Long commentId;
+	@Column(nullable = false)
 	private String commenter;
+	@Column(nullable = false)
 	private String comment;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")

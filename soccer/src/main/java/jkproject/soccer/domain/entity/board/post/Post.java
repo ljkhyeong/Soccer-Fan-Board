@@ -13,7 +13,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import jkproject.soccer.domain.entity.BaseTimeEntity;
 import jkproject.soccer.domain.entity.board.comment.Comment;
 import jkproject.soccer.domain.entity.user.User;
@@ -32,10 +31,11 @@ public class Post extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "post_id")
 	private Long postId;
-	@NotNull
+	@Column(nullable = false)
 	private String title;
-	@NotNull
+	@Column(nullable = false)
 	private String content;
+	@Column(nullable = false)
 	private String writer;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
