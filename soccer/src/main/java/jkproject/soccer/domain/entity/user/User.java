@@ -14,6 +14,7 @@ import jkproject.soccer.api.dto.user.request.UserUpdateRequestDto;
 import jkproject.soccer.domain.entity.BaseTimeEntity;
 import jkproject.soccer.domain.entity.board.comment.Comment;
 import jkproject.soccer.domain.entity.board.post.Post;
+import jkproject.soccer.domain.enums.user.UserRole;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,6 +39,8 @@ public class User extends BaseTimeEntity {
 	private String email;
 	@Column(name = "phone_number")
 	private String phoneNumber;
+	@Column(nullable = false)
+	private UserRole role;
 	@OneToMany(mappedBy = "user")
 	private List<Post> posts = new ArrayList<>();
 	@OneToMany(mappedBy = "user")
