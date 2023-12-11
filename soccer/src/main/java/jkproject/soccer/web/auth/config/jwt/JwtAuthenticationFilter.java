@@ -1,4 +1,4 @@
-package jkproject.soccer.web.auth.jwt;
+package jkproject.soccer.web.auth.config.jwt;
 
 import java.io.IOException;
 
@@ -42,6 +42,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			UsernamePasswordAuthenticationToken authentication = jwtTokenProvider.getAuthentication(token);
 			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
+		} catch (RuntimeException e) {
+			filterChain.doFilter(request, response);
+			return;
 		}
+		filterChain.doFilter(request, response);
 	}
 }

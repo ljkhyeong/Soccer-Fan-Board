@@ -1,4 +1,4 @@
-package jkproject.soccer.web.auth.jwt;
+package jkproject.soccer.web.auth.config.jwt;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
