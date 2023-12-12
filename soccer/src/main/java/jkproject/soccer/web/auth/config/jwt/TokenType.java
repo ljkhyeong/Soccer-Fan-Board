@@ -24,7 +24,7 @@ public enum TokenType {
 		return createCookieFrom(token, getValidTimeSec());
 	}
 
-	public ResponseCookie removeCookie() {
+	public ResponseCookie removalCookie() {
 		return createCookieFrom("", 0);
 	}
 

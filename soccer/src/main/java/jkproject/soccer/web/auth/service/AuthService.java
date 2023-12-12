@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jkproject.soccer.api.dto.auth.request.LoginRequestDto;
 import jkproject.soccer.api.dto.auth.response.LoginResponseDto;
+import jkproject.soccer.api.dto.auth.response.RefreshResponseDto;
 import jkproject.soccer.domain.entity.user.User;
 import jkproject.soccer.domain.repository.user.UserRepository;
 import jkproject.soccer.web.auth.config.jwt.JwtTokenProvider;
@@ -19,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class AuthService {
 
 	private final PasswordEncoder passwordEncoder;
@@ -35,11 +36,38 @@ public class AuthService {
 		String accessToken = jwtTokenProvider.generateToken(loginId, TokenType.ACCESS);
 		String refreshToken = refreshTokenRepository.findRefreshTokenByLoginId(loginId)
 			.orElseGet(() -> createAndSaveRefreshToken(loginId));
-		
+
 		return LoginResponseDto.builder()
 			.accessToken(accessToken)
 			.refreshToken(refreshToken)
 			.build();
+	}
+
+	public RefreshResponseDto refreshAccessToken(String refreshToken) {
+		if (refreshToken.isBlank()) {
+			throw new ApplicationContextException(ErrorCode.NOT_FOUND_TOKEN.getMessage());
+		}
+
+		String loginId = jwtTokenProvider.getSubject(refreshToken);
+		refreshTokenRepository.findRefreshTokenByLoginId(loginId)
+			.filter(foundRefreshToken -> foundRefreshToken.equals(refreshToken))
+			.orElseThrow(() -> new ApplicationContextException(ErrorCode.INVALID_TOKEN.getMessage()));
+
+		String accessToken = jwtTokenProvider.generateToken(loginId, TokenType.ACCESS);
+
+		return RefreshResponseDto.builder()
+			.accessToken(accessToken)
+			.refreshToken(refreshToken)
+			.build();
+	}
+
+	@Transactional
+	public void disableRefreshToken(String refreshToken) {
+		if (refreshToken.isBlank()) {
+			throw new ApplicationContextException(ErrorCode.NOT_FOUND_TOKEN.getMessage());
+		}
+		String loginId = jwtTokenProvider.getSubject(refreshToken);
+		refreshTokenRepository.deleteByLoginId(loginId);
 	}
 
 	private User validateLoginIdAndPassword(LoginRequestDto requestDto) {
