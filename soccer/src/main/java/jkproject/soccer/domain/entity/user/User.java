@@ -59,4 +59,8 @@ public class User extends BaseTimeEntity {
 		nickname = requestDto.getNickname();
 		password = requestDto.getPassword();
 	}
+
+	public void updatePassword(String password) {
+		this.password = password;
+	}
 }

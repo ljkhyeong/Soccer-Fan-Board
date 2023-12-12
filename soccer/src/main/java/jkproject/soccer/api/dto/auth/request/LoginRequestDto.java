@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class LoginRequestDto {
 	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
-	private String id;
+	private String loginId;
 	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
 	private String password;
 }
