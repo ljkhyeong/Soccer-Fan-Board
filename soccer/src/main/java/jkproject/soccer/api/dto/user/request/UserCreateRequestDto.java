@@ -1,24 +1,22 @@
 package jkproject.soccer.api.dto.user.request;
 
-
 import jakarta.validation.constraints.NotBlank;
 import jkproject.soccer.domain.entity.user.User;
-import jkproject.soccer.web.common.exception.enums.ErrorCode;
+import jkproject.soccer.web.common.exception.enums.ValidationMessage;
 import lombok.Data;
-
 
 @Data
 public class UserCreateRequestDto {
 
-	@NotBlank
+	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
 	private String loginId;
-	@NotBlank
+	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
 	private String password;
-	@NotBlank
+	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
 	private String nickname;
-	@NotBlank
+	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
 	private String email;
-	@NotBlank
+	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
 	private String phoneNumber;
 
 	public User toEntity() {
@@ -30,6 +28,5 @@ public class UserCreateRequestDto {
 			.phoneNumber(phoneNumber)
 			.build();
 	}
-
 
 }
