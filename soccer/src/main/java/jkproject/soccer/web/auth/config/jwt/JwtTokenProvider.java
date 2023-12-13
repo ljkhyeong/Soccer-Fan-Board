@@ -30,15 +30,15 @@ public class JwtTokenProvider {
 
 	@Value("${jwt.secret.key}")
 	private String secretKey;
-	private byte[] keyBytes;
+	private Key key;
 
 	@PostConstruct
 	private void init() {
-		keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
+		key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
 	}
 
 	private Key getKey() {
-		return Keys.hmacShaKeyFor(keyBytes);
+		return key;
 	}
 
 	public String generateToken(String subject, TokenType tokenType) {
@@ -54,18 +54,18 @@ public class JwtTokenProvider {
 			.compact();
 	}
 
-	private Cookie findCookieByName(String name, HttpServletRequest request) {
+	private Optional<Cookie> findCookieByName(String name, HttpServletRequest request) {
 		Cookie[] cookies = Optional.ofNullable(request.getCookies())
 			.orElse(new Cookie[0]);
 		return Arrays.stream(cookies)
 			.filter(cookie -> cookie.getName().equals(name))
-			.findFirst()
-			.orElse(new Cookie(name, null));
+			.findFirst();
 	}
 
 	public String resolveToken(HttpServletRequest request, TokenType tokenType) {
-		Cookie foundCookie = findCookieByName(tokenType.getName(), request);
-		return foundCookie.getValue();
+		return findCookieByName(tokenType.getName(), request)
+			.map(Cookie::getValue)
+			.orElse(null);
 	}
 
 	private String getId(String token) {
