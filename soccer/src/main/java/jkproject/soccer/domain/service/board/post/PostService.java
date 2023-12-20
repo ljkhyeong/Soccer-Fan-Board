@@ -9,8 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import jkproject.soccer.api.dto.board.post.request.PostCreateRequestDto;
 import jkproject.soccer.api.dto.board.post.response.PostDetailResponseDto;
 import jkproject.soccer.api.dto.board.post.response.PostListResponseDto;
+import jkproject.soccer.api.dto.user.UserAuthenticationDto;
 import jkproject.soccer.domain.entity.board.post.Post;
+import jkproject.soccer.domain.entity.user.User;
 import jkproject.soccer.domain.repository.board.post.PostRepository;
+import jkproject.soccer.domain.repository.user.UserRepository;
 import jkproject.soccer.web.common.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class PostService {
 
 	private final PostRepository postRepository;
+	private final UserRepository userRepository;
 
 	public Page<PostListResponseDto> lookupAllPosts(Pageable pageable) {
 		Page<Post> posts = postRepository.findAll(pageable);
@@ -28,9 +32,11 @@ public class PostService {
 	}
 
 	@Transactional
-	public void createPost(PostCreateRequestDto requestDto) {
+	public void createPost(PostCreateRequestDto requestDto, UserAuthenticationDto userDto) {
 		//TODO User 넣어야함
-		Post post = requestDto.toEntity();
+		User user = userRepository.findByLoginId(userDto.getLoginId())
+			.orElseThrow(() -> new ApplicationContextException(ErrorCode.NON_EXISTENT_USER_ID.getMessage()));
+		Post post = requestDto.toEntity(user);
 		postRepository.save(post);
 	}
 

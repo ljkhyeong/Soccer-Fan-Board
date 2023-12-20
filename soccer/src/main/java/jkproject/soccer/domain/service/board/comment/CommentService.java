@@ -8,8 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jkproject.soccer.api.dto.board.comment.request.CommentCreateRequestDto;
 import jkproject.soccer.api.dto.board.comment.response.CommentListResponseDto;
+import jkproject.soccer.api.dto.user.UserAuthenticationDto;
 import jkproject.soccer.domain.entity.board.comment.Comment;
 import jkproject.soccer.domain.entity.board.post.Post;
+import jkproject.soccer.domain.entity.user.User;
 import jkproject.soccer.domain.repository.board.comment.CommentRepository;
 import jkproject.soccer.domain.repository.board.post.PostRepository;
 import jkproject.soccer.domain.repository.user.UserRepository;
@@ -31,11 +33,13 @@ public class CommentService {
 	}
 
 	@Transactional
-	public void createComment(Long postId, CommentCreateRequestDto requestDto) {
+	public void createComment(Long postId, CommentCreateRequestDto requestDto, UserAuthenticationDto userDto) {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new ApplicationContextException(ErrorCode.NON_EXISTENT_POST_ID.getMessage()));
 		// TODO User도 넣어야함
-		Comment comment = requestDto.toEntity(post);
+		User user = userRepository.findByLoginId(userDto.getLoginId())
+			.orElseThrow(() -> new ApplicationContextException(ErrorCode.NON_EXISTENT_USER_ID.getMessage()));
+		Comment comment = requestDto.toEntity(user, post);
 		commentRepository.save(comment);
 	}
 }
