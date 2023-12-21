@@ -1,15 +1,30 @@
 import { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../../css/LoginModal.css';
+import axios from "axios";
 
 const LoginModal = (props) => {
     const [loginId, setLoginId] = useState('');
     const [password, setPassword] = useState('');
+    const [loginError, setLoginError] = useState('');
 
     const handleSignIn = (event) => {
 
+        if (loginId && password) {
+            axios.post("http://localhost:8080/api/v1/auth/login", {
+                loginId: loginId,
+                password: password
+            }).then((response) => {
+                console.log(response);
+                props.onHide();
+            }).catch((error) => {
+                console.log(error);
+                setLoginError(error.response.data.result);
+            })
+        } else {
+            setLoginError("아이디 혹은 비밀번호를 입력해주세요.");
+        }
         // 로그인 로직 처리
-        console.log('로그인 시도: ', loginId, password);
     };
 
     return (
@@ -39,11 +54,12 @@ const LoginModal = (props) => {
                             />
                     </Form.Group>
                     <Button variant="primary" onClick={handleSignIn}>로그인</Button>
+                    {loginError && <Form.Text className="login-error">{loginError}</Form.Text>}
                 </Form>
             </Modal.Body>
             <Modal.Footer>
                 <div className="d-flex justify-content-around mt-3">
-                    <a href="#" className="btn btn-outline-primary">계정 생성</a>
+                    <a href="#" className="btn btn-outline-primary" onClick={() => props.toggleModals("join")}>계정 생성</a>
                     <a href="#" className="btn btn-outline-secondary">비밀번호 찾기</a>
                 </div>
             </Modal.Footer>
