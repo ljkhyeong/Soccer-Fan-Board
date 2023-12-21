@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "../../css/Main.css";
 
 
@@ -17,15 +18,15 @@ return (
             </div>
             National Team
             <div id="national-logos">
-                <div class="country">
+                <div className="country">
                     <img src="../soccer/customicondesign-flags-png/png/32/England-flag.png" alt="Aland Islands"/>
                     <p>England</p>
                 </div>
-                <div class="country">
+                <div className="country">
                     <img src="../soccer/customicondesign-flags-png/png/32/Spain-flag.png" alt="Aland Islands"/>
                     <p>Spain</p>
                 </div>
-                <div class="country">
+                <div className="country">
                     <img src="../soccer/customicondesign-flags-png/png/32/Germany-flag.png" alt="Aland Islands"/>
                     <p>Germany</p>
                 </div>
@@ -33,15 +34,15 @@ return (
 
             League
             <div id="national-logos">
-                <div class="country">
+                <div className="country">
                     <img src="../soccer/customicondesign-flags-png/png/32/England-flag.png" alt="Aland Islands"/>
                     <p>England</p>
                 </div>
-                <div class="country">
+                <div className="country">
                     <img src="../soccer/customicondesign-flags-png/png/32/Spain-flag.png" alt="Aland Islands"/>
                     <p>Spain</p>
                 </div>
-                <div class="country">
+                <div className="country">
                     <img src="../soccer/customicondesign-flags-png/png/32/Germany-flag.png" alt="Aland Islands"/>
                     <p>Germany</p>
                 </div>

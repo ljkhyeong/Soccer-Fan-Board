@@ -5,11 +5,23 @@ import Board from '../team/Board';
 import {useState} from "react";
 import Intro from "../team/Intro";
 import LoginModal from "../modal/LoginModal";
+import JoinModal from "../modal/JoinModal";
+import loginModal from "../modal/LoginModal";
 const Team = () => {
 
     const [showContainer, setShowContainer] = useState('intro');
-    const [showModal, setShowModal] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
+    const [showJoinModal, setShowJoinModal] = useState(false);
 
+    const toggleModals = (modal) => {
+        if (modal === 'login') {
+            setShowLoginModal(true);
+            setShowJoinModal(false);
+        } else if (modal === 'join') {
+            setShowLoginModal(false);
+            setShowJoinModal(true);
+        }
+    }
 
     return (
         <Container fluid className="d-flex" id="wrapper">
@@ -27,7 +39,8 @@ const Team = () => {
 
                 </Nav>
             </Col>
-            <LoginModal show={showModal} onHide={() => setShowModal(false)}/>
+            <LoginModal show={showLoginModal} onHide={() => setShowLoginModal(false)} toggleModals={toggleModals}/>
+            <JoinModal show={showJoinModal} onHide={() => setShowJoinModal(false)} toggleModals={toggleModals}/>
             <Col id="page-content-wrapper">
                 <Navbar expand="lg" className="navbar-light bg-light border-bottom">
                     <Container fluid>
@@ -37,7 +50,7 @@ const Team = () => {
                             <Nav>
                                 <Nav.Link as={Link} to="/" className="nav-link active">Home</Nav.Link>
                                 <Nav.Link href="#!" className="nav-link"
-                                          onClick={() => setShowModal(true)}>Login</Nav.Link>
+                                          onClick={() => setShowLoginModal(true)}>Login</Nav.Link>
                                 <NavDropdown title="Dropdown" id="navbarDropdown">
                                     <NavDropdown.Item href="#!">Action</NavDropdown.Item>
                                     <NavDropdown.Item href="#!">Another action</NavDropdown.Item>
