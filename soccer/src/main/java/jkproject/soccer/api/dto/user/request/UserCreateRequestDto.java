@@ -2,6 +2,7 @@ package jkproject.soccer.api.dto.user.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jkproject.soccer.domain.entity.user.User;
+import jkproject.soccer.domain.enums.user.UserRole;
 import jkproject.soccer.web.common.exception.enums.ValidationMessage;
 import lombok.Data;
 
@@ -18,6 +19,7 @@ public class UserCreateRequestDto {
 	private String email;
 	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
 	private String phoneNumber;
+	private UserRole role;
 
 	public User toEntity() {
 		return User.builder()
@@ -26,6 +28,7 @@ public class UserCreateRequestDto {
 			.nickname(nickname)
 			.email(email)
 			.phoneNumber(phoneNumber)
+			.role(role)
 			.build();
 	}
 

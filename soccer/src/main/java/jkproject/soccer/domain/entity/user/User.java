@@ -5,6 +5,8 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,9 +32,9 @@ public class User extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
 	private Long userId;
-	@Column(name = "login_id", nullable = false)
+	@Column(name = "login_id")
 	private String loginId;
-	@Column(nullable = false)
+	@Column
 	private String password;
 	@Column(nullable = false)
 	private String nickname;
@@ -40,6 +42,7 @@ public class User extends BaseTimeEntity {
 	@Column(name = "phone_number")
 	private String phoneNumber;
 	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
 	private UserRole role;
 	@OneToMany(mappedBy = "user")
 	private List<Post> posts = new ArrayList<>();
@@ -47,12 +50,13 @@ public class User extends BaseTimeEntity {
 	private List<Comment> comments = new ArrayList<>();
 
 	@Builder
-	public User(String loginId, String password, String nickname, String email, String phoneNumber) {
+	public User(String loginId, String password, String nickname, String email, String phoneNumber, UserRole role) {
 		this.loginId = loginId;
 		this.password = password;
 		this.nickname = nickname;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
+		this.role = role;
 	}
 
 	public void updateUserData(UserUpdateRequestDto requestDto) {
