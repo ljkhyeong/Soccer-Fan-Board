@@ -15,7 +15,7 @@ import jkproject.soccer.domain.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserApiController {
 

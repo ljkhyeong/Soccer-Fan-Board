@@ -13,6 +13,7 @@ import jkproject.soccer.domain.repository.user.UserRepository;
 import jkproject.soccer.web.auth.config.jwt.JwtTokenProvider;
 import jkproject.soccer.web.auth.config.jwt.TokenType;
 import jkproject.soccer.web.auth.repository.RefreshTokenRepository;
+import jkproject.soccer.web.common.exception.ApplicationException;
 import jkproject.soccer.web.common.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,10 +73,10 @@ public class AuthService {
 
 	private User validateLoginIdAndPassword(LoginRequestDto requestDto) {
 		User user = userRepository.findByLoginId(requestDto.getLoginId())
-			.orElseThrow(() -> new ApplicationContextException(ErrorCode.NON_EXISTENT_USER_ID.getMessage()));
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 
 		if (passwordEncoder.matches(user.getPassword(), requestDto.getPassword())) {
-			throw new ApplicationContextException(ErrorCode.INVALID_PASSWORD.getMessage());
+			throw new ApplicationException(ErrorCode.INVALID_PASSWORD);
 		}
 		return user;
 	}
