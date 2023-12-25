@@ -1,6 +1,5 @@
 package jkproject.soccer.domain.service.user;
 
-import org.springframework.context.ApplicationContextException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +10,7 @@ import jkproject.soccer.api.dto.user.request.UserUpdateRequestDto;
 import jkproject.soccer.api.dto.user.response.UserCreateResponseDto;
 import jkproject.soccer.domain.entity.user.User;
 import jkproject.soccer.domain.repository.user.UserRepository;
+import jkproject.soccer.web.common.exception.ApplicationException;
 import jkproject.soccer.web.common.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +32,7 @@ public class UserService {
 
 	public void updateUser(UserUpdateRequestDto requestDto, UserAuthenticationDto userDto) {
 		User foundUser = userRepository.findByLoginId(userDto.getLoginId())
-			.orElseThrow(() -> new ApplicationContextException(ErrorCode.NON_EXISTENT_USER_ID.getMessage()));
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 		//TODO Exception 클래스 생성하고 바꿔줘야함. 일단 임시로 이렇게
 		//TODO userDto에 longId 필드를 추가하고 찾을때마다 longId로 쓰는게 더 낫지않을까?
 
@@ -43,7 +43,7 @@ public class UserService {
 
 	public void deleteUser(UserAuthenticationDto userDto) {
 		User foundUser = userRepository.findByLoginId(userDto.getLoginId())
-			.orElseThrow(() -> new ApplicationContextException(ErrorCode.NON_EXISTENT_USER_ID.getMessage()));
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 
 		userRepository.delete(foundUser);
 	}

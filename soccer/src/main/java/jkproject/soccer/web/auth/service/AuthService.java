@@ -1,6 +1,5 @@
 package jkproject.soccer.web.auth.service;
 
-import org.springframework.context.ApplicationContextException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,13 +45,13 @@ public class AuthService {
 
 	public RefreshResponseDto refreshAccessToken(String refreshToken) {
 		if (refreshToken.isBlank()) {
-			throw new ApplicationContextException(ErrorCode.NOT_FOUND_TOKEN.getMessage());
+			throw new ApplicationException(ErrorCode.NOT_FOUND_TOKEN);
 		}
 
 		String loginId = jwtTokenProvider.getSubject(refreshToken);
 		refreshTokenRepository.findRefreshTokenByLoginId(loginId)
 			.filter(foundRefreshToken -> foundRefreshToken.equals(refreshToken))
-			.orElseThrow(() -> new ApplicationContextException(ErrorCode.INVALID_TOKEN.getMessage()));
+			.orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_TOKEN));
 
 		String accessToken = jwtTokenProvider.generateToken(loginId, TokenType.ACCESS);
 
@@ -65,7 +64,7 @@ public class AuthService {
 	@Transactional
 	public void disableRefreshToken(String refreshToken) {
 		if (refreshToken.isBlank()) {
-			throw new ApplicationContextException(ErrorCode.NOT_FOUND_TOKEN.getMessage());
+			throw new ApplicationException(ErrorCode.NOT_FOUND_TOKEN);
 		}
 		String loginId = jwtTokenProvider.getSubject(refreshToken);
 		refreshTokenRepository.deleteByLoginId(loginId);

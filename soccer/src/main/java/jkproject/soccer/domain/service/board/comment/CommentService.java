@@ -1,6 +1,5 @@
 package jkproject.soccer.domain.service.board.comment;
 
-import org.springframework.context.ApplicationContextException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,6 +14,7 @@ import jkproject.soccer.domain.entity.user.User;
 import jkproject.soccer.domain.repository.board.comment.CommentRepository;
 import jkproject.soccer.domain.repository.board.post.PostRepository;
 import jkproject.soccer.domain.repository.user.UserRepository;
+import jkproject.soccer.web.common.exception.ApplicationException;
 import jkproject.soccer.web.common.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
@@ -35,10 +35,10 @@ public class CommentService {
 	@Transactional
 	public void createComment(Long postId, CommentCreateRequestDto requestDto, UserAuthenticationDto userDto) {
 		Post post = postRepository.findById(postId)
-			.orElseThrow(() -> new ApplicationContextException(ErrorCode.NON_EXISTENT_POST_ID.getMessage()));
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
 		// TODO User도 넣어야함
 		User user = userRepository.findByLoginId(userDto.getLoginId())
-			.orElseThrow(() -> new ApplicationContextException(ErrorCode.NON_EXISTENT_USER_ID.getMessage()));
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 		Comment comment = requestDto.toEntity(user, post);
 		commentRepository.save(comment);
 	}

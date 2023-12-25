@@ -1,6 +1,5 @@
 package jkproject.soccer.domain.service.board.post;
 
-import org.springframework.context.ApplicationContextException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,7 @@ import jkproject.soccer.domain.entity.board.post.Post;
 import jkproject.soccer.domain.entity.user.User;
 import jkproject.soccer.domain.repository.board.post.PostRepository;
 import jkproject.soccer.domain.repository.user.UserRepository;
+import jkproject.soccer.web.common.exception.ApplicationException;
 import jkproject.soccer.web.common.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
@@ -35,14 +35,14 @@ public class PostService {
 	public void createPost(PostCreateRequestDto requestDto, UserAuthenticationDto userDto) {
 		//TODO User 넣어야함
 		User user = userRepository.findByLoginId(userDto.getLoginId())
-			.orElseThrow(() -> new ApplicationContextException(ErrorCode.NON_EXISTENT_USER_ID.getMessage()));
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 		Post post = requestDto.toEntity(user);
 		postRepository.save(post);
 	}
 
 	public PostDetailResponseDto readPost(Long postId) {
 		Post post = postRepository.findById(postId)
-			.orElseThrow(() -> new ApplicationContextException(ErrorCode.NON_EXISTENT_POST_ID.getMessage()));
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
 
 		return PostDetailResponseDto.from(post);
 	}
