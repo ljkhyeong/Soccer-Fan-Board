@@ -2,16 +2,40 @@ import {Button, Container, Col, Nav, Navbar, NavDropdown, Table} from "react-boo
 import { Link } from 'react-router-dom';
 import '../../css/Team.css';
 import Board from '../team/Board';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Intro from "../team/Intro";
 import LoginModal from "../modal/LoginModal";
 import JoinModal from "../modal/JoinModal";
 import loginModal from "../modal/LoginModal";
+import {getAccessToken, logout} from "../../service/ApiService";
+import axios from "axios";
+
+const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
+
 const Team = () => {
 
+    const [isLogin, setIsLogin] = useState(false);
     const [showContainer, setShowContainer] = useState('intro');
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showJoinModal, setShowJoinModal] = useState(false);
+
+    useEffect(() => {
+        if (!getAccessToken()) {
+            axios.post(SPRING_SERVER_URL + '/auth/refresh', {}, {withCredentials: true})
+                .then(() => {
+                    if (getAccessToken()) {
+                        setIsLogin(true);
+                    } else {
+                        setIsLogin(false);
+                    }
+                })
+                .catch((e) => {
+                    console.log(e);
+                })
+        } else {
+            setIsLogin(true);
+        }
+    }, [isLogin]);
 
     const toggleModals = (modal) => {
         if (modal === 'login') {
@@ -22,6 +46,17 @@ const Team = () => {
             setShowJoinModal(true);
         }
     }
+
+    const handleLogout = () => {
+        axios.delete(SPRING_SERVER_URL + '/auth/refresh')
+            .then(() => {
+                alert("로그아웃되었습니다.");
+            }).catch((e) => {
+            console.log(e);
+        })
+        logout();
+        setIsLogin(false);
+    };
 
     return (
         <Container fluid className="d-flex" id="wrapper">
@@ -39,8 +74,13 @@ const Team = () => {
 
                 </Nav>
             </Col>
-            <LoginModal show={showLoginModal} onHide={() => setShowLoginModal(false)} toggleModals={toggleModals}/>
-            <JoinModal show={showJoinModal} onHide={() => setShowJoinModal(false)} toggleModals={toggleModals}/>
+            <LoginModal show={showLoginModal}
+                        onHide={() => setShowLoginModal(false)}
+                        toggleModals={toggleModals}
+                        setIsLogin={setIsLogin}/>
+            <JoinModal show={showJoinModal}
+                       onHide={() => setShowJoinModal(false)}
+                       toggleModals={toggleModals}/>
             <Col id="page-content-wrapper">
                 <Navbar expand="lg" className="navbar-light bg-light border-bottom">
                     <Container fluid>
@@ -49,8 +89,11 @@ const Team = () => {
                         <Navbar.Collapse id="navbarSupportedContent" className="justify-content-end">
                             <Nav>
                                 <Nav.Link as={Link} to="/" className="nav-link active">Home</Nav.Link>
-                                <Nav.Link href="#!" className="nav-link"
+                                {isLogin ? <Nav.Link href="#!" className="nav-link"
+                                                     onClick={() => handleLogout()}>Logout</Nav.Link>
+                                    : <Nav.Link href="#!" className="nav-link"
                                           onClick={() => setShowLoginModal(true)}>Login</Nav.Link>
+                                }
                                 <NavDropdown title="Dropdown" id="navbarDropdown">
                                     <NavDropdown.Item href="#!">Action</NavDropdown.Item>
                                     <NavDropdown.Item href="#!">Another action</NavDropdown.Item>

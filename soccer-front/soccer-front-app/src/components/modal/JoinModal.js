@@ -23,13 +23,14 @@ const JoinModal = (props) => {
                 role: "USER"
             }).then((response) => {
                 console.log(response);
+                alert("회원가입 되었습니다.")
                 props.onHide();
             }).catch((error) => {
                 console.log(error);
                 setJoinError(error.response.data.result);
             })
         } else {
-            setJoinError("아이디 혹은 비밀번호를 입력해주세요.");
+            setJoinError("항목을 모두 입력해주세요.");
         }
         // 로그인 로직 처리
     };

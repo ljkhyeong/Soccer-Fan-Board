@@ -16,6 +16,8 @@ const LoginModal = (props) => {
                 password: password
             }).then((response) => {
                 console.log(response);
+                alert("로그인 되었습니다.")
+                props.setIsLogin(true);
                 props.onHide();
             }).catch((error) => {
                 console.log(error);
