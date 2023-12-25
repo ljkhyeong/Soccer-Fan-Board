@@ -3,6 +3,8 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import '../../css/LoginModal.css';
 import axios from "axios";
 
+const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
+
 const JoinModal = (props) => {
     const [loginId, setLoginId] = useState('');
     const [password, setPassword] = useState('');
@@ -14,7 +16,7 @@ const JoinModal = (props) => {
     const handleJoin = (event) => {
 
         if (loginId && password) {
-            axios.post("http://localhost:8080/api/v1/user", {
+            axios.post(SPRING_SERVER_URL + "/user", {
                 loginId: loginId,
                 password: password,
                 nickname: nickname,
