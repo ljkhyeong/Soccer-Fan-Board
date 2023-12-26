@@ -11,11 +11,13 @@ const JoinModal = (props) => {
     const [nickname, setNickname] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [joinError, setJoinError] = useState('');
+    const [loginIdError, setLoginIdError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [nicknameError, setNicknameError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [phoneNumberError, setPhoneNumberError] = useState('');
 
-    const handleJoin = (event) => {
-
-        if (loginId && password) {
+    const handleJoin = () => {
             axios.post(SPRING_SERVER_URL + "/user", {
                 loginId: loginId,
                 password: password,
@@ -28,14 +30,18 @@ const JoinModal = (props) => {
                 alert("회원가입 되었습니다.")
                 props.onHide();
             }).catch((error) => {
+                let result = error.response.data.result;
                 console.log(error);
-                setJoinError(error.response.data.result);
+                setLoginIdError(result.valid_loginId);
+                setPasswordError(result.valid_password);
+                setNicknameError(result.valid_nickname);
+                setEmailError(result.valid_email);
+                setPhoneNumberError(result.valid_phoneNumber);
             })
-        } else {
-            setJoinError("항목을 모두 입력해주세요.");
-        }
+
         // 로그인 로직 처리
     };
+
 
     return (
         <Modal show={props.show} onHide={props.onHide} centered>
@@ -49,10 +55,10 @@ const JoinModal = (props) => {
                         <Form.Control
                             type="text"
                             required
-                            autoComplete="username"
                             onChange={(e) => setLoginId(e.target.value)}
                             onKeyUp={(e) => {if (e.key === 'Enter') handleJoin()}}
                         />
+                        {loginIdError && <Form.Text className="join-error">{loginIdError}</Form.Text>}
                     </Form.Group>
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>비밀번호</Form.Label>
@@ -62,6 +68,7 @@ const JoinModal = (props) => {
                             onChange={(e) => setPassword(e.target.value)}
                             onKeyUp={(e) => {if (e.key === 'Enter') handleJoin()}}
                         />
+                        {passwordError && <Form.Text className="join-error">{passwordError}</Form.Text>}
                     </Form.Group>
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>닉네임</Form.Label>
@@ -71,6 +78,7 @@ const JoinModal = (props) => {
                             onChange={(e) => setNickname(e.target.value)}
                             onKeyUp={(e) => {if (e.key === 'Enter') handleJoin()}}
                         />
+                        {nicknameError && <Form.Text className="join-error">{nicknameError}</Form.Text>}
                     </Form.Group>
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>이메일</Form.Label>
@@ -80,6 +88,7 @@ const JoinModal = (props) => {
                             onChange={(e) => setEmail(e.target.value)}
                             onKeyUp={(e) => {if (e.key === 'Enter') handleJoin()}}
                         />
+                        {emailError && <Form.Text className="join-error">{emailError}</Form.Text>}
                     </Form.Group>
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>전화번호</Form.Label>
@@ -89,9 +98,10 @@ const JoinModal = (props) => {
                             onChange={(e) => setPhoneNumber(e.target.value)}
                             onKeyUp={(e) => {if (e.key === 'Enter') handleJoin()}}
                         />
+                        {phoneNumberError && <Form.Text className="join-error">{phoneNumberError}</Form.Text>}
                     </Form.Group>
                     <Button variant="primary" onClick={handleJoin}>회원가입</Button>
-                    {joinError && <Form.Text className="join-error">{joinError}</Form.Text>}
+
                 </Form>
             </Modal.Body>
             <Modal.Footer>
