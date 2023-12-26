@@ -48,7 +48,7 @@ const Team = () => {
     }
 
     const handleLogout = () => {
-        axios.delete(SPRING_SERVER_URL + '/auth/refresh')
+        axios.delete(SPRING_SERVER_URL + '/auth/refresh',{withCredentials: true})
             .then(() => {
                 alert("로그아웃되었습니다.");
             }).catch((e) => {
