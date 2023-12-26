@@ -1,5 +1,7 @@
 package jkproject.soccer.web.common.exception;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -18,5 +20,14 @@ public class GlobalExceptionHandler {
 		return ResponseEntity
 			.status(errorCode.getHttpStatus())
 			.body(Response.error(errorCode.name(), errorCode.getMessage()));
+	}
+
+	@ExceptionHandler(CustomValidationException.class)
+	public ResponseEntity<?> handleValidationException(CustomValidationException exception) {
+		ErrorCode errorCode = exception.getErrorCode();
+		Map<String, String> validationMessages = exception.getValidationMessages();
+		return ResponseEntity
+			.status(errorCode.getHttpStatus())
+			.body(Response.error(errorCode.name(), validationMessages));
 	}
 }
