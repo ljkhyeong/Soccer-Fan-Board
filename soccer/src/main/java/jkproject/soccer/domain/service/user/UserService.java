@@ -1,8 +1,12 @@
 package jkproject.soccer.domain.service.user;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
 
 import jkproject.soccer.api.dto.user.UserAuthenticationDto;
 import jkproject.soccer.api.dto.user.request.UserCreateRequestDto;
@@ -46,5 +50,15 @@ public class UserService {
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 
 		userRepository.delete(foundUser);
+	}
+
+	@Transactional(readOnly = true)
+	public Map<String, String> validateCreateUser(Errors errors) {
+		Map<String, String> validateResult = new HashMap<>();
+		errors.getFieldErrors().forEach(
+			(error) -> validateResult.put(String.format("valid_%s", error.getField()),
+				error.getDefaultMessage()));
+
+		return validateResult;
 	}
 }
