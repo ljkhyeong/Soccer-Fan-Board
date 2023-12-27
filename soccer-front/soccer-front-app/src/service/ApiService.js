@@ -1,4 +1,9 @@
+import axios from 'axios';
 export const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
+export const axiosInstance = axios.create({
+    baseURL: SPRING_SERVER_URL,
+    withCredentials: true
+});
 
 export function getAccessToken() {
     const cookies = document.cookie.split(';').map(cookie => cookie.trim());
