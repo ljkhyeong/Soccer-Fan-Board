@@ -1,14 +1,16 @@
 import {Button, Container, Col, Nav, Navbar, NavDropdown, Table} from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import '../../css/Team.css';
-import Board from '../team/Board';
+import Board from '../team/board/Board';
 import {useEffect, useState} from "react";
 import Intro from "../team/Intro";
 import LoginModal from "../modal/LoginModal";
 import JoinModal from "../modal/JoinModal";
+import PostPage from "../team/board/PostPage";
 import loginModal from "../modal/LoginModal";
 import {getAccessToken, logout} from "../../service/ApiService";
 import axios from "axios";
+import {axiosInstance} from "../../service/ApiService";
 
 const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
 
@@ -21,7 +23,7 @@ const Team = () => {
 
     useEffect(() => {
         if (!getAccessToken()) {
-            axios.post(SPRING_SERVER_URL + '/auth/refresh', {}, {withCredentials: true})
+            axiosInstance.post('/auth/refresh', {})
                 .then(() => {
                     if (getAccessToken()) {
                         setIsLogin(true);
@@ -56,6 +58,19 @@ const Team = () => {
         })
         logout();
         setIsLogin(false);
+    };
+
+    const renderContent = () => {
+        switch (showContainer) {
+            case 'intro':
+                return <Intro/>;
+            case 'board':
+                return <Board setShowContainer={setShowContainer}/>;
+            case 'postPage':
+                return <PostPage setShowContainer={setShowContainer}/>;
+            default:
+                return <Intro/>
+        }
     };
 
     return (
@@ -105,7 +120,7 @@ const Team = () => {
                     </Container>
                 </Navbar>
                 <Container fluid>
-                    { showContainer==='board' ? <Board/> : <Intro/>}
+                    {renderContent()}
                 </Container>
             </Col>
         </Container>

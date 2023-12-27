@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../../css/LoginModal.css';
 import axios from "axios";
+import {axiosInstance} from "../../service/ApiService";
 
 const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
 
@@ -13,10 +14,10 @@ const LoginModal = (props) => {
     const handleSignIn = (event) => {
 
         if (loginId && password) {
-            axios.post(SPRING_SERVER_URL + "/auth/login", {
+            axiosInstance.post("/auth/login", {
                 loginId: loginId,
                 password: password
-            },{withCredentials: true}).then((response) => {
+            }).then((response) => {
                 console.log(response);
                 alert("로그인 되었습니다.")
                 props.setIsLogin(true);

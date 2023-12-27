@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+	//TODO 지금은 쿠키에서 토큰을 꺼내오는 방식이지만 확장 시 Authorization 헤더를 이용하도록 수정 필요
 	private final JwtTokenProvider jwtTokenProvider;
 
 	@Override
