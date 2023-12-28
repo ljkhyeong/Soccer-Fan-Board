@@ -14,3 +14,15 @@ export function getAccessToken() {
 export function logout() {
     document.cookie =  "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
+
+export function formatDateTime(dateTimeString) {
+    const date = new Date(dateTimeString);
+    return date.toLocaleString('ko-KR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    }).replace(/\.\d+$/, '');
+}
