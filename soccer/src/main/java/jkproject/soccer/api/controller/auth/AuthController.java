@@ -7,7 +7,9 @@ import java.util.Optional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,9 +38,13 @@ public class AuthController {
 	private final AuthService authService;
 	private final JwtTokenProvider jwtTokenProvider;
 
+	@InitBinder
+	public void validatorBinder(WebDataBinder binder) {
+	}
+
 	@PostMapping("/login")
-	public Response<Void> login(@Valid @RequestBody LoginRequestDto requestDto,
-		HttpServletResponse response, Errors errors) {
+	public Response<Void> login(@Valid @RequestBody LoginRequestDto requestDto, Errors errors
+		, HttpServletResponse response) {
 
 		if (errors.hasErrors()) {
 			Map<String, String> validateResult = authService.validateResultLogin(errors);
