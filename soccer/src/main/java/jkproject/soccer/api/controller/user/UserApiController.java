@@ -40,11 +40,12 @@ public class UserApiController {
 	}
 
 	@PostMapping
-	public Response<Void> createUser(@Valid @RequestBody UserCreateRequestDto requestDto, Errors errors) {
+	public Response<Void> createUser(@Valid @RequestBody UserCreateRequestDto requestDto,
+		Errors errors) {
 
 		if (errors.hasErrors()) {
-			Map<String, String> validResult = userService.validateCreateUser(errors);
-			throw new CustomValidationException(ErrorCode.INVALID_JOIN, validResult);
+			Map<String, String> validateResult = userService.validateResultCreateUser(errors);
+			throw new CustomValidationException(ErrorCode.INVALID_JOIN, validateResult);
 		}
 
 		userService.createUser(requestDto);

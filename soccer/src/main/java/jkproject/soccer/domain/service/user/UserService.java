@@ -53,7 +53,7 @@ public class UserService {
 	}
 
 	@Transactional(readOnly = true)
-	public Map<String, String> validateCreateUser(Errors errors) {
+	public Map<String, String> validateResultCreateUser(Errors errors) {
 		Map<String, String> validateResult = new HashMap<>();
 		errors.getFieldErrors().forEach(
 			(error) -> validateResult.put(String.format("valid_%s", error.getField()),
