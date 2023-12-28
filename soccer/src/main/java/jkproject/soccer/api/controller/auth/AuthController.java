@@ -1,10 +1,12 @@
 package jkproject.soccer.api.controller.auth;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +24,8 @@ import jkproject.soccer.api.dto.auth.response.RefreshResponseDto;
 import jkproject.soccer.web.auth.config.jwt.JwtTokenProvider;
 import jkproject.soccer.web.auth.config.jwt.TokenType;
 import jkproject.soccer.web.auth.service.AuthService;
+import jkproject.soccer.web.common.exception.CustomValidationException;
+import jkproject.soccer.web.common.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -33,7 +37,14 @@ public class AuthController {
 	private final JwtTokenProvider jwtTokenProvider;
 
 	@PostMapping("/login")
-	public Response<Void> login(@RequestBody @Valid LoginRequestDto requestDto, HttpServletResponse response) {
+	public Response<Void> login(@Valid @RequestBody LoginRequestDto requestDto,
+		HttpServletResponse response, Errors errors) {
+
+		if (errors.hasErrors()) {
+			Map<String, String> validateResult = authService.validateResultLogin(errors);
+			throw new CustomValidationException(ErrorCode.INVALID_LOGIN, validateResult);
+		}
+
 		LoginResponseDto responseDto = authService.login(requestDto);
 
 		addTokenCookie(response, responseDto.getAccessToken(), TokenType.ACCESS);

@@ -1,8 +1,12 @@
 package jkproject.soccer.web.auth.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
 
 import jkproject.soccer.api.dto.auth.request.LoginRequestDto;
 import jkproject.soccer.api.dto.auth.response.LoginResponseDto;
@@ -70,6 +74,15 @@ public class AuthService {
 		refreshTokenRepository.deleteByLoginId(loginId);
 	}
 
+	public Map<String, String> validateResultLogin(Errors errors) {
+		Map<String, String> validateResult = new HashMap<>();
+		errors.getFieldErrors().forEach(
+			(error) -> validateResult.put(String.format("valid_%s", error.getField()),
+				error.getDefaultMessage()));
+
+		return validateResult;
+	}
+
 	private User validateLoginIdAndPassword(LoginRequestDto requestDto) {
 		User user = userRepository.findByLoginId(requestDto.getLoginId())
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
@@ -85,4 +98,5 @@ public class AuthService {
 		refreshTokenRepository.save(loginId, refreshToken);
 		return refreshToken;
 	}
+
 }
