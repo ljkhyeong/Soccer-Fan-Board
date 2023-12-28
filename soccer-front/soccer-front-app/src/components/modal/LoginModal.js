@@ -3,33 +3,44 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import '../../css/LoginModal.css';
 import axios from "axios";
 import {axiosInstance} from "../../service/ApiService";
-
-const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
+import {handleKeyDown, handleInputChange, initStateObject} from "../../service/CommonService";
 
 const LoginModal = (props) => {
-    const [loginId, setLoginId] = useState('');
-    const [password, setPassword] = useState('');
-    const [loginError, setLoginError] = useState('');
+    const [errors, setErrors] = useState({
+        noExistError: '',
+        loginIdError: '',
+        passwordError: ''
+    });
+    const [loginForm, setLoginForm] = useState({
+        loginId: '',
+        password: ''
+    })
 
-    const handleSignIn = (event) => {
-
-        if (loginId && password) {
-            axiosInstance.post("/auth/login", {
-                loginId: loginId,
-                password: password
-            }).then((response) => {
-                console.log(response);
-                alert("로그인 되었습니다.")
-                props.setIsLogin(true);
-                props.onHide();
-            }).catch((error) => {
-                console.log(error);
-                setLoginError(error.response.data.result);
-            })
-        } else {
-            setLoginError("아이디 혹은 비밀번호를 입력해주세요.");
-        }
-        // 로그인 로직 처리
+    const handleSignIn = () => {
+        axiosInstance.post("/auth/login", loginForm)
+            .then((response) => {
+            console.log(response);
+            setLoginForm(initStateObject(loginForm));
+            alert("로그인 되었습니다.")
+            props.setIsLogin(true);
+            props.onHide();
+        }).catch((error) => {
+            console.log(error);
+            const errorResult = error.response.data.result;
+            if (typeof errorResult == 'object') {
+                setErrors({
+                    noExistError: '',
+                    loginIdError: errorResult.valid_loginId,
+                    passwordError: errorResult.valid_password
+                });
+            } else {
+                setErrors({
+                    noExistError: errorResult,
+                    loginIdError: '',
+                    passwordError: ''
+                });
+            }
+        })
     };
 
     return (
@@ -42,24 +53,28 @@ const LoginModal = (props) => {
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>아이디</Form.Label>
                         <Form.Control
+                            name="loginId"
                             type="text"
                             required
                             autoComplete="username"
-                            onChange={(e) => setLoginId(e.target.value)}
-                            onKeyUp={(e) => {if (e.key === 'Enter') handleSignIn()}}
+                            onChange={(e) => handleInputChange(e,loginForm, setLoginForm)}
+                            onKeyDown={(e) => handleKeyDown(e,handleSignIn)}
                             />
+                        {errors.loginIdError && <Form.Text className="login-error">{errors.loginIdError}</Form.Text>}
                     </Form.Group>
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>비밀번호</Form.Label>
                         <Form.Control
+                            name="password"
                             type="password"
                             required
-                            onChange={(e) => setPassword(e.target.value)}
-                            onKeyUp={(e) => {if (e.key === 'Enter') handleSignIn()}}
+                            onChange={(e) => handleInputChange(e,loginForm, setLoginForm)}
+                            onKeyDown={(e) => handleKeyDown(e,handleSignIn)}
                             />
+                        {errors.passwordError && <Form.Text className="login-error">{errors.passwordError}</Form.Text>}
                     </Form.Group>
                     <Button variant="primary" onClick={handleSignIn}>로그인</Button>
-                    {loginError && <Form.Text className="login-error">{loginError}</Form.Text>}
+                    {errors.noExistError && <Form.Text className="login-error">{errors.noExistError}</Form.Text>}
                 </Form>
             </Modal.Body>
             <Modal.Footer>
