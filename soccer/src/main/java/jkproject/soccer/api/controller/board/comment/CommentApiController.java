@@ -28,7 +28,7 @@ public class CommentApiController {
 
 	private final CommentService commentService;
 
-	@GetMapping("/post/{postId}/comments")
+	@GetMapping("/posts/{postId}/comments")
 	public Response<Page<CommentListResponseDto>> readComments(@PathVariable Long postId,
 		@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
@@ -37,7 +37,7 @@ public class CommentApiController {
 		return Response.success(dtoList);
 	}
 
-	@PostMapping("/post/{postId}/comment")
+	@PostMapping("/posts/{postId}/comment")
 	public Response<Void> createComment(@PathVariable Long postId,
 		@RequestBody @Valid CommentCreateRequestDto requestDto, Errors errors,
 		@AuthenticationPrincipal UserAuthenticationDto userDto) {

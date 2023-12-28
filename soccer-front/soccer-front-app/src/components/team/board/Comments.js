@@ -14,7 +14,7 @@ const Comments = (props) => {
     }, [reload]);
 
     const renderCommentList = () => {
-        axiosInstance.get(`/post/${props.postId}/comments`)
+        axiosInstance.get(`/posts/${props.postId}/comments`)
             .then(response => {
                 console.log(response);
                 setComments(response.data.result.content);
@@ -24,12 +24,13 @@ const Comments = (props) => {
     }
 
     const handleCommentSubmit = () => {
-        axiosInstance.post(`/post/${props.postId}/comment`, {
+        axiosInstance.post(`/posts/${props.postId}/comment`, {
             comment : newComment
         }).then(response => {
             console.log(response);
-            setReload(!reload);
+            setError('');
             resetStates(setNewComment);
+            setReload(!reload);
         }).catch(error => {
             console.log(error);
             const errorResult = error.response.data.result;

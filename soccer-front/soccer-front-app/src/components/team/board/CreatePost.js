@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {Container, Form, Button} from "react-bootstrap";
 import {axiosInstance} from "../../../service/ApiService";
-import {handleInputChange, handleKeyDown} from "../../../service/CommonService";
+import {handleInputChange, handleKeyDown, initStateObject} from "../../../service/CommonService";
 
 const CreatePost = (props) => {
 
@@ -16,9 +16,10 @@ const CreatePost = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axiosInstance.post('/post', postForm)
+        axiosInstance.post('/posts', postForm)
             .then(response => {
             console.log(response);
+            setErrors(initStateObject(errors));
             alert("게시글 작성 성공");
             props.setShowContainer('board');
         }).catch(error => {

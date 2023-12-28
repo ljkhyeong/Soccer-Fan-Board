@@ -16,11 +16,14 @@ const LoginModal = (props) => {
         password: ''
     })
 
-    const handleSignIn = () => {
+    const handleSignIn = (e) => {
+        e.preventDefault();
+
         axiosInstance.post("/auth/login", loginForm)
             .then((response) => {
             console.log(response);
             setLoginForm(initStateObject(loginForm));
+            setErrors(initStateObject(errors));
             alert("로그인 되었습니다.")
             props.setIsLogin(true);
             props.onHide();
@@ -73,8 +76,8 @@ const LoginModal = (props) => {
                             />
                         {errors.passwordError && <Form.Text className="valid-error">{errors.passwordError}</Form.Text>}
                     </Form.Group>
-                    <Button variant="primary" onClick={handleSignIn}>로그인</Button>
                     {errors.noExistError && <Form.Text className="valid-error">{errors.noExistError}</Form.Text>}
+                    <Button variant="primary" onClick={handleSignIn}>로그인</Button>
                 </Form>
             </Modal.Body>
             <Modal.Footer>

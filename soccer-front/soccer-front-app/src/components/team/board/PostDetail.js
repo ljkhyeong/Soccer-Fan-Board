@@ -13,7 +13,7 @@ const PostDetail = (props) => {
     }, []);
 
     const renderPostDetail = () => {
-        axiosInstance.get(`/post/${props.postId}`)
+        axiosInstance.get(`/posts/${props.postId}`)
             .then(response => {
                 console.log(response)
                 setPostDetail(response.data.result)

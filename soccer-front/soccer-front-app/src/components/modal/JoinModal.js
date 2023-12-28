@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../../css/LoginModal.css';
 import axios from "axios";
-import {handleInputChange, handleKeyDown} from "../../service/CommonService";
+import {handleInputChange, handleKeyDown, initStateObject} from "../../service/CommonService";
 
 const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
 
@@ -30,6 +30,7 @@ const JoinModal = (props) => {
             ).then((response) => {
                 console.log(response);
                 setJoinForm(initialJoinForm);
+                setErrors(initStateObject(errors));
                 alert("회원가입 되었습니다.")
                 props.onHide();
             }).catch((error) => {
