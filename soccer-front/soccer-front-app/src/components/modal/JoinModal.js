@@ -75,7 +75,7 @@ const JoinModal = (props) => {
                             onChange={(e) => handleInputChange(e,joinForm,setJoinForm)}
                             onKeyDown={(e) => handleKeyDown(e,handleJoin)}
                         />
-                        {errors.passwordError && <Form.Text className="join-error">{errors.passwordError}</Form.Text>}
+                        {errors.passwordError && <Form.Text className="valid-error">{errors.passwordError}</Form.Text>}
                     </Form.Group>
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>닉네임</Form.Label>
@@ -86,7 +86,7 @@ const JoinModal = (props) => {
                             onChange={(e) => handleInputChange(e,joinForm,setJoinForm)}
                             onKeyDown={(e) => handleKeyDown(e,handleJoin)}
                         />
-                        {errors.nicknameError && <Form.Text className="join-error">{errors.nicknameError}</Form.Text>}
+                        {errors.nicknameError && <Form.Text className="valid-error">{errors.nicknameError}</Form.Text>}
                     </Form.Group>
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>이메일</Form.Label>
@@ -97,7 +97,7 @@ const JoinModal = (props) => {
                             onChange={(e) => handleInputChange(e,joinForm,setJoinForm)}
                             onKeyDown={(e) => handleKeyDown(e,handleJoin)}
                         />
-                        {errors.emailError && <Form.Text className="join-error">{errors.emailError}</Form.Text>}
+                        {errors.emailError && <Form.Text className="valid-error">{errors.emailError}</Form.Text>}
                     </Form.Group>
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>전화번호</Form.Label>

@@ -60,7 +60,7 @@ const LoginModal = (props) => {
                             onChange={(e) => handleInputChange(e,loginForm, setLoginForm)}
                             onKeyDown={(e) => handleKeyDown(e,handleSignIn)}
                             />
-                        {errors.loginIdError && <Form.Text className="login-error">{errors.loginIdError}</Form.Text>}
+                        {errors.loginIdError && <Form.Text className="valid-error">{errors.loginIdError}</Form.Text>}
                     </Form.Group>
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>비밀번호</Form.Label>
@@ -71,10 +71,10 @@ const LoginModal = (props) => {
                             onChange={(e) => handleInputChange(e,loginForm, setLoginForm)}
                             onKeyDown={(e) => handleKeyDown(e,handleSignIn)}
                             />
-                        {errors.passwordError && <Form.Text className="login-error">{errors.passwordError}</Form.Text>}
+                        {errors.passwordError && <Form.Text className="valid-error">{errors.passwordError}</Form.Text>}
                     </Form.Group>
                     <Button variant="primary" onClick={handleSignIn}>로그인</Button>
-                    {errors.noExistError && <Form.Text className="login-error">{errors.noExistError}</Form.Text>}
+                    {errors.noExistError && <Form.Text className="valid-error">{errors.noExistError}</Form.Text>}
                 </Form>
             </Modal.Body>
             <Modal.Footer>
