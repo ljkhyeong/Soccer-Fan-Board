@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum TokenType {
 	ACCESS("accessToken", 1000L * 60 * 30, false),
-	REFRESH("refreshToken", 1000L * 60 * 30, true);
+	REFRESH("refreshToken", 1000L * 60 * 60 * 24 * 7, true);
 
 	// TODO XSS공격에 취약할 수 있으므로 HttpOnly옵션을 둘다 키도록 수정 요망
 	private final String name;
