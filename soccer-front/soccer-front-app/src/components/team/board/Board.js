@@ -1,7 +1,7 @@
 import {Button, Table} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {axiosInstance} from "../../../service/ApiService";
+import {axiosInstance, formatDateTime} from "../../../service/ApiService";
 
 const Board = (props) => {
     const [posts, setPosts] = useState([]);
@@ -18,8 +18,15 @@ const Board = (props) => {
     }, []);
 
     const handleCreatePost = () => {
-        props.setShowContainer('postPage');
+        props.setShowContainer('createPost');
     };
+
+    const handleShowPost = (postId) => {
+        props.setPostId(postId);
+        props.setShowContainer('postDetail');
+    };
+
+
 
     return (
         <>
@@ -36,11 +43,11 @@ const Board = (props) => {
                 </thead>
                 <tbody>
                 {posts.map((post, index) => (
-                    <tr key={post.postId}>
+                    <tr key={post.postId} onClick={() => handleShowPost(post.postId)}>
                         <td>{index + 1}</td>
                         <td>{post.title}</td>
-                        <td>Jane Smith</td>
-                        <td>2023-01-20</td>
+                        <td>{post.writer}</td>
+                        <td>{formatDateTime(post.createdAt)}</td>
                         <td>0</td>
                     </tr>
                 ))}

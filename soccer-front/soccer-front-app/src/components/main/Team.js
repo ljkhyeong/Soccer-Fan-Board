@@ -6,11 +6,11 @@ import {useEffect, useState} from "react";
 import Intro from "../team/Intro";
 import LoginModal from "../modal/LoginModal";
 import JoinModal from "../modal/JoinModal";
-import PostPage from "../team/board/PostPage";
-import loginModal from "../modal/LoginModal";
 import {getAccessToken, logout} from "../../service/ApiService";
 import axios from "axios";
 import {axiosInstance} from "../../service/ApiService";
+import CreatePost from "../team/board/CreatePost";
+import PostDetail from "../team/board/PostDetail";
 
 const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
 
@@ -20,6 +20,7 @@ const Team = () => {
     const [showContainer, setShowContainer] = useState('intro');
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showJoinModal, setShowJoinModal] = useState(false);
+    const [postId, setPostId] = useState(0);
 
     useEffect(() => {
         if (!getAccessToken()) {
@@ -65,9 +66,11 @@ const Team = () => {
             case 'intro':
                 return <Intro/>;
             case 'board':
-                return <Board setShowContainer={setShowContainer}/>;
-            case 'postPage':
-                return <PostPage setShowContainer={setShowContainer}/>;
+                return <Board setShowContainer={setShowContainer} setPostId={setPostId}/>;
+            case 'createPost':
+                return <CreatePost setShowContainer={setShowContainer}/>;
+            case 'postDetail':
+                return <PostDetail postId={postId}/>
             default:
                 return <Intro/>
         }
