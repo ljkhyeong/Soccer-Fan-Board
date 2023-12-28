@@ -21,7 +21,7 @@ export const initStateObject = (state) => {
     for (const key in state) {
         resetState[key] = "";
     }
-    return initStateObject;
+    return resetState;
 };
 
 export const resetStates = (...setters) => {
