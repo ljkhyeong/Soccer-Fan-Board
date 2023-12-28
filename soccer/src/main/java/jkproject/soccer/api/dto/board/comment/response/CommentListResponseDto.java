@@ -8,11 +8,13 @@ import lombok.Getter;
 @Builder
 public class CommentListResponseDto {
 
+	private Long commentId;
 	private String commenter;
 	private String comment;
 
 	public static CommentListResponseDto from(Comment comment) {
 		return CommentListResponseDto.builder()
+			.commentId(comment.getCommentId())
 			.commenter(comment.getCommenter())
 			.comment(comment.getComment())
 			.build();
