@@ -2,41 +2,46 @@ import { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../../css/LoginModal.css';
 import axios from "axios";
+import {handleInputChange, handleKeyDown} from "../../service/CommonService";
 
 const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
 
+const initialJoinForm = {
+    loginId: '',
+    password: '',
+    nickname: '',
+    email: '',
+    phoneNumber: '',
+    role: "USER"
+}
+
 const JoinModal = (props) => {
-    const [loginId, setLoginId] = useState('');
-    const [password, setPassword] = useState('');
-    const [nickname, setNickname] = useState('');
-    const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [loginIdError, setLoginIdError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [nicknameError, setNicknameError] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [phoneNumberError, setPhoneNumberError] = useState('');
+    const [joinForm, setJoinForm] = useState(initialJoinForm);
+    const [errors, setErrors] = useState({
+        loginIdError: '',
+        passwordError: '',
+        nicknameError: '',
+        emailError: '',
+        phoneNumberError: ''
+    });
 
     const handleJoin = () => {
-            axios.post(SPRING_SERVER_URL + "/user", {
-                loginId: loginId,
-                password: password,
-                nickname: nickname,
-                email: email,
-                phoneNumber: phoneNumber,
-                role: "USER"
-            }).then((response) => {
+            axios.post(SPRING_SERVER_URL + "/user", joinForm
+            ).then((response) => {
                 console.log(response);
+                setJoinForm(initialJoinForm);
                 alert("회원가입 되었습니다.")
                 props.onHide();
             }).catch((error) => {
                 let result = error.response.data.result;
                 console.log(error);
-                setLoginIdError(result.valid_loginId);
-                setPasswordError(result.valid_password);
-                setNicknameError(result.valid_nickname);
-                setEmailError(result.valid_email);
-                setPhoneNumberError(result.valid_phoneNumber);
+                setErrors({
+                    loginIdError: result.valid_loginId,
+                    passwordError: result.valid_password,
+                    nicknameError: result.valid_nickname,
+                    emailError: result.valid_email,
+                    phoneNumberError: result.valid_phoneNumber
+                })
             })
 
         // 로그인 로직 처리
@@ -53,52 +58,57 @@ const JoinModal = (props) => {
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>아이디</Form.Label>
                         <Form.Control
+                            name="loginId"
                             type="text"
                             required
-                            onChange={(e) => setLoginId(e.target.value)}
-                            onKeyUp={(e) => {if (e.key === 'Enter') handleJoin()}}
+                            onChange={(e) => handleInputChange(e,joinForm,setJoinForm)}
+                            onKeyDown={(e) => handleKeyDown(e,handleJoin)}
                         />
-                        {loginIdError && <Form.Text className="join-error">{loginIdError}</Form.Text>}
+                        {errors.loginIdError && <Form.Text className="join-error">{errors.loginIdError}</Form.Text>}
                     </Form.Group>
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>비밀번호</Form.Label>
                         <Form.Control
+                            name="password"
                             type="password"
                             required
-                            onChange={(e) => setPassword(e.target.value)}
-                            onKeyUp={(e) => {if (e.key === 'Enter') handleJoin()}}
+                            onChange={(e) => handleInputChange(e,joinForm,setJoinForm)}
+                            onKeyDown={(e) => handleKeyDown(e,handleJoin)}
                         />
-                        {passwordError && <Form.Text className="join-error">{passwordError}</Form.Text>}
+                        {errors.passwordError && <Form.Text className="join-error">{errors.passwordError}</Form.Text>}
                     </Form.Group>
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>닉네임</Form.Label>
                         <Form.Control
+                            name="nickname"
                             type="text"
                             required
-                            onChange={(e) => setNickname(e.target.value)}
-                            onKeyUp={(e) => {if (e.key === 'Enter') handleJoin()}}
+                            onChange={(e) => handleInputChange(e,joinForm,setJoinForm)}
+                            onKeyDown={(e) => handleKeyDown(e,handleJoin)}
                         />
-                        {nicknameError && <Form.Text className="join-error">{nicknameError}</Form.Text>}
+                        {errors.nicknameError && <Form.Text className="join-error">{errors.nicknameError}</Form.Text>}
                     </Form.Group>
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>이메일</Form.Label>
                         <Form.Control
+                            name="email"
                             type="email"
                             required
-                            onChange={(e) => setEmail(e.target.value)}
-                            onKeyUp={(e) => {if (e.key === 'Enter') handleJoin()}}
+                            onChange={(e) => handleInputChange(e,joinForm,setJoinForm)}
+                            onKeyDown={(e) => handleKeyDown(e,handleJoin)}
                         />
-                        {emailError && <Form.Text className="join-error">{emailError}</Form.Text>}
+                        {errors.emailError && <Form.Text className="join-error">{errors.emailError}</Form.Text>}
                     </Form.Group>
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>전화번호</Form.Label>
                         <Form.Control
+                            name="phoneNumber"
                             type="tel"
                             required
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                            onKeyUp={(e) => {if (e.key === 'Enter') handleJoin()}}
+                            onChange={(e) => handleInputChange(e,joinForm,setJoinForm)}
+                            onKeyDown={(e) => handleKeyDown(e,handleJoin)}
                         />
-                        {phoneNumberError && <Form.Text className="join-error">{phoneNumberError}</Form.Text>}
+                        {errors.phoneNumberError && <Form.Text className="join-error">{errors.phoneNumberError}</Form.Text>}
                     </Form.Group>
                     <Button variant="primary" onClick={handleJoin}>회원가입</Button>
 
