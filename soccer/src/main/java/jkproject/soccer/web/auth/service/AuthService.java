@@ -3,6 +3,7 @@ package jkproject.soccer.web.auth.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
 
 import jkproject.soccer.api.dto.auth.request.LoginRequestDto;
 import jkproject.soccer.api.dto.auth.response.LoginResponseDto;
@@ -14,6 +15,7 @@ import jkproject.soccer.web.auth.config.jwt.TokenType;
 import jkproject.soccer.web.auth.repository.RefreshTokenRepository;
 import jkproject.soccer.web.common.exception.ApplicationException;
 import jkproject.soccer.web.common.exception.enums.ErrorCode;
+import jkproject.soccer.web.common.validator.ValidationResultHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,8 +29,10 @@ public class AuthService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final RefreshTokenRepository refreshTokenRepository;
 	private final UserRepository userRepository;
+	private final ValidationResultHandler validationResultHandler;
 
-	public LoginResponseDto login(LoginRequestDto requestDto) {
+	public LoginResponseDto login(LoginRequestDto requestDto, Errors errors) {
+		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_LOGIN);
 
 		User user = validateLoginIdAndPassword(requestDto);
 		String loginId = user.getLoginId();

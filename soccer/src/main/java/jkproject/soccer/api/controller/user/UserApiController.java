@@ -1,7 +1,5 @@
 package jkproject.soccer.api.controller.user;
 
-import java.util.Map;
-
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,9 +16,7 @@ import jkproject.soccer.api.dto.user.UserAuthenticationDto;
 import jkproject.soccer.api.dto.user.request.UserCreateRequestDto;
 import jkproject.soccer.api.dto.user.request.UserUpdateRequestDto;
 import jkproject.soccer.domain.service.user.UserService;
-import jkproject.soccer.web.common.exception.CustomValidationException;
-import jkproject.soccer.web.common.exception.enums.ErrorCode;
-import jkproject.soccer.web.common.validator.ValidationProvider;
+import jkproject.soccer.web.common.validator.ValidationResultHandler;
 import jkproject.soccer.web.common.validator.user.CheckLoginIdValidator;
 import jkproject.soccer.web.common.validator.user.CheckNicknameValidator;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class UserApiController {
 
 	private final UserService userService;
-	private final ValidationProvider validationProvider;
+	private final ValidationResultHandler validationProvider;
 	private final CheckLoginIdValidator checkLoginIdValidator;
 	private final CheckNicknameValidator checkNicknameValidator;
 
@@ -44,13 +40,7 @@ public class UserApiController {
 	@PostMapping
 	public Response<Void> createUser(@Valid @RequestBody UserCreateRequestDto requestDto,
 		Errors errors) {
-
-		if (errors.hasErrors()) {
-			Map<String, String> validationResult = validationProvider.validationResult(errors);
-			throw new CustomValidationException(ErrorCode.INVALID_JOIN, validationResult);
-		}
-
-		userService.createUser(requestDto);
+		userService.createUser(requestDto, errors);
 		return Response.success();
 	}
 

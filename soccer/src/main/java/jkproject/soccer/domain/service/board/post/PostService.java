@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
 
 import jkproject.soccer.api.dto.board.post.request.PostCreateRequestDto;
 import jkproject.soccer.api.dto.board.post.response.PostDetailResponseDto;
@@ -15,6 +16,7 @@ import jkproject.soccer.domain.repository.board.post.PostRepository;
 import jkproject.soccer.domain.repository.user.UserRepository;
 import jkproject.soccer.web.common.exception.ApplicationException;
 import jkproject.soccer.web.common.exception.enums.ErrorCode;
+import jkproject.soccer.web.common.validator.ValidationResultHandler;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,6 +26,7 @@ public class PostService {
 
 	private final PostRepository postRepository;
 	private final UserRepository userRepository;
+	private final ValidationResultHandler validationResultHandler;
 
 	public Page<PostListResponseDto> lookupAllPosts(Pageable pageable) {
 		Page<Post> posts = postRepository.findAll(pageable);
@@ -32,8 +35,10 @@ public class PostService {
 	}
 
 	@Transactional
-	public void createPost(PostCreateRequestDto requestDto, UserAuthenticationDto userDto) {
-		//TODO User 넣어야함
+	public void createPost(PostCreateRequestDto requestDto,
+		UserAuthenticationDto userDto, Errors errors) {
+
+		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_CREATE_POST);
 		User user = userRepository.findByLoginId(userDto.getLoginId())
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 		Post post = requestDto.toEntity(user);

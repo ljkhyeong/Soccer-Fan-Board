@@ -1,7 +1,6 @@
 package jkproject.soccer.api.controller.auth;
 
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpHeaders;
@@ -26,9 +25,6 @@ import jkproject.soccer.api.dto.auth.response.RefreshResponseDto;
 import jkproject.soccer.web.auth.config.jwt.JwtTokenProvider;
 import jkproject.soccer.web.auth.config.jwt.TokenType;
 import jkproject.soccer.web.auth.service.AuthService;
-import jkproject.soccer.web.common.exception.CustomValidationException;
-import jkproject.soccer.web.common.exception.enums.ErrorCode;
-import jkproject.soccer.web.common.validator.ValidationProvider;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -38,7 +34,6 @@ public class AuthController {
 
 	private final AuthService authService;
 	private final JwtTokenProvider jwtTokenProvider;
-	private final ValidationProvider validationProvider;
 
 	@InitBinder
 	public void validatorBinder(WebDataBinder binder) {
@@ -48,12 +43,7 @@ public class AuthController {
 	public Response<Void> login(@Valid @RequestBody LoginRequestDto requestDto, Errors errors
 		, HttpServletResponse response) {
 
-		if (errors.hasErrors()) {
-			Map<String, String> validationResult = validationProvider.validationResult(errors);
-			throw new CustomValidationException(ErrorCode.INVALID_LOGIN, validationResult);
-		}
-
-		LoginResponseDto responseDto = authService.login(requestDto);
+		LoginResponseDto responseDto = authService.login(requestDto, errors);
 
 		addTokenCookie(response, responseDto.getAccessToken(), TokenType.ACCESS);
 		addTokenCookie(response, responseDto.getRefreshToken(), TokenType.REFRESH);
