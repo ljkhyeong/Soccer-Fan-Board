@@ -28,6 +28,7 @@ import jkproject.soccer.web.auth.config.jwt.TokenType;
 import jkproject.soccer.web.auth.service.AuthService;
 import jkproject.soccer.web.common.exception.CustomValidationException;
 import jkproject.soccer.web.common.exception.enums.ErrorCode;
+import jkproject.soccer.web.common.validator.ValidationProvider;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -37,6 +38,7 @@ public class AuthController {
 
 	private final AuthService authService;
 	private final JwtTokenProvider jwtTokenProvider;
+	private final ValidationProvider validationProvider;
 
 	@InitBinder
 	public void validatorBinder(WebDataBinder binder) {
@@ -47,8 +49,8 @@ public class AuthController {
 		, HttpServletResponse response) {
 
 		if (errors.hasErrors()) {
-			Map<String, String> validateResult = authService.validateResultLogin(errors);
-			throw new CustomValidationException(ErrorCode.INVALID_LOGIN, validateResult);
+			Map<String, String> validationResult = validationProvider.validationResult(errors);
+			throw new CustomValidationException(ErrorCode.INVALID_LOGIN, validationResult);
 		}
 
 		LoginResponseDto responseDto = authService.login(requestDto);

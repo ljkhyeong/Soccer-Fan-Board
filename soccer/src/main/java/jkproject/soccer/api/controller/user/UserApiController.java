@@ -20,6 +20,7 @@ import jkproject.soccer.api.dto.user.request.UserUpdateRequestDto;
 import jkproject.soccer.domain.service.user.UserService;
 import jkproject.soccer.web.common.exception.CustomValidationException;
 import jkproject.soccer.web.common.exception.enums.ErrorCode;
+import jkproject.soccer.web.common.validator.ValidationProvider;
 import jkproject.soccer.web.common.validator.user.CheckLoginIdValidator;
 import jkproject.soccer.web.common.validator.user.CheckNicknameValidator;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class UserApiController {
 
 	private final UserService userService;
+	private final ValidationProvider validationProvider;
 	private final CheckLoginIdValidator checkLoginIdValidator;
 	private final CheckNicknameValidator checkNicknameValidator;
 
@@ -44,8 +46,8 @@ public class UserApiController {
 		Errors errors) {
 
 		if (errors.hasErrors()) {
-			Map<String, String> validateResult = userService.validateResultCreateUser(errors);
-			throw new CustomValidationException(ErrorCode.INVALID_JOIN, validateResult);
+			Map<String, String> validationResult = validationProvider.validationResult(errors);
+			throw new CustomValidationException(ErrorCode.INVALID_JOIN, validationResult);
 		}
 
 		userService.createUser(requestDto);
