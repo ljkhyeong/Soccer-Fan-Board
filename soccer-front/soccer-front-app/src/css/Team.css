@@ -2,11 +2,8 @@
     min-width: 100vw; /* 예시 값, 필요에 따라 조정 */
 }
 
-.login-error {
+.valid-error {
     color: red;
     float: right;
 }
 
-.join-error {
-    color: red;
-}
