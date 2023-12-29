@@ -38,6 +38,8 @@ public class Post extends BaseTimeEntity {
 	private String content;
 	@Column(nullable = false)
 	private String writer;
+	private Long viewCount;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -45,10 +47,15 @@ public class Post extends BaseTimeEntity {
 	private List<Comment> comments = new ArrayList<>();
 
 	@Builder
-	public Post(String title, String content, String writer, User user) {
+	public Post(String title, String content, String writer, User user, Long viewCount) {
 		this.title = title;
 		this.content = content;
 		this.writer = writer;
 		this.user = user;
+		this.viewCount = viewCount;
+	}
+
+	public void increaseViewCount() {
+		this.viewCount++;
 	}
 }

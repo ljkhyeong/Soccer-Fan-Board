@@ -12,6 +12,7 @@ public class PostListResponseDto {
 	private Long postId;
 	private String title;
 	private String writer;
+	private Long viewCount;
 	private LocalDateTime createdAt;
 
 	public static PostListResponseDto from(Post post) {
@@ -19,8 +20,9 @@ public class PostListResponseDto {
 			.postId(post.getPostId())
 			.title(post.getTitle())
 			.writer(post.getWriter())
+			.viewCount(post.getViewCount())
 			.createdAt(post.getCreatedAt())
 			.build();
 	}
-	
+
 }

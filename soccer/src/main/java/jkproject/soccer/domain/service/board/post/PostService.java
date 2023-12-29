@@ -41,14 +41,22 @@ public class PostService {
 		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_CREATE_POST);
 		User user = userRepository.findByLoginId(userDto.getLoginId())
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
+		// TODO 사용자 검증로직 분리하자.
 		Post post = requestDto.toEntity(user);
 		postRepository.save(post);
 	}
 
+	@Transactional
 	public PostDetailResponseDto readPost(Long postId) {
+		increasePostViewCount(postId);
+
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
 
 		return PostDetailResponseDto.from(post);
+	}
+
+	private void increasePostViewCount(Long postId) {
+		postRepository.increaseViewCountByPostId(postId);
 	}
 }

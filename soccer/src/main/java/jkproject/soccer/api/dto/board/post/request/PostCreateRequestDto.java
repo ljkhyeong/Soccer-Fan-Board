@@ -19,6 +19,7 @@ public class PostCreateRequestDto {
 			.content(content)
 			.writer(user.getNickname())
 			.user(user)
+			.viewCount(0L)
 			.build();
 	}
 }

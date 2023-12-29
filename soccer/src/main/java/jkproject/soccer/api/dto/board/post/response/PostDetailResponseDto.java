@@ -13,6 +13,7 @@ public class PostDetailResponseDto {
 	private String title;
 	private String content;
 	private String writer;
+	private Long viewCount;
 	private LocalDateTime createdAt;
 
 	public static PostDetailResponseDto from(Post post) {
@@ -21,6 +22,7 @@ public class PostDetailResponseDto {
 			.title(post.getTitle())
 			.content(post.getContent())
 			.writer(post.getWriter())
+			.viewCount(post.getViewCount())
 			.createdAt(post.getCreatedAt())
 			.build();
 	}
