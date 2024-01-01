@@ -36,6 +36,7 @@ const PostDetail = (props) => {
                       </Card.Body>
                       <Card.Footer>
                           작성일: {formatDateTime(postDetail.createdAt)}
+                          조회수: {postDetail.viewCount}
                       </Card.Footer>
                   </Card>
                   <Comments postId={props.postId}/>

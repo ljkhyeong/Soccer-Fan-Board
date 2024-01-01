@@ -48,7 +48,7 @@ const Board = (props) => {
                         <td>{post.title}</td>
                         <td>{post.writer}</td>
                         <td>{formatDateTime(post.createdAt)}</td>
-                        <td>0</td>
+                        <td>{post.viewCount}</td>
                     </tr>
                 ))}
                 </tbody>

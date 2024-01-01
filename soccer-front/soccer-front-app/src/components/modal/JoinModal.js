@@ -65,7 +65,7 @@ const JoinModal = (props) => {
                             onChange={(e) => handleInputChange(e,joinForm,setJoinForm)}
                             onKeyDown={(e) => handleKeyDown(e,handleJoin)}
                         />
-                        {errors.loginIdError && <Form.Text className="join-error">{errors.loginIdError}</Form.Text>}
+                        {errors.loginIdError && <Form.Text className="valid-error">{errors.loginIdError}</Form.Text>}
                     </Form.Group>
                     <Form.Group className="mb-3 custom-form-group">
                         <Form.Label>비밀번호</Form.Label>
@@ -109,7 +109,7 @@ const JoinModal = (props) => {
                             onChange={(e) => handleInputChange(e,joinForm,setJoinForm)}
                             onKeyDown={(e) => handleKeyDown(e,handleJoin)}
                         />
-                        {errors.phoneNumberError && <Form.Text className="join-error">{errors.phoneNumberError}</Form.Text>}
+                        {errors.phoneNumberError && <Form.Text className="valid-error">{errors.phoneNumberError}</Form.Text>}
                     </Form.Group>
                     <Button variant="primary" onClick={handleJoin}>회원가입</Button>
 
