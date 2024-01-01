@@ -33,7 +33,10 @@
 - 다국어 지원:
   - 다양한 사용자를 위해 다국어 지원을 고려할 수 있다.
 ---
-> ## API
+## API
+
+<details>
+ <summary>API 명세</summary>
 
 1. 인증 컨트롤러 (AuthController)
 - POST /api/v1/auth/login
@@ -110,6 +113,8 @@
   - 문서의 새로운 버전 생성하기 : Mutation insert_doc_version
 - /api/v1/history[문서이름]
   - 해당 문서의 모든 버전 읽기 : Query wiki_doc_pk
+
+</details>
 
 ---
 ## ERD
