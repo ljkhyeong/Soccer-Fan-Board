@@ -17,8 +17,6 @@ const LoginModal = (props) => {
     })
 
     const handleSignIn = (e) => {
-        e.preventDefault();
-
         axiosInstance.post("/auth/login", loginForm)
             .then((response) => {
             console.log(response);
