@@ -11,8 +11,10 @@ import jkproject.soccer.api.dto.board.post.response.PostDetailResponseDto;
 import jkproject.soccer.api.dto.board.post.response.PostListResponseDto;
 import jkproject.soccer.api.dto.user.UserAuthenticationDto;
 import jkproject.soccer.domain.entity.board.post.Post;
+import jkproject.soccer.domain.entity.team.Team;
 import jkproject.soccer.domain.entity.user.User;
 import jkproject.soccer.domain.repository.board.post.PostRepository;
+import jkproject.soccer.domain.repository.team.TeamRepository;
 import jkproject.soccer.domain.repository.user.UserRepository;
 import jkproject.soccer.web.common.exception.ApplicationException;
 import jkproject.soccer.web.common.exception.enums.ErrorCode;
@@ -27,22 +29,25 @@ public class PostService {
 	private final PostRepository postRepository;
 	private final UserRepository userRepository;
 	private final ValidationResultHandler validationResultHandler;
+	private final TeamRepository teamRepository;
 
-	public Page<PostListResponseDto> lookupAllPosts(Pageable pageable) {
-		Page<Post> posts = postRepository.findAll(pageable);
+	public Page<PostListResponseDto> lookupAllPosts(Long teamId, Pageable pageable) {
+		Page<Post> posts = postRepository.findAllByTeamId(teamId, pageable);
 
 		return posts.map(PostListResponseDto::from);
 	}
 
 	@Transactional
-	public void createPost(PostCreateRequestDto requestDto,
+	public void createPost(Long teamId, PostCreateRequestDto requestDto,
 		UserAuthenticationDto userDto, Errors errors) {
 
 		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_CREATE_POST);
 		User user = userRepository.findByLoginId(userDto.getLoginId())
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
+		Team team = teamRepository.findById(teamId)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_ID));
 		// TODO 사용자 검증로직 분리하자.
-		Post post = requestDto.toEntity(user);
+		Post post = requestDto.toEntity(team, user);
 		postRepository.save(post);
 	}
 
