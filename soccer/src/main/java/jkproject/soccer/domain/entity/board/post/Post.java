@@ -1,9 +1,5 @@
 package jkproject.soccer.domain.entity.board.post;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,10 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jkproject.soccer.domain.entity.BaseTimeEntity;
-import jkproject.soccer.domain.entity.board.comment.Comment;
+import jkproject.soccer.domain.entity.team.Team;
 import jkproject.soccer.domain.entity.user.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -41,16 +36,18 @@ public class Post extends BaseTimeEntity {
 	private Long viewCount;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "team_id")
+	private Team team;
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-	private List<Comment> comments = new ArrayList<>();
 
 	@Builder
-	public Post(String title, String content, String writer, User user, Long viewCount) {
+	public Post(String title, String content, String writer, Team team, User user, Long viewCount) {
 		this.title = title;
 		this.content = content;
 		this.writer = writer;
+		this.team = team;
 		this.user = user;
 		this.viewCount = viewCount;
 	}
