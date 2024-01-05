@@ -10,6 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jkproject.soccer.domain.entity.CreationTimeEntity;
+import jkproject.soccer.domain.entity.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,10 +25,23 @@ public class DocVersion extends CreationTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "doc_version_id")
 	private Long docVersionId;
+	@Column(nullable = false)
 	private String body;
+	@Column(nullable = false)
 	private Integer version;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "wiki_doc_id")
 	private WikiDoc wikiDoc;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
+
+	@Builder
+	public DocVersion(String body, Integer version, WikiDoc wikiDoc, User user) {
+		this.body = body;
+		this.version = version;
+		this.wikiDoc = wikiDoc;
+		this.user = user;
+	}
 }

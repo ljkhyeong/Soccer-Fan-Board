@@ -16,6 +16,7 @@ import jkproject.soccer.api.dto.user.request.UserUpdateRequestDto;
 import jkproject.soccer.domain.entity.BaseTimeEntity;
 import jkproject.soccer.domain.entity.board.comment.Comment;
 import jkproject.soccer.domain.entity.board.post.Post;
+import jkproject.soccer.domain.entity.wiki.DocVersion;
 import jkproject.soccer.domain.enums.user.UserRole;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -48,6 +49,8 @@ public class User extends BaseTimeEntity {
 	private List<Post> posts = new ArrayList<>();
 	@OneToMany(mappedBy = "user")
 	private List<Comment> comments = new ArrayList<>();
+	@OneToMany(mappedBy = "user")
+	private List<DocVersion> docs = new ArrayList<>();
 
 	@Builder
 	public User(String loginId, String password, String nickname, String email, String phoneNumber, UserRole role) {
