@@ -12,6 +12,7 @@ import {axiosInstance} from "../../service/ApiService";
 import CreatePost from "../team/board/CreatePost";
 import PostDetail from "../team/board/PostDetail";
 import WikiDoc from "../team/wiki/WikiDoc";
+import CreateWikiDoc from "../team/wiki/CreateWikiDoc";
 
 const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
 
@@ -96,7 +97,7 @@ const Team = () => {
                             <Nav>
                                 <Nav.Link as={Link} to="/" className="nav-link active">Home</Nav.Link>
                                 {isLogin ? <Nav.Link href="#!" className="nav-link"
-                                                     onClick={() => handleLogout()}>Logout</Nav.Link>
+                                                     onClick={handleLogout}>Logout</Nav.Link>
                                     : <Nav.Link href="#!" className="nav-link"
                                           onClick={() => setShowLoginModal(true)}>Login</Nav.Link>
                                 }
@@ -114,6 +115,7 @@ const Team = () => {
                     <Routes>
                         <Route index element={<Intro />} />
                         <Route path="wiki" element={<WikiDoc />} />
+                        <Route path="wiki/create" element={<CreateWikiDoc />} />
                         <Route path="board" element={<Board />} />
                         <Route path="board/create" element={<CreatePost />} />
                         <Route path="board/:postId" element={<PostDetail />} />

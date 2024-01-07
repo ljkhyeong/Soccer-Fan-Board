@@ -20,7 +20,7 @@ const Board = (props) => {
             })
     }, []);
 
-    const handleCreatePost = () => {
+    const handlePostForm = () => {
         navigate('./create');
     };
 
@@ -32,7 +32,7 @@ const Board = (props) => {
 
     return (
         <>
-            <Button onClick={handleCreatePost}>글 작성</Button>
+            <Button onClick={handlePostForm}>글 작성</Button>
             <Table className="mt-4" hover>
                 <thead>
                 <tr>

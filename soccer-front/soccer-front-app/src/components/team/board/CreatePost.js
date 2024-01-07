@@ -17,7 +17,7 @@ const CreatePost = (props) => {
     })
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handlePostSubmit = (e) => {
         e.preventDefault();
         axiosInstance.post(`/${teamName}/posts`, postForm)
             .then(response => {
@@ -46,7 +46,6 @@ const CreatePost = (props) => {
                         placeholder="제목을 입력하세요"
                         onChange={(e) => handleInputChange(e,postForm,setPostForm)}
                         required
-                        onKeyDown={(e) => handleKeyDown(e,handleSubmit)}
                     />
                     { errors.titleError && <Form.Text className="valid-error">{errors.titleError}</Form.Text>}
                 </Form.Group>
@@ -59,11 +58,10 @@ const CreatePost = (props) => {
                         placeholder="내용을 입력하세요"
                         onChange={(e) => handleInputChange(e,postForm,setPostForm)}
                         required
-                        onKeyDown={(e) => handleKeyDown(e,handleSubmit)}
                     />
                     { errors.contentError && <Form.Text className="valid-error">{errors.contentError}</Form.Text>}
                 </Form.Group>
-                <Button onClick={handleSubmit}>작성</Button>
+                <Button onClick={handlePostSubmit}>작성</Button>
             </Form>
         </Container>
     );

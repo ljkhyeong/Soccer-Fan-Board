@@ -55,7 +55,7 @@ const Comments = (props) => {
                 />
                 {error && <Form.Text className="valid-error">{error}</Form.Text>}
             </Form.Group>
-            <Button onClick={() => handleCommentSubmit()}>댓글 작성</Button>
+            <Button onClick={handleCommentSubmit}>댓글 작성</Button>
         </Form>
         <ListGroup className="mt-4">
             {comments.map((comment,index) => (
