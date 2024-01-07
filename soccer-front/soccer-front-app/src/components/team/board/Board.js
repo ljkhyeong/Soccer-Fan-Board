@@ -2,12 +2,15 @@ import {Button, Table} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {axiosInstance, formatDateTime} from "../../../service/ApiService";
+import {useNavigate, useParams} from "react-router-dom";
 
 const Board = (props) => {
+    const {teamName} = useParams();
     const [posts, setPosts] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        axiosInstance.get('/posts')
+        axiosInstance.get(`/${teamName}/posts`)
             .then(response => {
                 setPosts(response.data.result.content);
                 console.log(response);

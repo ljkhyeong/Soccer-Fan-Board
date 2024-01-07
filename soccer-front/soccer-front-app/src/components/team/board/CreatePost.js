@@ -2,9 +2,11 @@ import {useState} from "react";
 import {Container, Form, Button} from "react-bootstrap";
 import {axiosInstance} from "../../../service/ApiService";
 import {handleInputChange, handleKeyDown, initStateObject} from "../../../service/CommonService";
+import {useNavigate, useParams} from "react-router-dom";
 
 const CreatePost = (props) => {
 
+    const {teamName} = useParams();
     const [postForm, setPostForm] = useState({
         title:'',
         content:''
@@ -13,15 +15,16 @@ const CreatePost = (props) => {
         titleError:'',
         contentError:''
     })
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axiosInstance.post('/posts', postForm)
+        axiosInstance.post(`/${teamName}/posts`, postForm)
             .then(response => {
             console.log(response);
             setErrors(initStateObject(errors));
             alert("게시글 작성 성공");
-            props.setShowContainer('board');
+            navigate('../board');
         }).catch(error => {
             console.log(error);
             const errorResult = error.response.data.result;

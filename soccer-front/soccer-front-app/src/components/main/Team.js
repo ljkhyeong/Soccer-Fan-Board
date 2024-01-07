@@ -1,5 +1,5 @@
 import {Button, Container, Col, Nav, Navbar, NavDropdown, Table} from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import {Link, Route, Routes, useNavigate, useParams} from 'react-router-dom';
 import '../../css/Team.css';
 import Board from '../team/board/Board';
 import {useEffect, useState} from "react";
@@ -11,16 +11,18 @@ import axios from "axios";
 import {axiosInstance} from "../../service/ApiService";
 import CreatePost from "../team/board/CreatePost";
 import PostDetail from "../team/board/PostDetail";
+import WikiDoc from "../team/wiki/WikiDoc";
 
 const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
 
 const Team = () => {
 
+    const {teamName} = useParams();
     const [isLogin, setIsLogin] = useState(false);
-    const [showContainer, setShowContainer] = useState('intro');
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showJoinModal, setShowJoinModal] = useState(false);
     const [postId, setPostId] = useState(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!getAccessToken()) {

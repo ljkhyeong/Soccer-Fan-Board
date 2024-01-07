@@ -2,10 +2,11 @@ import {useEffect, useRef, useState} from "react";
 import {Container, Row, Col, Card} from "react-bootstrap";
 import {axiosInstance, formatDateTime} from "../../../service/ApiService";
 import Comments from "./Comments";
+import {useParams} from "react-router-dom";
 
 
-const PostDetail = (props) => {
-
+const PostDetail = () => {
+    const {teamName, postId} = useParams();
     const [postDetail, setPostDetail] = useState({});
 
     useEffect(() => {
@@ -13,7 +14,7 @@ const PostDetail = (props) => {
     }, []);
 
     const renderPostDetail = () => {
-        axiosInstance.get(`/posts/${props.postId}`)
+        axiosInstance.get(`${teamName}/posts/${postId}`)
             .then(response => {
                 console.log(response)
                 setPostDetail(response.data.result)
@@ -39,7 +40,7 @@ const PostDetail = (props) => {
                           조회수: {postDetail.viewCount}
                       </Card.Footer>
                   </Card>
-                  <Comments postId={props.postId}/>
+                  <Comments teamName={teamName} postId={postId}/>
               </Col>
           </Row>
       </Container>
