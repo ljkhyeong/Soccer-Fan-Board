@@ -28,8 +28,9 @@ public class CommentApiController {
 
 	private final CommentService commentService;
 
-	@GetMapping("/posts/{postId}/comments")
-	public Response<Page<CommentListResponseDto>> readComments(@PathVariable Long postId,
+	@GetMapping("/{teamName}/posts/{postId}/comments")
+	public Response<Page<CommentListResponseDto>> readComments(@PathVariable String teamName,
+		@PathVariable Long postId,
 		@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
 		Page<CommentListResponseDto> dtoList = commentService.readComments(postId, pageable);
@@ -37,8 +38,8 @@ public class CommentApiController {
 		return Response.success(dtoList);
 	}
 
-	@PostMapping("/posts/{postId}/comment")
-	public Response<Void> createComment(@PathVariable Long postId,
+	@PostMapping("/{teamName}/posts/{postId}/comment")
+	public Response<Void> createComment(@PathVariable String teamName, @PathVariable Long postId,
 		@RequestBody @Valid CommentCreateRequestDto requestDto, Errors errors,
 		@AuthenticationPrincipal UserAuthenticationDto userDto) {
 
