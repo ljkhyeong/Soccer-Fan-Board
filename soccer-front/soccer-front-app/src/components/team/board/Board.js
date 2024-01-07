@@ -18,12 +18,11 @@ const Board = (props) => {
     }, []);
 
     const handleCreatePost = () => {
-        props.setShowContainer('createPost');
+        navigate('./create');
     };
 
     const handleShowPost = (postId) => {
-        props.setPostId(postId);
-        props.setShowContainer('postDetail');
+        navigate(`./${postId}`)
     };
 
 

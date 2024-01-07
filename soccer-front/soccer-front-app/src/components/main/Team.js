@@ -61,34 +61,20 @@ const Team = () => {
         setIsLogin(false);
     };
 
-    const renderContent = () => {
-        switch (showContainer) {
-            case 'intro':
-                return <Intro/>;
-            case 'board':
-                return <Board setShowContainer={setShowContainer} setPostId={setPostId}/>;
-            case 'createPost':
-                return <CreatePost setShowContainer={setShowContainer}/>;
-            case 'postDetail':
-                return <PostDetail postId={postId}/>
-            default:
-                return <Intro/>
-        }
-    };
 
     return (
         <Container fluid className="d-flex" id="wrapper">
             <Col xs={2} id="sidebar-wrapper" className="border-end bg-white">
                 <div className="sidebar-heading border-bottom bg-light">Tottenham Hotspur</div>
                 <Nav className="flex-column">
+                    <Nav.Link className="list-group-item-action list-group-item-light p-3"
+                              onClick={() => navigate(`./wiki`)}>팀 정보(Wiki)</Nav.Link>
                     <Nav.Link className="list-group-item-action list-group-item-light p-3" href="#!"
-                              onClick={() => setShowContainer('intro')}>팀 정보(Wiki)</Nav.Link>
+                              >선수단</Nav.Link>
                     <Nav.Link className="list-group-item-action list-group-item-light p-3" href="#!"
-                              onClick={() => setShowContainer('players')}>선수단</Nav.Link>
-                    <Nav.Link className="list-group-item-action list-group-item-light p-3" href="#!"
-                              onClick={() => setShowContainer('intro')}>경기일정</Nav.Link>
-                    <Nav.Link className="list-group-item-action list-group-item-light p-3" href="#!"
-                              onClick={() => setShowContainer('board')}>게시판</Nav.Link>
+                              >경기일정</Nav.Link>
+                    <Nav.Link className="list-group-item-action list-group-item-light p-3"
+                              onClick={() => navigate(`./board`)}>게시판</Nav.Link>
 
                 </Nav>
             </Col>
@@ -123,7 +109,13 @@ const Team = () => {
                     </Container>
                 </Navbar>
                 <Container fluid>
-                    {renderContent()}
+                    <Routes>
+                        <Route index element={<Intro />} />
+                        <Route path="wiki" element={<WikiDoc />} />
+                        <Route path="board" element={<Board />} />
+                        <Route path="board/create" element={<CreatePost />} />
+                        <Route path="board/:postId" element={<PostDetail />} />
+                    </Routes>
                 </Container>
             </Col>
         </Container>
