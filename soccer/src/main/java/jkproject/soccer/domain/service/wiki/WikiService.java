@@ -76,7 +76,7 @@ public class WikiService {
 		User user = userRepository.findByLoginId(userDto.getLoginId())
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 		Integer topVersion = docVersionRepository.findTopVersionByWikiDoc(wikiDoc)
-			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_WIKIDOC_VERSION));
+			.orElse(-1);
 
 		DocVersion newDoc = requestDto.toDocVersionEntity(wikiDoc, topVersion + 1, user);
 		docVersionRepository.save(newDoc);
