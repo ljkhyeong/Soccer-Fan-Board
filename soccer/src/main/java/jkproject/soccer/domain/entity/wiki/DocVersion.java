@@ -27,8 +27,10 @@ public class DocVersion extends CreationTimeEntity {
 	private Long docVersionId;
 	@Column(nullable = false)
 	private String body;
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private Integer version;
+	@Column(nullable = false)
+	private String writer;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "wiki_doc_id")
@@ -38,9 +40,10 @@ public class DocVersion extends CreationTimeEntity {
 	private User user;
 
 	@Builder
-	public DocVersion(String body, Integer version, WikiDoc wikiDoc, User user) {
+	public DocVersion(String body, Integer version, String writer, WikiDoc wikiDoc, User user) {
 		this.body = body;
 		this.version = version;
+		this.writer = writer;
 		this.wikiDoc = wikiDoc;
 		this.user = user;
 	}

@@ -37,7 +37,8 @@ public class WikiDoc {
 	private List<DocVersion> docVersions = new ArrayList<>();
 
 	@Builder
-	public WikiDoc(String title) {
+	public WikiDoc(String title, Team team) {
 		this.title = title;
+		this.team = team;
 	}
 }
