@@ -1,12 +1,16 @@
 package jkproject.soccer.domain.service.wiki;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 
 import jkproject.soccer.api.dto.user.UserAuthenticationDto;
-import jkproject.soccer.api.dto.wiki.request.WikiDocCreateRequestDto;
-import jkproject.soccer.api.dto.wiki.response.WikiDocDetailResponseDto;
+import jkproject.soccer.api.dto.wiki.request.DocVersionCreateRequestDto;
+import jkproject.soccer.api.dto.wiki.response.DocVersionDetailResponseDto;
+import jkproject.soccer.api.dto.wiki.response.DocVersionListResponseDto;
+import jkproject.soccer.domain.entity.team.Team;
 import jkproject.soccer.domain.entity.user.User;
 import jkproject.soccer.domain.entity.wiki.DocVersion;
 import jkproject.soccer.domain.entity.wiki.WikiDoc;
@@ -20,40 +24,61 @@ import jkproject.soccer.web.common.validator.ValidationResultHandler;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class WikiService {
 
 	private final WikiDocRepository wikiDocRepository;
 	private final DocVersionRepository docVersionRepository;
-	private final TeamRepository teamRepository;
 	private final UserRepository userRepository;
+	private final TeamRepository teamRepository;
 	private final ValidationResultHandler validationResultHandler;
 
-	@Transactional(readOnly = true)
-	public WikiDocDetailResponseDto getNewWikiDocDetail(Long teamId) {
-		WikiDoc wikiDoc = wikiDocRepository.findByTeamId(teamId)
+	public DocVersionDetailResponseDto getNewDocVersion(String teamName) {
+		Team team = teamRepository.findByName(teamName)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_NAME));
+
+		WikiDoc wikiDoc = wikiDocRepository.findByTeam(team)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_WIKIDOC_ID));
 
 		DocVersion docVersion = docVersionRepository.findTopDocByWikiDoc(wikiDoc)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_WIKIDOC_VERSION));
 
-		return WikiDocDetailResponseDto.from(wikiDoc, docVersion);
+		return DocVersionDetailResponseDto.from(wikiDoc, docVersion);
 	}
 
-	public void createNewWikiDoc(Long wikiDocId, WikiDocCreateRequestDto requestDto,
+	public Page<DocVersionListResponseDto> lookUpAllDocVersion(Long wikiDocId, Pageable pageable) {
+		Page<DocVersion> docVersions = docVersionRepository.findAllByWikiDocId(wikiDocId, pageable);
+
+		return docVersions.map(DocVersionListResponseDto::from);
+	}
+
+	public DocVersionDetailResponseDto getDocVersion(Long wikiDocId, Integer version) {
+		WikiDoc wikiDoc = wikiDocRepository.findById(wikiDocId)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_WIKIDOC_ID));
+
+		DocVersion docVersion = docVersionRepository.findByWikiDocAndVersion(wikiDoc, version)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_WIKIDOC_VERSION));
+
+		return DocVersionDetailResponseDto.from(wikiDoc, docVersion);
+	}
+
+	@Transactional
+	public void createNewDocVersion(String teamName, DocVersionCreateRequestDto requestDto,
 		UserAuthenticationDto userDto, Errors errors) {
 
 		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_LOGIN);
 
-		WikiDoc wikiDoc = wikiDocRepository.findById(wikiDocId)
-			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_WIKIDOC_ID));
+		Team team = teamRepository.findByName(teamName)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_NAME));
+		WikiDoc wikiDoc = wikiDocRepository.findByTeam(team)
+			.orElseGet(() -> wikiDocRepository.save(requestDto.toWikiDocEntity(team)));
 		User user = userRepository.findByLoginId(userDto.getLoginId())
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 		Integer topVersion = docVersionRepository.findTopVersionByWikiDoc(wikiDoc)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_WIKIDOC_VERSION));
 
-		DocVersion newDoc = requestDto.toEntity(wikiDoc, topVersion, user);
+		DocVersion newDoc = requestDto.toDocVersionEntity(wikiDoc, topVersion + 1, user);
 		docVersionRepository.save(newDoc);
 	}
 }
