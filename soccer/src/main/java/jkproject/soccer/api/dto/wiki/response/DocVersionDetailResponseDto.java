@@ -9,20 +9,22 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class WikiDocDetailResponseDto {
+public class DocVersionDetailResponseDto {
 
 	private Long wikiDocId;
 	private String title;
 	private String body;
 	private Integer version;
+	private String writer;
 	private LocalDateTime createdAt;
 
-	public static WikiDocDetailResponseDto from(WikiDoc wikiDoc, DocVersion docVersion) {
-		return WikiDocDetailResponseDto.builder()
+	public static DocVersionDetailResponseDto from(WikiDoc wikiDoc, DocVersion docVersion) {
+		return DocVersionDetailResponseDto.builder()
 			.wikiDocId(wikiDoc.getWikiDocId())
 			.title(wikiDoc.getTitle())
 			.body(docVersion.getBody())
 			.version(docVersion.getVersion())
+			.writer(docVersion.getWriter())
 			.createdAt(docVersion.getCreatedAt())
 			.build();
 	}
