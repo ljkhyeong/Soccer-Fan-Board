@@ -5,19 +5,30 @@ import {axiosInstance} from "../../../service/ApiService";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 
 const CreateWikiDoc = () => {
-    const {teamName} = useParams();
+    const {teamCode} = useParams();
     const location = useLocation();
-    const initialDocBody = location.state?.body || '';
-    const [newDocVersion, setNewDocVersion] = useState({
-        title: teamName,
-        body: initialDocBody
-    })
+    const wikiDoc = location.state?.wikiDoc;
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState(wikiDoc?.body || '');
     const [errors, setErrors] = useState('');
     const navigate = useNavigate();
 
+    useEffect(() => {
+        axiosInstance.get(`/${teamCode}`)
+            .then(response => {
+                console.log(response);
+                setTitle(response.data.result.name);
+            }).catch(error => {
+                console.log(error);
+        })
+    }, [teamCode]);
+
 
     const handleDocSubmit = () => {
-        axiosInstance.post(`/${teamName}/wiki`, newDocVersion)
+        axiosInstance.post(`/${teamCode}/wiki`, {
+            title: title,
+            body: body
+        })
             .then(response => {
                 console.log(response);
                 navigate('../wiki');
@@ -31,14 +42,14 @@ const CreateWikiDoc = () => {
         <>
             <Form>
                 <Form.Group>
-                    <Form.Label>문서 작성</Form.Label>
+                    <h1>{title} ({wikiDoc?.version ? 'v'+(wikiDoc.version+1) : '새 문서 작성'})</h1>
                     <Form.Control
                         name="body"
                         as="textarea"
                         rows={10}
-                        value={newDocVersion.body}
+                        value={body}
                         required
-                        onChange={(e) => handleInputChange(e,newDocVersion,setNewDocVersion)}
+                        onChange={(e) => setBody(e.target.value)}
                         />
                 </Form.Group>
                 {errors && <Form.Text className="valid-error">{errors}</Form.Text>}
