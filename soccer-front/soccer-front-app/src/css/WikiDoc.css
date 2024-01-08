@@ -1,0 +1,20 @@
+.wiki-doc-title {
+    font-size: 2em;
+}
+
+.wiki-doc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+.wiki-doc-badge-group {
+    text-align: right;
+}
+
+.wiki-doc-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
