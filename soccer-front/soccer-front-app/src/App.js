@@ -11,7 +11,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Main/>}/>
-          <Route path='team/:teamName/*' element={<Team/>}/>
+          <Route path='team/:teamCode/*' element={<Team/>}/>
         </Routes>
       </BrowserRouter>
     </Suspense>

@@ -13,12 +13,13 @@ import CreatePost from "../team/board/CreatePost";
 import PostDetail from "../team/board/PostDetail";
 import WikiDoc from "../team/wiki/WikiDoc";
 import CreateWikiDoc from "../team/wiki/CreateWikiDoc";
+import DocHistory from "../team/wiki/DocHistory";
 
 const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
 
 const Team = () => {
 
-    const {teamName} = useParams();
+    const {teamCode} = useParams();
     const [isLogin, setIsLogin] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showJoinModal, setShowJoinModal] = useState(false);
@@ -119,6 +120,8 @@ const Team = () => {
                         <Route path="board" element={<Board />} />
                         <Route path="board/create" element={<CreatePost />} />
                         <Route path="board/:postId" element={<PostDetail />} />
+                        <Route path="wiki/history" element={<DocHistory />} />
+                        <Route path="wiki/:wikiDocId/:version" element={<WikiDoc />} />
                     </Routes>
                 </Container>
             </Col>
