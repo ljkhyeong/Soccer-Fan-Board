@@ -5,12 +5,12 @@ import {axiosInstance, formatDateTime} from "../../../service/ApiService";
 import {useNavigate, useParams} from "react-router-dom";
 
 const Board = (props) => {
-    const {teamName} = useParams();
+    const {teamCode} = useParams();
     const [posts, setPosts] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        axiosInstance.get(`/${teamName}/posts`)
+        axiosInstance.get(`/${teamCode}/posts`)
             .then(response => {
                 setPosts(response.data.result.content);
                 console.log(response);

@@ -6,7 +6,7 @@ import {useNavigate, useParams} from "react-router-dom";
 
 const CreatePost = (props) => {
 
-    const {teamName} = useParams();
+    const {teamCode} = useParams();
     const [postForm, setPostForm] = useState({
         title:'',
         content:''
@@ -19,7 +19,7 @@ const CreatePost = (props) => {
 
     const handlePostSubmit = (e) => {
         e.preventDefault();
-        axiosInstance.post(`/${teamName}/posts`, postForm)
+        axiosInstance.post(`/${teamCode}/posts`, postForm)
             .then(response => {
             console.log(response);
             setErrors(initStateObject(errors));

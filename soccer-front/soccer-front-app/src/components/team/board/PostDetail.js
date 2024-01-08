@@ -6,7 +6,7 @@ import {useParams} from "react-router-dom";
 
 
 const PostDetail = () => {
-    const {teamName, postId} = useParams();
+    const {teamCode, postId} = useParams();
     const [postDetail, setPostDetail] = useState({});
 
     useEffect(() => {
@@ -14,7 +14,7 @@ const PostDetail = () => {
     }, []);
 
     const renderPostDetail = () => {
-        axiosInstance.get(`${teamName}/posts/${postId}`)
+        axiosInstance.get(`${teamCode}/posts/${postId}`)
             .then(response => {
                 console.log(response)
                 setPostDetail(response.data.result)
@@ -40,7 +40,7 @@ const PostDetail = () => {
                           조회수: {postDetail.viewCount}
                       </Card.Footer>
                   </Card>
-                  <Comments teamName={teamName} postId={postId}/>
+                  <Comments />
               </Col>
           </Row>
       </Container>

@@ -4,8 +4,8 @@ import {axiosInstance} from "../../../service/ApiService";
 import {handleKeyDown, resetStates} from "../../../service/CommonService";
 import {formatDateTime} from "../../../service/ApiService";
 import {useParams} from "react-router-dom";
-const Comments = (props) => {
-    const {teamName, postId} = useParams();
+const Comments = () => {
+    const {teamCode, postId} = useParams();
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
     const [error, setError] = useState("");
@@ -16,7 +16,7 @@ const Comments = (props) => {
     }, [reload]);
 
     const renderCommentList = () => {
-        axiosInstance.get(`${teamName}/posts/${postId}/comments`)
+        axiosInstance.get(`${teamCode}/posts/${postId}/comments`)
             .then(response => {
                 console.log(response);
                 setComments(response.data.result.content);
@@ -26,7 +26,7 @@ const Comments = (props) => {
     }
 
     const handleCommentSubmit = () => {
-        axiosInstance.post(`${teamName}/posts/${postId}/comment`, {
+        axiosInstance.post(`${teamCode}/posts/${postId}/comment`, {
             comment : newComment
         }).then(response => {
             console.log(response);
