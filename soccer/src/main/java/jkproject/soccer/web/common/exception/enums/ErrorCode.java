@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
 
-	NON_EXISTENT_TEAM_NAME(HttpStatus.BAD_REQUEST, "존재하지 않는 팀"),
+	NON_EXISTENT_TEAM_CODE(HttpStatus.BAD_REQUEST, "존재하지 않는 팀"),
 	NON_EXISTENT_USER_ID(HttpStatus.BAD_REQUEST, "존재하지 않는 회원"),
 	NON_EXISTENT_POST_ID(HttpStatus.BAD_REQUEST, "존재하지 않는 게시물"),
 	NON_EXISTENT_WIKIDOC_ID(HttpStatus.BAD_REQUEST, "존재하지 않는 위키문서"),

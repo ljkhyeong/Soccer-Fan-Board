@@ -31,23 +31,23 @@ public class PostService {
 	private final ValidationResultHandler validationResultHandler;
 	private final TeamRepository teamRepository;
 
-	public Page<PostListResponseDto> lookupAllPosts(String teamName, Pageable pageable) {
-		Team team = teamRepository.findByName(teamName)
-			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_NAME));
+	public Page<PostListResponseDto> lookupAllPosts(String teamCode, Pageable pageable) {
+		Team team = teamRepository.findByCode(teamCode)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_CODE));
 		Page<Post> posts = postRepository.findAllByTeam(team, pageable);
 
 		return posts.map(PostListResponseDto::from);
 	}
 
 	@Transactional
-	public void createPost(String teamName, PostCreateRequestDto requestDto,
+	public void createPost(String teamCode, PostCreateRequestDto requestDto,
 		UserAuthenticationDto userDto, Errors errors) {
 
 		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_CREATE_POST);
 		User user = userRepository.findByLoginId(userDto.getLoginId())
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
-		Team team = teamRepository.findByName(teamName)
-			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_NAME));
+		Team team = teamRepository.findByCode(teamCode)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_CODE));
 		// TODO 사용자 검증로직 분리하자.
 		Post post = requestDto.toEntity(team, user);
 		postRepository.save(post);

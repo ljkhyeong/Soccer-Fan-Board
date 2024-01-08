@@ -20,6 +20,7 @@ public class Team {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "team_id")
 	private Long teamId;
+	private String code;
 	private String name;
 
 }

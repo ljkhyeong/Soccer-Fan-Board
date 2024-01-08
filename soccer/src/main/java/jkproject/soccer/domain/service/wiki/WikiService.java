@@ -34,9 +34,9 @@ public class WikiService {
 	private final TeamRepository teamRepository;
 	private final ValidationResultHandler validationResultHandler;
 
-	public DocVersionDetailResponseDto getNewDocVersion(String teamName) {
-		Team team = teamRepository.findByName(teamName)
-			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_NAME));
+	public DocVersionDetailResponseDto getNewDocVersion(String teamCode) {
+		Team team = teamRepository.findByCode(teamCode)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_CODE));
 
 		WikiDoc wikiDoc = wikiDocRepository.findByTeam(team)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_WIKIDOC_ID));
@@ -54,6 +54,7 @@ public class WikiService {
 	}
 
 	public DocVersionDetailResponseDto getDocVersion(Long wikiDocId, Integer version) {
+
 		WikiDoc wikiDoc = wikiDocRepository.findById(wikiDocId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_WIKIDOC_ID));
 
@@ -64,19 +65,19 @@ public class WikiService {
 	}
 
 	@Transactional
-	public void createNewDocVersion(String teamName, DocVersionCreateRequestDto requestDto,
+	public void createNewDocVersion(String teamCode, DocVersionCreateRequestDto requestDto,
 		UserAuthenticationDto userDto, Errors errors) {
 
 		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_LOGIN);
 
-		Team team = teamRepository.findByName(teamName)
-			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_NAME));
+		Team team = teamRepository.findByCode(teamCode)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_CODE));
 		WikiDoc wikiDoc = wikiDocRepository.findByTeam(team)
 			.orElseGet(() -> wikiDocRepository.save(requestDto.toWikiDocEntity(team)));
 		User user = userRepository.findByLoginId(userDto.getLoginId())
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 		Integer topVersion = docVersionRepository.findTopVersionByWikiDoc(wikiDoc)
-			.orElse(-1);
+			.orElse(0);
 
 		DocVersion newDoc = requestDto.toDocVersionEntity(wikiDoc, topVersion + 1, user);
 		docVersionRepository.save(newDoc);

@@ -30,30 +30,30 @@ public class WikiApiController {
 
 	private final WikiService wikiService;
 
-	@GetMapping("/{teamName}/wiki")
-	public Response<DocVersionDetailResponseDto> readNewDocVersion(@PathVariable String teamName) {
-		DocVersionDetailResponseDto wikiDocDto = wikiService.getNewDocVersion(teamName);
+	@GetMapping("/{teamCode}/wiki")
+	public Response<DocVersionDetailResponseDto> readNewDocVersion(@PathVariable String teamCode) {
+		DocVersionDetailResponseDto wikiDocDto = wikiService.getNewDocVersion(teamCode);
 		return Response.success(wikiDocDto);
 	}
 
-	@GetMapping("/{teamName}/wiki/{wikiDocId}/list")
-	public Response<Page<DocVersionListResponseDto>> lookupAllDocVersions(@PathVariable String teamName,
+	@GetMapping("/{teamCode}/wiki/{wikiDocId}/list")
+	public Response<Page<DocVersionListResponseDto>> lookupAllDocVersions(@PathVariable String teamCode,
 		@PathVariable Long wikiDocId,
 		@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 		Page<DocVersionListResponseDto> docVersionDtoList = wikiService.lookUpAllDocVersion(wikiDocId, pageable);
 		return Response.success(docVersionDtoList);
 	}
 
-	@PostMapping("/{teamName}/wiki")
-	public Response<Void> createNewDocVersion(@PathVariable String teamName,
+	@PostMapping("/{teamCode}/wiki")
+	public Response<Void> createNewDocVersion(@PathVariable String teamCode,
 		@RequestBody @Valid DocVersionCreateRequestDto requestDto,
 		Errors errors, @AuthenticationPrincipal UserAuthenticationDto userDto) {
-		wikiService.createNewDocVersion(teamName, requestDto, userDto, errors);
+		wikiService.createNewDocVersion(teamCode, requestDto, userDto, errors);
 		return Response.success();
 	}
 
-	@GetMapping("/{teamName}/wiki/{wikiDocId}")
-	public Response<DocVersionDetailResponseDto> readDocVersion(@PathVariable String teamName,
+	@GetMapping("/{teamCode}/wiki/{wikiDocId}")
+	public Response<DocVersionDetailResponseDto> readDocVersion(@PathVariable String teamCode,
 		@PathVariable Long wikiDocId, @RequestParam Integer version) {
 		DocVersionDetailResponseDto wikiDocDto = wikiService.getDocVersion(wikiDocId, version);
 		return Response.success(wikiDocDto);

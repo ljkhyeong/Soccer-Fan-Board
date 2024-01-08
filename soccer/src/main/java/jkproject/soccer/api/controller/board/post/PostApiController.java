@@ -29,24 +29,24 @@ public class PostApiController {
 
 	private final PostService postService;
 
-	@GetMapping("/{teamName}/posts")
-	public Response<Page<PostListResponseDto>> lookupAllPosts(@PathVariable String teamName,
+	@GetMapping("/{teamCode}/posts")
+	public Response<Page<PostListResponseDto>> lookupAllPosts(@PathVariable String teamCode,
 		@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-		Page<PostListResponseDto> postDtoList = postService.lookupAllPosts(teamName, pageable);
+		Page<PostListResponseDto> postDtoList = postService.lookupAllPosts(teamCode, pageable);
 		return Response.success(postDtoList);
 	}
 
-	@PostMapping("/{teamName}/posts")
-	public Response<Void> createPost(@PathVariable String teamName,
+	@PostMapping("/{teamCode}/posts")
+	public Response<Void> createPost(@PathVariable String teamCode,
 		@RequestBody @Valid PostCreateRequestDto requestDto,
 		Errors errors, @AuthenticationPrincipal UserAuthenticationDto userDto) {
 		//TODO 회원가입 상태면 회원 닉네임, 아니면 IP와 임시닉네임을 사용하도록
-		postService.createPost(teamName, requestDto, userDto, errors);
+		postService.createPost(teamCode, requestDto, userDto, errors);
 		return Response.success();
 	}
 
-	@GetMapping("/{teamName}/posts/{postId}")
-	public Response<PostDetailResponseDto> readPost(@PathVariable String teamName, @PathVariable Long postId) {
+	@GetMapping("/{teamCode}/posts/{postId}")
+	public Response<PostDetailResponseDto> readPost(@PathVariable String teamCode, @PathVariable Long postId) {
 		PostDetailResponseDto responseDto = postService.readPost(postId);
 		return Response.success(responseDto);
 	}
