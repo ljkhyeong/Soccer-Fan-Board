@@ -25,7 +25,7 @@ public class DocVersion extends CreationTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "doc_version_id")
 	private Long docVersionId;
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "TEXT")
 	private String body;
 	@Column(nullable = false, unique = true)
 	private Integer version;
