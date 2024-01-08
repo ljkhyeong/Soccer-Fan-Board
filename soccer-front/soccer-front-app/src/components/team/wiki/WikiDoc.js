@@ -1,7 +1,10 @@
 import {useEffect, useState} from "react";
-import {Button, Container} from "react-bootstrap";
+import {Badge, Button, Col, Container, Row, Card} from "react-bootstrap";
 import {axiosInstance, formatDateTime} from "../../../service/ApiService";
 import {useNavigate, useParams} from "react-router-dom";
+import MarkdownIt from 'markdown-it';
+import "../../../css/WikiDoc.css";
+
 
 
 const WikiDoc = () => {
@@ -9,6 +12,7 @@ const WikiDoc = () => {
     const [wikiDoc, setWikiDoc] = useState(null);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const mdParser = new MarkdownIt();
 
     useEffect(() => {
         if (wikiDocId && version) {
@@ -42,14 +46,37 @@ const WikiDoc = () => {
     }
 
     return (
-        <>
-            {wikiDoc && <><h1>{wikiDoc.title}</h1>
-                <p>{wikiDoc.body}</p></>}
-            {error && <p>{error}</p>}
-            {!wikiDocId && <Button onClick={() => navigate('../wiki/create', {state: {wikiDoc}})}>편집</Button>}
-            {wikiDoc ? <Button onClick={() => navigate('../wiki/history', {state: {wikiDoc}})}>역사</Button>
-                : <Button onClick={() => navigate('./create', {state: {wikiDoc}})}>새 문서 만들기</Button>}
-        </>
+        <Row className="justify-content-md-center">
+            <Col md={10}>
+                <Card>
+                    <Card.Body>
+                        {wikiDoc && (
+                            <>
+                                <div className="wiki-doc-header">
+                                    <Card.Title className="wiki-doc-title">{wikiDoc.title}</Card.Title>
+                                    <div className="wiki-doc-badge-group">
+                                        <Badge bg="secondary">작성자: {wikiDoc.writer}</Badge>{' '}
+                                        <Badge bg="info">생성일: {formatDateTime(wikiDoc.createdAt)}</Badge>
+                                    </div>
+                                </div>
+                                <Card.Text dangerouslySetInnerHTML={{ __html: mdParser.render(wikiDoc.body) }} />
+                            </>
+                        )}
+                        <div className="wiki-doc-buttons">
+                            {wikiDoc ? (
+                                <>
+                                    <Button onClick={() => navigate('../wiki/create', {state: {wikiDoc}})}>편집</Button>
+                                    <Button onClick={() => navigate('../wiki/history', {state: {wikiDoc}})}>역사</Button>
+                                </>
+                            ) : (
+                                <Button onClick={() => navigate('./create', {state: {wikiDoc}})}>새 문서 만들기</Button>
+                            )}
+                        </div>
+                        {error && <Card.Text>{error}</Card.Text>}
+                    </Card.Body>
+                </Card>
+            </Col>
+        </Row>
     )
 }
 
