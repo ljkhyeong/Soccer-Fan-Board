@@ -25,21 +25,23 @@ public class Player {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "player_id")
 	private Long playerId;
+	private String imagePath;
 	@Column(nullable = false)
 	private String name;
 	private String position;
 	@Column(nullable = false)
-	private String nationality;
+	private String country;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "team_id")
 	private Team team;
 
 	@Builder
-	public Player(String name, String position, String nationality, Team team) {
+	public Player(String imagePath, String name, String position, String country, Team team) {
+		this.imagePath = imagePath;
 		this.name = name;
 		this.position = position;
-		this.nationality = nationality;
+		this.country = country;
 		this.team = team;
 	}
 }

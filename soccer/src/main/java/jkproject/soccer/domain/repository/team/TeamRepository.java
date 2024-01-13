@@ -8,6 +8,8 @@ import jkproject.soccer.domain.entity.team.Team;
 
 public interface TeamRepository extends JpaRepository<Team, Long> {
 
-	Optional<Team> findByCode(String name);
+	Optional<Team> findByCode(String code);
+
+	Optional<Team> findByName(String name);
 
 }
