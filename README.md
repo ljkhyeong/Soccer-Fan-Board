@@ -1,4 +1,20 @@
 # Soccer-Fan-Board
+<img width="1437" alt="스크린샷 2024-01-16 오전 4 02 34" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/dce747b9-9eb3-411a-865d-2e574a462208">
+
+## 개요
+본 프로젝트는 축구 팬들에게 관련 팀 정보(선수단 정보, 경기일정 등)들과 소통 커뮤니티(위키문서, 게시판)를 제공하기 위한 프로젝트다.
+
+## 기술 스택
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
+<img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
+<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> 
+<img src="https://img.shields.io/badge/mariaDB-003545?style=for-the-badge&logo=mariaDB&logoColor=white">
+<img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
+<img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+<img src="https://img.shields.io/badge/springdatajpa-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
+<img src="https://img.shields.io/badge/hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white">
+
 ## 요구사항
 1. 일반 사용자
 - 회원가입 및 로그인:
@@ -32,6 +48,10 @@
 4. 추가 고려사항
 - 다국어 지원:
   - 다양한 사용자를 위해 다국어 지원을 고려할 수 있다.
+- 타 리그 지원:
+  - 다양한 사용자를 위해 다양한 국가 리그, 하부 리그 정보 지원을 고려할 수 있다.
+- 스크랩 기능 자동화:
+  - 시즌 종료 시 강등과 승격, 이적시장 종료 시 선수명단 변경에 대해 스크랩 기능 자동화를 고려할 수 있다.
 ---
 ## API
 
@@ -57,32 +77,35 @@
   - 응답:
     - 성공 시: Response<Void> (토큰 제거)
     - 실패 시: 오류 메시지
-2. 댓글 컨트롤러 (CommentApiController)
-- GET /api/v1/posts/{postId}/comments
+   
+2. 게시물 컨트롤러 (PostApiController)
+- GET /api/v1/{teamCode}/posts
+  - 목적: 모든 게시물 조회
+  - 응답: Page<PostListResponseDto>: 게시물 목록
+- POST /api/v1/{teamCode}/posts
+  - 목적: 새 게시물 작성
+  - 요청 본문: PostCreateRequestDto (게시물 제목, 내용 등)
+  - 응답:
+    - 성공 시: Response<Void>
+    - 실패 시: 오류 메시지
+- GET /api/v1/{teamCode}/posts/{postId}
+  - 목적: 특정 게시물 조회
+  - 매개변수: postId: 게시물 ID
+  - 응답: PostDetailResponseDto: 게시물 상세 정보
+  
+3. 댓글 컨트롤러 (CommentApiController)
+- GET /api/v1/{teamCode}/posts/{postId}/comments
   - 목적: 특정 게시물의 모든 댓글 조회
   - 매개변수: postId: 게시물 ID
   - 응답: Page<CommentListResponseDto>: 댓글 목록
-- POST /api/v1/posts/{postId}/comment
+- POST /api/v1/{teamCode}/posts/{postId}/comment
   - 목적: 특정 게시물에 댓글 작성
   - 매개변수: postId: 게시물 ID
   - 요청 본문: CommentCreateRequestDto (댓글 내용 등)
   - 응답:
     - 성공 시: Response<Void>
     - 실패 시: 오류 메시지
-3. 게시물 컨트롤러 (PostApiController)
-- GET /api/v1/posts
-  - 목적: 모든 게시물 조회
-  - 응답: Page<PostListResponseDto>: 게시물 목록
-- POST /api/v1/posts
-  - 목적: 새 게시물 작성
-  - 요청 본문: PostCreateRequestDto (게시물 제목, 내용 등)
-  - 응답:
-    - 성공 시: Response<Void>
-    - 실패 시: 오류 메시지
-- GET /api/v1/posts/{postId}
-  - 목적: 특정 게시물 조회
-  - 매개변수: postId: 게시물 ID
-  - 응답: PostDetailResponseDto: 게시물 상세 정보
+
 4. 사용자 컨트롤러 (UserApiController)
 - POST /api/v1/user
   - 목적: 새 사용자 계정 생성
@@ -101,24 +124,36 @@
   - 응답:
     - 성공 시: Response<Void>
     - 실패 시: 오류 메시지
+    
+4. 위키 컨트롤러 (WikiApiController)
+- GET /api/v1/{teamCode}/wiki
+  - 목적: 위키 최신문서 확인
+  - 응답: DocVersionDetailResponseDto
+- GET /api/v1/{teamCode}/wiki/{wikiDocId}
+  - 목적: 해당 버전 위키문서 조회
+  - 응답: DocVersionDetailResponseDto
+- GET /api/v1/{teamCode}/wiki/{wikiDocId}/list
+  - 목적: 모든 버전 위키문서 조회
+  - 응답: Page<DocVersionListResponseDto>: 위키문서 버전 목록
+- POST /api/v1/{teamCode}/wiki
+  - 목적: 새 버전 위키문서 작성
+  - 요청 본문: DocVersionCreateRequestDto (위키문서 제목, 내용)
+  - 응답:
+    - 성공 시: Response<Void>
+    - 실패 시: 오류 메시지
 
-(예정)
-- 공통
-  - 문서 제목으로 문서 찾기 : Query wiki_doc_pk
-- /api/v1/w/[문서이름]
-  - 해당 문서의 최신 버전 읽기 : Query wiki_doc_pk
-- /api/v1/edit/[문서이름]
-  - 해당 문서의 최신 버전 읽기 : Query wiki_doc_pk
-  - 새로운 문서 생성하기 : Mutation insert_wiki_doc
-  - 문서의 새로운 버전 생성하기 : Mutation insert_doc_version
-- /api/v1/history[문서이름]
-  - 해당 문서의 모든 버전 읽기 : Query wiki_doc_pk
+5. 선수 컨트롤러 (PlayerApiController)
+- GET /api/v1/{teamCode}/players
+  - 목적: 선수단 확인
+  - 응답: Page<PlayerListResponseDto>: 선수 목록
+
+6. 팀 컨트롤러 (TeamApiController)
+- GET /api/v1/{teamCode}
+  - 목적: 팀 정보 확인
+  - 응답: TeamResponseDto
+
 
 </details>
 
----
-## ERD
-(수정예정)
-![배리어프리 board](https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/fc83c217-64fd-438c-9a86-74bfd6e77381)
 
 ---
