@@ -7,18 +7,26 @@ import {useNavigate, useParams} from "react-router-dom";
 const Board = (props) => {
     const {teamCode} = useParams();
     const [posts, setPosts] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPage, setTotalPage] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
-        axiosInstance.get(`/${teamCode}/posts`)
+        axiosInstance.get(`/${teamCode}/posts`, {
+            params : {
+                page: currentPage,
+                size: 10
+            }
+        })
             .then(response => {
                 setPosts(response.data.result.content);
+                setTotalPage(response.data.result.totalPages);
                 console.log(response);
             })
             .catch(error => {
                 console.log(error);
             })
-    }, []);
+    }, [currentPage]);
 
     const handlePostForm = () => {
         navigate('./create');
@@ -27,7 +35,6 @@ const Board = (props) => {
     const handleShowPost = (postId) => {
         navigate(`./${postId}`)
     };
-
 
 
     return (
@@ -45,7 +52,7 @@ const Board = (props) => {
                 </thead>
                 <tbody>
                 {posts.map((post, index) => (
-                    <tr key={post.postId} onClick={() => handleShowPost(post.postId)}>
+                    <tr key={post.postId} onClick={() => handleShowPost(post.postId)} style={{cursor: "pointer"}}>
                         <td>{index + 1}</td>
                         <td>{post.title}</td>
                         <td>{post.writer}</td>
@@ -55,6 +62,13 @@ const Board = (props) => {
                 ))}
                 </tbody>
             </Table>
+            <div>
+                <Button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 0}>이전</Button>
+                {Array.from({length:totalPage},(_,index) => (
+                    <Button variant="light" key={index} onClick={() => setCurrentPage(index)}>{index+1}</Button>
+                ))}
+                <Button onClick={() => setCurrentPage(currentPage + 1)} disabled={posts.length < 10}>다음</Button>
+            </div>
         </>
     );
 }
