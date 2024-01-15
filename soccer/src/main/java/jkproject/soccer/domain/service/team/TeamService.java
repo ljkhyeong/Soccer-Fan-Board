@@ -3,7 +3,7 @@ package jkproject.soccer.domain.service.team;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jkproject.soccer.api.dto.team.response.TeamNameResponseDto;
+import jkproject.soccer.api.dto.team.response.TeamResponseDto;
 import jkproject.soccer.domain.entity.team.Team;
 import jkproject.soccer.domain.repository.team.TeamRepository;
 import jkproject.soccer.web.common.exception.ApplicationException;
@@ -17,11 +17,11 @@ public class TeamService {
 
 	private final TeamRepository teamRepository;
 
-	public TeamNameResponseDto getTeamName(String teamCode) {
+	public TeamResponseDto getTeamName(String teamCode) {
 		Team team = teamRepository.findByCode(teamCode)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_CODE));
 
-		return TeamNameResponseDto.from(team);
+		return TeamResponseDto.from(team);
 	}
 
 }

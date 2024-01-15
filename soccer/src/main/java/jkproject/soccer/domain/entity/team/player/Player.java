@@ -25,6 +25,7 @@ public class Player {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "player_id")
 	private Long playerId;
+	private String infoLink;
 	private String imagePath;
 	@Column(nullable = false)
 	private String name;
@@ -37,7 +38,8 @@ public class Player {
 	private Team team;
 
 	@Builder
-	public Player(String imagePath, String name, String position, String country, Team team) {
+	public Player(String infoLink, String imagePath, String name, String position, String country, Team team) {
+		this.infoLink = infoLink;
 		this.imagePath = imagePath;
 		this.name = name;
 		this.position = position;
