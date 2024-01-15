@@ -1,5 +1,15 @@
 # Soccer-Fan-Board
-<img width="1437" alt="스크린샷 2024-01-16 오전 4 02 34" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/dce747b9-9eb3-411a-865d-2e574a462208">
+<img width="1433" alt="스크린샷 2024-01-16 오전 5 31 20" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/d55efa3d-20d6-4586-ae85-d2ab60008a03">
+<img width="1435" alt="스크린샷 2024-01-16 오전 5 38 07" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/1fa7a90d-7061-4e3d-a8a9-ee135601d994">
+
+<details>
+ <summary>화면</summary>
+  <img width="1435" alt="스크린샷 2024-01-16 오전 5 37 03" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/fa1e9004-30ef-4204-ba52-0fd1821231ba">
+  <img width="1433" alt="스크린샷 2024-01-16 오전 5 31 09" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/82fc5bfe-709b-41f3-9bea-15f0683ee178">
+<img width="1435" alt="스크린샷 2024-01-16 오전 5 32 00" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/18cf76fb-d3f7-40cf-83f2-b41ad1d5f060">
+<img width="1424" alt="스크린샷 2024-01-16 오전 5 36 48" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/752f0d34-e07a-4f4c-b45f-9313d490f9fc">
+</details>
+
 
 ## 개요
 본 프로젝트는 축구 팬들에게 관련 팀 정보(선수단 정보, 경기일정 등)들과 소통 커뮤니티(위키문서, 게시판)를 제공하기 위한 프로젝트다.
