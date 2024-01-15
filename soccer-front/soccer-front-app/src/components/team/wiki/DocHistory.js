@@ -29,7 +29,7 @@ const DocHistory = () => {
             <ListGroup>
                 {history.map((doc, index) => (
                     <ListGroup.Item key={doc.docVersionId}>
-                        {index +1} - V{doc.version} - {formatDateTime(doc.createdAt)}
+                        {index +1} - V{doc.version} - {formatDateTime(doc.createdAt)} - {doc.writer}
                         <Button onClick={() => navigate(`../wiki/${wikiDocId}/${doc.version}`)}>보기</Button>
                     </ListGroup.Item>
                     )
