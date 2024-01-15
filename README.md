@@ -3,9 +3,10 @@
 <img width="1435" alt="스크린샷 2024-01-16 오전 5 38 07" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/1fa7a90d-7061-4e3d-a8a9-ee135601d994">
 
 <details>
- <summary>화면</summary>
+ <summary>추가 화면</summary>
   <img width="1435" alt="스크린샷 2024-01-16 오전 5 37 03" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/fa1e9004-30ef-4204-ba52-0fd1821231ba">
   <img width="1433" alt="스크린샷 2024-01-16 오전 5 31 09" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/82fc5bfe-709b-41f3-9bea-15f0683ee178">
+ <img width="1438" alt="스크린샷 2024-01-16 오전 5 43 04" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/f422c1d6-a72c-497a-bf21-e00771bbdf42">
 <img width="1435" alt="스크린샷 2024-01-16 오전 5 32 00" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/18cf76fb-d3f7-40cf-83f2-b41ad1d5f060">
 <img width="1424" alt="스크린샷 2024-01-16 오전 5 36 48" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/752f0d34-e07a-4f4c-b45f-9313d490f9fc">
 </details>
