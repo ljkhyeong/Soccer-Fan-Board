@@ -14,6 +14,7 @@ import PostDetail from "../team/board/PostDetail";
 import WikiDoc from "../team/wiki/WikiDoc";
 import CreateWikiDoc from "../team/wiki/CreateWikiDoc";
 import DocHistory from "../team/wiki/DocHistory";
+import Players from "../team/players/Players";
 
 const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
 
@@ -24,7 +25,18 @@ const Team = () => {
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showJoinModal, setShowJoinModal] = useState(false);
     const [postId, setPostId] = useState(0);
+    const [team, setTeam] = useState({});
     const navigate = useNavigate();
+
+    useEffect(() => {
+        axiosInstance.get(`/${teamCode}`)
+            .then(response => {
+                console.log(response);
+                setTeam(response.data.result);
+            }).catch(error => {
+            console.log(error);
+        });
+    }, []);
 
     useEffect(() => {
         if (!getAccessToken()) {
@@ -69,16 +81,18 @@ const Team = () => {
     return (
         <Container fluid className="d-flex" id="wrapper">
             <Col xs={2} id="sidebar-wrapper" className="border-end bg-white">
-                <div className="sidebar-heading border-bottom bg-light">Tottenham Hotspur</div>
+                <div className="sidebar-heading border-bottom bg-light"><img src={team.imagePath}/>{team.name}</div>
                 <Nav className="flex-column">
                     <Nav.Link className="list-group-item-action list-group-item-light p-3"
                               onClick={() => navigate(`./wiki`)}>팀 정보(Wiki)</Nav.Link>
-                    <Nav.Link className="list-group-item-action list-group-item-light p-3" href="#!"
-                              >선수단</Nav.Link>
+                    <Nav.Link className="list-group-item-action list-group-item-light p-3"
+                              onClick={() => navigate(`./players`)}>선수단</Nav.Link>
                     <Nav.Link className="list-group-item-action list-group-item-light p-3" href="#!"
                               >경기일정</Nav.Link>
                     <Nav.Link className="list-group-item-action list-group-item-light p-3"
                               onClick={() => navigate(`./board`)}>게시판</Nav.Link>
+                    <Nav.Link className="list-group-item-action list-group-item-light p-3"
+                              onClick={() => navigate(`../`)}>메인으로</Nav.Link>
 
                 </Nav>
             </Col>
@@ -117,11 +131,12 @@ const Team = () => {
                         <Route index element={<Intro />} />
                         <Route path="wiki" element={<WikiDoc />} />
                         <Route path="wiki/create" element={<CreateWikiDoc />} />
+                        <Route path="wiki/history" element={<DocHistory />} />
+                        <Route path="wiki/:wikiDocId/:version" element={<WikiDoc />} />
+                        <Route path="players" element={<Players/>} />
                         <Route path="board" element={<Board />} />
                         <Route path="board/create" element={<CreatePost />} />
                         <Route path="board/:postId" element={<PostDetail />} />
-                        <Route path="wiki/history" element={<DocHistory />} />
-                        <Route path="wiki/:wikiDocId/:version" element={<WikiDoc />} />
                     </Routes>
                 </Container>
             </Col>
