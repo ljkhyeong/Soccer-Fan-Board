@@ -6,12 +6,14 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class TeamNameResponseDto {
+public class TeamResponseDto {
 	String name;
+	String imagePath;
 
-	public static TeamNameResponseDto from(Team team) {
-		return TeamNameResponseDto.builder()
+	public static TeamResponseDto from(Team team) {
+		return TeamResponseDto.builder()
 			.name(team.getName())
+			.imagePath(team.getImagePath())
 			.build();
 	}
 }

@@ -22,5 +22,6 @@ public class Team {
 	private Long teamId;
 	private String code;
 	private String name;
+	private String imagePath;
 
 }
