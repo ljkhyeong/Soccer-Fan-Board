@@ -12,13 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import jkproject.soccer.api.dto.user.UserAuthenticationDto;
-import jkproject.soccer.api.dto.user.request.UserCreateRequestDto;
-import jkproject.soccer.api.dto.user.response.UserCreateResponseDto;
 import jkproject.soccer.common.util.MockProvider;
-import jkproject.soccer.domain.entity.user.User;
-import jkproject.soccer.domain.repository.user.UserRepository;
-import jkproject.soccer.domain.service.user.UserService;
+import jkproject.soccer.user.repository.UserRepository;
+import jkproject.soccer.user.service.UserService;
+import jkproject.soccer.user.data.dto.UserAuthenticationDto;
+import jkproject.soccer.user.data.dto.request.UserCreateRequestDto;
+import jkproject.soccer.user.data.dto.response.UserCreateResponseDto;
+import jkproject.soccer.user.data.entity.User;
 
 @SpringBootTest(classes = {UserService.class})
 @Import(value = MockProvider.class)

@@ -2,7 +2,7 @@ package jkproject.soccer.common.util;
 
 import org.springframework.boot.test.context.TestConfiguration;
 
-import jkproject.soccer.domain.entity.user.User;
+import jkproject.soccer.user.data.entity.User;
 
 @TestConfiguration
 public class MockProvider {
