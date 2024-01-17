@@ -2,9 +2,9 @@ package jkproject.soccer.board.data.dto.post.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jkproject.soccer.board.data.entity.post.Post;
+import jkproject.soccer.common.exception.enums.ValidationMessage;
 import jkproject.soccer.team.data.entity.Team;
 import jkproject.soccer.user.data.entity.User;
-import jkproject.soccer.common.exception.enums.ValidationMessage;
 import lombok.Data;
 
 @Data
@@ -22,6 +22,7 @@ public class PostCreateRequestDto {
 			.team(team)
 			.user(user)
 			.viewCount(0L)
+			.heartCount(0L)
 			.build();
 	}
 }
