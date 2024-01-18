@@ -11,14 +11,14 @@ import jkproject.soccer.board.data.dto.post.response.PostDetailResponseDto;
 import jkproject.soccer.board.data.dto.post.response.PostListResponseDto;
 import jkproject.soccer.board.data.entity.post.Post;
 import jkproject.soccer.board.repository.post.PostRepository;
-import jkproject.soccer.team.repository.TeamRepository;
-import jkproject.soccer.user.repository.UserRepository;
-import jkproject.soccer.team.data.entity.Team;
-import jkproject.soccer.user.data.dto.UserAuthenticationDto;
-import jkproject.soccer.user.data.entity.User;
 import jkproject.soccer.common.exception.ApplicationException;
 import jkproject.soccer.common.exception.enums.ErrorCode;
 import jkproject.soccer.common.validator.ValidationResultHandler;
+import jkproject.soccer.team.data.entity.Team;
+import jkproject.soccer.team.repository.TeamRepository;
+import jkproject.soccer.user.data.dto.UserAuthenticationDto;
+import jkproject.soccer.user.data.entity.User;
+import jkproject.soccer.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -55,15 +55,12 @@ public class PostService {
 
 	@Transactional
 	public PostDetailResponseDto readPost(Long postId) {
-		increasePostViewCount(postId);
-
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
+
+		post.increaseViewCount();
 
 		return PostDetailResponseDto.from(post);
 	}
 
-	private void increasePostViewCount(Long postId) {
-		postRepository.increaseViewCountByPostId(postId);
-	}
 }
