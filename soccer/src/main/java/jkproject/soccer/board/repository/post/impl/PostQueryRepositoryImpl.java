@@ -1,4 +1,4 @@
-package jkproject.soccer.board.repository.heart.impl;
+package jkproject.soccer.board.repository.post.impl;
 
 import static jkproject.soccer.board.data.entity.post.QPost.*;
 
@@ -7,12 +7,12 @@ import org.springframework.stereotype.Repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jkproject.soccer.board.data.entity.post.Post;
-import jkproject.soccer.board.repository.heart.HeartQueryRepository;
+import jkproject.soccer.board.repository.post.PostQueryRepository;
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class HeartQueryRepositoryImpl implements HeartQueryRepository {
+public class PostQueryRepositoryImpl implements PostQueryRepository {
 
 	private final JPAQueryFactory queryFactory;
 
@@ -30,4 +30,5 @@ public class HeartQueryRepositoryImpl implements HeartQueryRepository {
 				.execute();
 		}
 	}
+
 }

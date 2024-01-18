@@ -21,8 +21,6 @@ public class PostCreateRequestDto {
 			.writer(user.getNickname())
 			.team(team)
 			.user(user)
-			.viewCount(0L)
-			.heartCount(0L)
 			.build();
 	}
 }

@@ -14,6 +14,7 @@ public class PostDetailResponseDto {
 	private String content;
 	private String writer;
 	private Long viewCount;
+	private Long heartCount;
 	private LocalDateTime createdAt;
 
 	public static PostDetailResponseDto from(Post post) {
@@ -23,7 +24,9 @@ public class PostDetailResponseDto {
 			.content(post.getContent())
 			.writer(post.getWriter())
 			.viewCount(post.getViewCount())
+			.heartCount(post.getHeartCount())
 			.createdAt(post.getCreatedAt())
 			.build();
 	}
+
 }

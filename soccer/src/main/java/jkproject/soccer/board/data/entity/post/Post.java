@@ -18,9 +18,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @Table(name = "POST_TB")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class Post extends BaseTimeEntity {
 
 	@Id
@@ -33,8 +33,8 @@ public class Post extends BaseTimeEntity {
 	private String content;
 	@Column(nullable = false)
 	private String writer;
-	private Long viewCount;
-	private Long heartCount;
+	private Long viewCount = 0L;
+	private Long heartCount = 0L;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "team_id")
@@ -44,17 +44,17 @@ public class Post extends BaseTimeEntity {
 	private User user;
 
 	@Builder
-	public Post(String title, String content, String writer, Team team, User user, Long viewCount, Long heartCount) {
+	public Post(String title, String content, String writer, Team team, User user) {
 		this.title = title;
 		this.content = content;
 		this.writer = writer;
 		this.team = team;
 		this.user = user;
-		this.viewCount = viewCount;
-		this.heartCount = heartCount;
 	}
 
 	public void increaseViewCount() {
 		this.viewCount++;
 	}
 }
+
+
