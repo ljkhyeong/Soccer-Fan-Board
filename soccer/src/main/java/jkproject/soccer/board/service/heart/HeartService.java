@@ -58,4 +58,13 @@ public class HeartService {
 
 		heartRepository.delete(heart);
 	}
+
+	public long getHeartCount(Long postId) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
+
+		long count = heartRepository.countByPost(post);
+
+		return count;
+	}
 }
