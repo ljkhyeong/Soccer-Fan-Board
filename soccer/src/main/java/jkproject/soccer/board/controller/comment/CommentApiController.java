@@ -2,8 +2,6 @@ package jkproject.soccer.board.controller.comment;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import jkproject.soccer.board.data.dto.comment.request.CommentCreateRequestDto;
 import jkproject.soccer.board.data.dto.comment.response.CommentListResponseDto;
-import jkproject.soccer.common.data.dto.response.Response;
 import jkproject.soccer.board.service.comment.CommentService;
+import jkproject.soccer.common.data.dto.response.Response;
 import jkproject.soccer.user.data.dto.UserAuthenticationDto;
 import lombok.RequiredArgsConstructor;
 
@@ -30,8 +28,7 @@ public class CommentApiController {
 
 	@GetMapping("/{teamCode}/posts/{postId}/comments")
 	public Response<Page<CommentListResponseDto>> readComments(@PathVariable String teamCode,
-		@PathVariable Long postId,
-		@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+		@PathVariable Long postId, Pageable pageable) {
 
 		Page<CommentListResponseDto> dtoList = commentService.readComments(postId, pageable);
 
