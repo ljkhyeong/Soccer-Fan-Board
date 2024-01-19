@@ -11,6 +11,10 @@ const Comments = () => {
         parentId : '',
         comment : ''
     });
+    const [replyForm, setReplyForm] = useState({
+        parentId : '',
+        comment : ''
+    });
     const [error, setError] = useState("");
     const [activeCommentId, setActiveCommentId] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
@@ -44,6 +48,23 @@ const Comments = () => {
             console.log(response);
             setError('');
             setCommentForm(initStateObject(commentForm));
+            setReplyForm(initStateObject(replyForm));
+            setActiveCommentId(null);
+            setReload(!reload);
+        }).catch(error => {
+            console.log(error);
+            const errorResult = error.response.data.result;
+            setError(errorResult.valid_comment);
+        })
+    }
+
+    const handleReplySubmit = () => {
+        axiosInstance.post(`${teamCode}/posts/${postId}/comment`, replyForm
+        ).then(response => {
+            console.log(response);
+            setError('');
+            setCommentForm(initStateObject(commentForm));
+            setReplyForm(initStateObject(replyForm));
             setActiveCommentId(null);
             setReload(!reload);
         }).catch(error => {
@@ -55,7 +76,7 @@ const Comments = () => {
 
     const handleReplyOpen = (commentId) => {
         setActiveCommentId(commentId);
-        setCommentForm({
+        setReplyForm({
             parentId: commentId,
             comment: ''
         })
@@ -69,6 +90,7 @@ const Comments = () => {
                     <Form.Control
                         name="comment"
                         as="textarea"
+                        value={commentForm.comment}
                         rows={2}
                         placeholder="댓글을 입력하세요"
                         onChange={(e) => handleInputChange(e, commentForm, setCommentForm)}
@@ -100,14 +122,15 @@ const Comments = () => {
                                         <Form.Control
                                             name="comment"
                                             as="textarea"
+                                            value={replyForm.comment}
                                             rows={2}
                                             placeholder="댓글을 입력하세요"
-                                            onChange={(e) => handleInputChange(e, commentForm, setCommentForm)}
-                                            onKeyDown={(e) => handleKeyDown(e, handleCommentSubmit)}
+                                            onChange={(e) => handleInputChange(e, replyForm, setReplyForm)}
+                                            onKeyDown={(e) => handleKeyDown(e, handleReplySubmit)}
                                         />
                                         {error && <Form.Text className="valid-error">{error}</Form.Text>}
                                     </Form.Group>
-                                    <Button onClick={handleCommentSubmit}>댓글 작성</Button>
+                                    <Button onClick={handleReplySubmit}>댓글 작성</Button>
                                 </Form>
                             )}
                         </ListGroup.Item>
