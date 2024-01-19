@@ -12,12 +12,12 @@ import jkproject.soccer.board.data.entity.comment.Comment;
 import jkproject.soccer.board.data.entity.post.Post;
 import jkproject.soccer.board.repository.comment.CommentRepository;
 import jkproject.soccer.board.repository.post.PostRepository;
-import jkproject.soccer.user.repository.UserRepository;
-import jkproject.soccer.user.data.dto.UserAuthenticationDto;
-import jkproject.soccer.user.data.entity.User;
 import jkproject.soccer.common.exception.ApplicationException;
 import jkproject.soccer.common.exception.enums.ErrorCode;
 import jkproject.soccer.common.validator.ValidationResultHandler;
+import jkproject.soccer.user.data.dto.UserAuthenticationDto;
+import jkproject.soccer.user.data.entity.User;
+import jkproject.soccer.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -31,7 +31,8 @@ public class CommentService {
 	private final ValidationResultHandler validationResultHandler;
 
 	public Page<CommentListResponseDto> readComments(Long postId, Pageable pageable) {
-		Page<Comment> comments = commentRepository.findByPostId(postId, pageable);
+		Page<Comment> comments = commentRepository.findAllByPostId(postId, pageable);
+
 		return comments.map(CommentListResponseDto::from);
 	}
 
@@ -44,7 +45,18 @@ public class CommentService {
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
 		User user = userRepository.findByLoginId(userDto.getLoginId())
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
-		Comment comment = requestDto.toEntity(user, post);
+
+		Long parentId = requestDto.getParentId();
+		Comment comment;
+
+		if (parentId == null) {
+			comment = requestDto.toEntity(null, user, post);
+		} else {
+			Comment parent = commentRepository.findById(parentId)
+				.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_COMMENT_ID));
+			comment = requestDto.toEntity(parent, user, post);
+		}
+
 		commentRepository.save(comment);
 	}
 }
