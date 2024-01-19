@@ -13,7 +13,7 @@ const Players = () => {
         axiosInstance.get(`/${teamCode}/players`, {
             params: {
                 page: currentPage,
-                size: 10
+                size: 5
             }
         })
             .then(response => {
@@ -56,7 +56,7 @@ const Players = () => {
                 {Array.from({length: totalPage}, (_,index) => (
                     <Button variant="light" key = {index} onClick={() => setCurrentPage(index)}> {index+1} </Button>
                 ))}
-                <Button onClick={() => setCurrentPage(currentPage + 1)} disabled={players.length < 10}>다음</Button>
+                <Button onClick={() => setCurrentPage(currentPage + 1)} disabled={players.length < 5}>다음</Button>
             </div>
         </>
     );
