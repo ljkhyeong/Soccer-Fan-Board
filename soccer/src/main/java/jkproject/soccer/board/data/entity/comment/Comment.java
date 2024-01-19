@@ -37,6 +37,13 @@ public class Comment extends BaseTimeEntity {
 	private String commenter;
 	@Column(nullable = false)
 	private String comment;
+	@Column(nullable = false)
+	private boolean Removed = false;
+
+	@ManyToOne
+	@JoinColumn(name = "parent_id")
+	private Comment parent;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -45,11 +52,15 @@ public class Comment extends BaseTimeEntity {
 	private Post post;
 
 	@Builder
-	public Comment(String commenter, String comment, User user, Post post) {
+	public Comment(String commenter, String comment, Comment parent, User user, Post post) {
 		this.commenter = commenter;
 		this.comment = comment;
+		this.parent = parent;
 		this.user = user;
 		this.post = post;
 	}
 
+	public boolean isReply() {
+		return this.parent != null;
+	}
 }
