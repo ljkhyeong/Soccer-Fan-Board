@@ -13,6 +13,7 @@ public class PostListResponseDto {
 	private String title;
 	private String writer;
 	private Long viewCount;
+	private Long heartCount;
 	private LocalDateTime createdAt;
 
 	public static PostListResponseDto from(Post post) {
@@ -21,6 +22,7 @@ public class PostListResponseDto {
 			.title(post.getTitle())
 			.writer(post.getWriter())
 			.viewCount(post.getViewCount())
+			.heartCount(post.getHeartCount())
 			.createdAt(post.getCreatedAt())
 			.build();
 	}
