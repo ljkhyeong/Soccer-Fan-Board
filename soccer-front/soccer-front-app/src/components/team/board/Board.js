@@ -12,6 +12,10 @@ const Board = (props) => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        renderPostList();
+    }, [currentPage]);
+
+    const renderPostList = () => {
         axiosInstance.get(`/${teamCode}/posts`, {
             params : {
                 page: currentPage,
@@ -26,7 +30,7 @@ const Board = (props) => {
             .catch(error => {
                 console.log(error);
             })
-    }, [currentPage]);
+    }
 
     const handlePostForm = () => {
         navigate('./create');
@@ -48,6 +52,7 @@ const Board = (props) => {
                     <th>글쓴이</th>
                     <th>작성일</th>
                     <th>조회수</th>
+                    <th>좋아요</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -58,6 +63,7 @@ const Board = (props) => {
                         <td>{post.writer}</td>
                         <td>{formatDateTime(post.createdAt)}</td>
                         <td>{post.viewCount}</td>
+                        <td>{post.heartCount}</td>
                     </tr>
                 ))}
                 </tbody>
