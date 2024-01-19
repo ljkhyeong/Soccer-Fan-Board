@@ -13,14 +13,19 @@ public class CommentListResponseDto {
 	private Long commentId;
 	private String commenter;
 	private String comment;
+	private boolean isReply;
 	private LocalDateTime createdAt;
 
 	public static CommentListResponseDto from(Comment comment) {
+
 		return CommentListResponseDto.builder()
 			.commentId(comment.getCommentId())
 			.commenter(comment.getCommenter())
-			.comment(comment.getComment())
+			.comment(comment.isRemoved() ? "삭제된 댓글입니다." : comment.getComment())
+			.isReply(comment.isReply())
 			.createdAt(comment.getCreatedAt())
 			.build();
+
 	}
+
 }
