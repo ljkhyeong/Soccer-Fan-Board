@@ -106,7 +106,6 @@ const Team = () => {
             <Col id="page-content-wrapper">
                 <Navbar expand="lg" className="navbar-light bg-light border-bottom">
                     <Container fluid>
-                        <Button variant="primary" id="sidebarToggle">Toggle Menu</Button>
                         <Navbar.Toggle aria-controls="navbarSupportedContent" />
                         <Navbar.Collapse id="navbarSupportedContent" className="justify-content-end">
                             <Nav>
