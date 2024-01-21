@@ -1,5 +1,8 @@
 package jkproject.soccer.board.data.entity.post;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,7 +11,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jkproject.soccer.board.data.entity.comment.Comment;
 import jkproject.soccer.common.data.entity.BaseTimeEntity;
 import jkproject.soccer.team.data.entity.Team;
 import jkproject.soccer.user.data.entity.User;
@@ -42,6 +47,8 @@ public class Post extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
+	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+	private List<Comment> comments;
 
 	@Builder
 	public Post(String title, String content, String writer, Team team, User user) {

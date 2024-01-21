@@ -3,6 +3,7 @@ package jkproject.soccer.wiki.data.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +34,7 @@ public class WikiDoc {
 	@OneToOne
 	@JoinColumn(name = "team_id")
 	private Team team;
-	@OneToMany(mappedBy = "wikiDoc")
+	@OneToMany(mappedBy = "wikiDoc", cascade = CascadeType.REMOVE)
 	private List<DocVersion> docVersions = new ArrayList<>();
 
 	@Builder

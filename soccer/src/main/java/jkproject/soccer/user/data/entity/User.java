@@ -1,8 +1,5 @@
 package jkproject.soccer.user.data.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,14 +7,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jkproject.soccer.board.data.entity.comment.Comment;
-import jkproject.soccer.board.data.entity.post.Post;
 import jkproject.soccer.common.data.entity.BaseTimeEntity;
-import jkproject.soccer.user.data.enums.UserRole;
 import jkproject.soccer.user.data.dto.request.UserUpdateRequestDto;
-import jkproject.soccer.wiki.data.entity.DocVersion;
+import jkproject.soccer.user.data.enums.UserRole;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,12 +38,6 @@ public class User extends BaseTimeEntity {
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
-	@OneToMany(mappedBy = "user")
-	private List<Post> posts = new ArrayList<>();
-	@OneToMany(mappedBy = "user")
-	private List<Comment> comments = new ArrayList<>();
-	@OneToMany(mappedBy = "user")
-	private List<DocVersion> docs = new ArrayList<>();
 
 	@Builder
 	public User(String loginId, String password, String nickname, String email, String phoneNumber, UserRole role) {
