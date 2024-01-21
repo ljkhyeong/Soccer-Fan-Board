@@ -25,7 +25,9 @@ public class CommentCreateRequestDto {
 			builder.parent(parent);
 		}
 
-		return builder.build();
+		Comment comment = builder.build();
+		post.getComments().add(comment);
+		return comment;
 	}
 
 }
