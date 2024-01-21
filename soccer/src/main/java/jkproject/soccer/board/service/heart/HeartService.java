@@ -41,6 +41,7 @@ public class HeartService {
 			.user(user)
 			.build();
 
+		post.addHeart(heart);
 		heartRepository.save(heart);
 	}
 

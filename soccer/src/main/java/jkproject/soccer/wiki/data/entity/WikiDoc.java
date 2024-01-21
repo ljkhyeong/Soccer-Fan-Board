@@ -34,7 +34,7 @@ public class WikiDoc {
 	@OneToOne
 	@JoinColumn(name = "team_id")
 	private Team team;
-	@OneToMany(mappedBy = "wikiDoc", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "wikiDoc", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<DocVersion> docVersions = new ArrayList<>();
 
 	@Builder

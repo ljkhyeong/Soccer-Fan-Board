@@ -14,6 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jkproject.soccer.board.data.entity.comment.Comment;
+import jkproject.soccer.board.data.entity.heart.Heart;
 import jkproject.soccer.common.data.entity.BaseTimeEntity;
 import jkproject.soccer.team.data.entity.Team;
 import jkproject.soccer.user.data.entity.User;
@@ -47,7 +48,9 @@ public class Post extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
-	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<Heart> hearts;
+	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Comment> comments;
 
 	@Builder
@@ -61,6 +64,10 @@ public class Post extends BaseTimeEntity {
 
 	public void increaseViewCount() {
 		this.viewCount++;
+	}
+
+	public void addHeart(Heart heart) {
+		this.hearts.add(heart);
 	}
 }
 
