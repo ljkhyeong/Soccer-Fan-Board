@@ -9,7 +9,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jkproject.soccer.board.data.dto.post.request.SearchCondition;
@@ -56,14 +59,16 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 			}
 		}
 
-		// pageable의 정렬을 받아서 처리하도록 수정 필요
+		PathBuilder<Post> entityPath = new PathBuilder<>(Post.class, "post");
+		OrderSpecifier[] orderSpecifiers = getOrderSpecifiers(pageable, entityPath);
+
 		List<Post> posts = queryFactory.selectFrom(post)
 			.where(searchCondition)
 			.offset(pageable.getOffset())
-			.orderBy(post.createdAt.desc())
+			.orderBy(orderSpecifiers)
 			.limit(pageable.getPageSize())
 			.fetch();
-
+		
 		Long count = queryFactory.select(post.count())
 			.from(post)
 			.where(searchCondition)
@@ -88,11 +93,13 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 			}
 		}
 
-		// pageable의 정렬을 받아서 처리하도록 수정 필요
+		PathBuilder<Post> entityPath = new PathBuilder<>(Post.class, "post");
+		OrderSpecifier[] orderSpecifiers = getOrderSpecifiers(pageable, entityPath);
+
 		List<Post> posts = queryFactory.selectFrom(post)
 			.where(searchCondition)
 			.offset(pageable.getOffset())
-			.orderBy(post.createdAt.desc())
+			.orderBy(orderSpecifiers)
 			.limit(pageable.getPageSize())
 			.fetch();
 
@@ -102,6 +109,14 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 			.fetchOne();
 
 		return new PageImpl<>(posts, pageable, count);
+	}
+
+	private OrderSpecifier[] getOrderSpecifiers(Pageable pageable, PathBuilder<?> entityPath) {
+		return pageable.getSort().stream()
+			.map(order -> {
+				PathBuilder path = entityPath.get(order.getProperty());
+				return new OrderSpecifier(order.isAscending() ? Order.ASC : Order.DESC, path);
+			}).toArray(OrderSpecifier[]::new);
 	}
 
 }
