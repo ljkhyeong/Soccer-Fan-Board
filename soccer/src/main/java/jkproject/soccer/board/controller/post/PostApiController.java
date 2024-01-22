@@ -7,6 +7,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,10 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import jkproject.soccer.board.data.dto.post.request.PostCreateRequestDto;
+import jkproject.soccer.board.data.dto.post.request.SearchCondition;
 import jkproject.soccer.board.data.dto.post.response.PostDetailResponseDto;
 import jkproject.soccer.board.data.dto.post.response.PostListResponseDto;
-import jkproject.soccer.common.data.dto.response.Response;
 import jkproject.soccer.board.service.post.PostService;
+import jkproject.soccer.common.data.dto.response.Response;
 import jkproject.soccer.user.data.dto.UserAuthenticationDto;
 import lombok.RequiredArgsConstructor;
 
@@ -31,8 +33,9 @@ public class PostApiController {
 
 	@GetMapping("/{teamCode}/posts")
 	public Response<Page<PostListResponseDto>> lookupAllPosts(@PathVariable String teamCode,
+		@ModelAttribute SearchCondition condition,
 		@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-		Page<PostListResponseDto> postDtoList = postService.lookupAllPosts(teamCode, pageable);
+		Page<PostListResponseDto> postDtoList = postService.lookupAllPosts(teamCode, condition, pageable);
 		return Response.success(postDtoList);
 	}
 

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 
 import jkproject.soccer.board.data.dto.post.request.PostCreateRequestDto;
+import jkproject.soccer.board.data.dto.post.request.SearchCondition;
 import jkproject.soccer.board.data.dto.post.response.PostDetailResponseDto;
 import jkproject.soccer.board.data.dto.post.response.PostListResponseDto;
 import jkproject.soccer.board.data.entity.post.Post;
@@ -31,10 +32,10 @@ public class PostService {
 	private final ValidationResultHandler validationResultHandler;
 	private final TeamRepository teamRepository;
 
-	public Page<PostListResponseDto> lookupAllPosts(String teamCode, Pageable pageable) {
+	public Page<PostListResponseDto> lookupAllPosts(String teamCode, SearchCondition condition, Pageable pageable) {
 		Team team = teamRepository.findByCode(teamCode)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_CODE));
-		Page<Post> posts = postRepository.findAllByTeam(team, pageable);
+		Page<Post> posts = postRepository.findAllByTeam(team, condition, pageable);
 
 		return posts.map(PostListResponseDto::from);
 	}
