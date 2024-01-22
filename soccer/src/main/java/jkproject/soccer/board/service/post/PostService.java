@@ -40,6 +40,14 @@ public class PostService {
 		return posts.map(PostListResponseDto::from);
 	}
 
+	public Page<PostListResponseDto> lookUpBestPosts(String teamCode, SearchCondition condition, Pageable pageable) {
+		Team team = teamRepository.findByCode(teamCode)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_CODE));
+		Page<Post> posts = postRepository.findBestAllByTeam(team, condition, pageable);
+
+		return posts.map(PostListResponseDto::from);
+	}
+
 	@Transactional
 	public void createPost(String teamCode, PostCreateRequestDto requestDto,
 		UserAuthenticationDto userDto, Errors errors) {

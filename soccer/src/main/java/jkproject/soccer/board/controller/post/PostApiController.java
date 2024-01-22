@@ -39,6 +39,14 @@ public class PostApiController {
 		return Response.success(postDtoList);
 	}
 
+	@GetMapping("/{teamCode}/posts/best")
+	public Response<Page<PostListResponseDto>> lookupBestPosts(@PathVariable String teamCode,
+		@ModelAttribute SearchCondition condition,
+		@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+		Page<PostListResponseDto> postDtoList = postService.lookUpBestPosts(teamCode, condition, pageable);
+		return Response.success(postDtoList);
+	}
+
 	@PostMapping("/{teamCode}/posts")
 	public Response<Void> createPost(@PathVariable String teamCode,
 		@RequestBody @Valid PostCreateRequestDto requestDto,
