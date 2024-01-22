@@ -1,23 +1,29 @@
-import {Button, Table} from "react-bootstrap";
+import {Button, Form, FormControl, Table} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {axiosInstance, formatDateTime} from "../../../service/ApiService";
 import {useNavigate, useParams} from "react-router-dom";
+import {handleInputChange, handleKeyDown} from "../../../service/CommonService";
 
 const Board = (props) => {
     const {teamCode} = useParams();
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
+    const [searchCondition, setSearchCondition] = useState({
+        type: 'title',
+        keyword: ''
+    })
     const navigate = useNavigate();
 
     useEffect(() => {
-        renderPostList();
+        renderPostList(searchCondition);
     }, [currentPage]);
 
-    const renderPostList = () => {
+    const renderPostList = (condition = {}) => {
         axiosInstance.get(`/${teamCode}/posts`, {
             params : {
+                ...condition,
                 page: currentPage,
                 size: 10
             }
@@ -39,6 +45,12 @@ const Board = (props) => {
     const handleShowPost = (postId) => {
         navigate(`./${postId}`)
     };
+
+    const handleSearch = () => {
+        setCurrentPage(0);
+        renderPostList(searchCondition);
+        console.log(searchCondition);
+    }
 
 
     return (
@@ -70,10 +82,23 @@ const Board = (props) => {
             </Table>
             <div>
                 <Button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 0}>이전</Button>
-                {Array.from({length:totalPage},(_,index) => (
-                    <Button variant="light" key={index} onClick={() => setCurrentPage(index)}>{index+1}</Button>
+                {Array.from({length: totalPage}, (_, index) => (
+                    <Button variant="light" key={index} onClick={() => setCurrentPage(index)}>{index + 1}</Button>
                 ))}
                 <Button onClick={() => setCurrentPage(currentPage + 1)} disabled={posts.length < 10}>다음</Button>
+            </div>
+            <div style={{ display: 'flex', marginTop: '10px' }}>
+                <Form.Select className="mr-2" name="type" style={{ width: 'auto', height: '38px' }}
+                             onChange={(e) => handleInputChange(e, searchCondition, setSearchCondition)}>
+                    <option value="title">제목</option>
+                    <option value="content">내용</option>
+                    <option value="writer">작성자</option>
+                </Form.Select>
+                <FormControl className="mr-2" name="keyword" type="text" placeholder="검색할 단어를 입력하세요."
+                             onChange={e => handleInputChange(e, searchCondition, setSearchCondition)}
+                             onKeyDown={e => handleKeyDown(e, handleSearch)} style={{ height: '38px', marginLeft: '1vw' }} />
+                <Button variant="outline-success"
+                        onClick={handleSearch} style={{height:'38px', marginLeft: '1vw'}}>검색</Button>
             </div>
         </>
     );
