@@ -55,9 +55,44 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 				searchCondition = searchCondition.and(post.content.contains(keyword));
 			}
 		}
+
+		// pageable의 정렬을 받아서 처리하도록 수정 필요
 		List<Post> posts = queryFactory.selectFrom(post)
 			.where(searchCondition)
 			.offset(pageable.getOffset())
+			.orderBy(post.createdAt.desc())
+			.limit(pageable.getPageSize())
+			.fetch();
+
+		Long count = queryFactory.select(post.count())
+			.from(post)
+			.where(searchCondition)
+			.fetchOne();
+
+		return new PageImpl<>(posts, pageable, count);
+	}
+
+	@Override
+	public Page<Post> findBestAllByTeam(Team team, SearchCondition condition, Pageable pageable) {
+		BooleanExpression searchCondition = post.team.eq(team).and(post.heartCount.goe(1));
+		String type = condition.getType();
+		String keyword = condition.getKeyword();
+
+		if (type != null && !type.isBlank()) {
+			if (type.equals("title")) {
+				searchCondition = searchCondition.and(post.title.contains(keyword));
+			} else if (type.equals("writer")) {
+				searchCondition = searchCondition.and(post.writer.eq(keyword));
+			} else if (type.equals("content")) {
+				searchCondition = searchCondition.and(post.content.contains(keyword));
+			}
+		}
+
+		// pageable의 정렬을 받아서 처리하도록 수정 필요
+		List<Post> posts = queryFactory.selectFrom(post)
+			.where(searchCondition)
+			.offset(pageable.getOffset())
+			.orderBy(post.createdAt.desc())
 			.limit(pageable.getPageSize())
 			.fetch();
 

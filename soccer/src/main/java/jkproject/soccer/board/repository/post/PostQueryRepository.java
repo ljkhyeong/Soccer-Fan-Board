@@ -11,4 +11,6 @@ public interface PostQueryRepository {
 	void updateHeartCount(Post post, boolean notClicked);
 
 	Page<Post> findAllByTeam(Team team, SearchCondition condition, Pageable pageable);
+
+	Page<Post> findBestAllByTeam(Team team, SearchCondition condition, Pageable pageable);
 }
