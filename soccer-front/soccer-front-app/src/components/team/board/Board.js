@@ -4,6 +4,7 @@ import axios from "axios";
 import {axiosInstance, formatDateTime} from "../../../service/ApiService";
 import {useNavigate, useParams} from "react-router-dom";
 import {handleInputChange, handleKeyDown} from "../../../service/CommonService";
+import "../../../css/Board.css";
 
 const Board = (props) => {
     const {teamCode} = useParams();
@@ -52,6 +53,11 @@ const Board = (props) => {
         console.log(searchCondition);
     }
 
+    const highlightKeyword = (text, keyword) => {
+        const regex = new RegExp(keyword, 'gi');
+        return text.replace(regex, (match) => `<span class="highlight">${match}</span>`)
+    };
+
 
     return (
         <>
@@ -71,7 +77,7 @@ const Board = (props) => {
                 {posts.map((post, index) => (
                     <tr key={post.postId} onClick={() => handleShowPost(post.postId)} style={{cursor: "pointer"}}>
                         <td>{index + 1}</td>
-                        <td>{post.title}</td>
+                        <td dangerouslySetInnerHTML={{__html: highlightKeyword(post.title, searchCondition.keyword)}}></td>
                         <td>{post.writer}</td>
                         <td>{formatDateTime(post.createdAt)}</td>
                         <td>{post.viewCount}</td>
