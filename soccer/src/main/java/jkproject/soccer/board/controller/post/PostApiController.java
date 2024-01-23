@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,5 +61,12 @@ public class PostApiController {
 	public Response<PostDetailResponseDto> readPost(@PathVariable String teamCode, @PathVariable Long postId) {
 		PostDetailResponseDto responseDto = postService.readPost(postId);
 		return Response.success(responseDto);
+	}
+
+	@DeleteMapping("/{teamCode}/posts/{postId}")
+	public Response<Void> deletePost(@PathVariable String teamCode, @PathVariable Long postId,
+		@AuthenticationPrincipal UserAuthenticationDto userDto) {
+		postService.deletePost(postId, userDto);
+		return Response.success();
 	}
 }

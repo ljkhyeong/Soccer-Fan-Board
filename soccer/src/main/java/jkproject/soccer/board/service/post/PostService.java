@@ -1,5 +1,7 @@
 package jkproject.soccer.board.service.post;
 
+import java.util.Objects;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -72,4 +74,19 @@ public class PostService {
 		return PostDetailResponseDto.from(post);
 	}
 
+	@Transactional
+	public void deletePost(Long postId, UserAuthenticationDto userDto) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
+
+		checkPermission(post, userDto);
+
+		postRepository.delete(post);
+	}
+
+	private void checkPermission(Post post, UserAuthenticationDto userDto) {
+		if (userDto == null || !Objects.equals(post.getWriter(), userDto.getNickname())) {
+			throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+		}
+	}
 }
