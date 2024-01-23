@@ -27,7 +27,7 @@ const Comments = () => {
     }, [currentPage, reload]);
 
     const renderCommentList = () => {
-        axiosInstance.get(`${teamCode}/posts/${postId}/comments`, {
+        axiosInstance.get(`/${teamCode}/posts/${postId}/comments`, {
             params: {
                 page : currentPage,
                 size : 10
@@ -43,7 +43,7 @@ const Comments = () => {
     }
 
     const handleCommentSubmit = () => {
-        axiosInstance.post(`${teamCode}/posts/${postId}/comment`, commentForm
+        axiosInstance.post(`/${teamCode}/posts/${postId}/comment`, commentForm
         ).then(response => {
             console.log(response);
             setError('');
@@ -59,7 +59,7 @@ const Comments = () => {
     }
 
     const handleReplySubmit = () => {
-        axiosInstance.post(`${teamCode}/posts/${postId}/comment`, replyForm
+        axiosInstance.post(`/${teamCode}/posts/${postId}/comment`, replyForm
         ).then(response => {
             console.log(response);
             setError('');
@@ -82,6 +82,18 @@ const Comments = () => {
         })
     }
 
+    const handleDeleteComment = (commentId) => {
+        axiosInstance.delete(`/${teamCode}/posts/${postId}/comment/${commentId}`
+        ).then(response => {
+            console.log(response);
+            alert("삭제되었습니다.");
+            setReload(!reload);
+        }).catch(error => {
+            console.log(error);
+            alert(error.response.data.result);
+        })
+    }
+
 
     return (
         <>
@@ -101,7 +113,8 @@ const Comments = () => {
                 <Button onClick={handleCommentSubmit}>댓글 작성</Button>
             </Form>
             <ListGroup className="mt-4">
-                {comments.map((comment, index) => (comment.reply ?
+                {comments.map((comment, index) => (comment.reply
+                        ?
                         <ListGroup.Item style={{
                             marginLeft: '20px',
                             backgroundColor: '#f0f0f0',
@@ -112,10 +125,25 @@ const Comments = () => {
                             borderRadius: '5px'
                         }}
                                         key={comment.commentId} onClick={() => handleReplyOpen(comment.commentId)}>
-                            <div>{index + 1} . {comment.commenter} - {comment.comment} - {formatDateTime(comment.createdAt)}</div>
-                        </ListGroup.Item> :
+                            <div>{index + 1} . {comment.commenter} - {comment.comment} - {formatDateTime(comment.createdAt)}
+                                <img src="/images/delete_remove_bin_icon-icons.com_72400%20(1).png"
+                                     style={{
+                                         height: "3vh",
+                                         marginLeft: "2px",
+                                         paddingBottom: "1.5px"
+                                }} onClick={() => handleDeleteComment(comment.commentId)}/>
+                            </div>
+                        </ListGroup.Item>
+                        :
                         <ListGroup.Item key={comment.commentId} onClick={() => handleReplyOpen(comment.commentId)}>
-                            <div>{index + 1} . {comment.commenter} - {comment.comment} - {formatDateTime(comment.createdAt)}</div>
+                            <div>{index + 1} . {comment.commenter} - {comment.comment} - {formatDateTime(comment.createdAt)}
+                                <img src="/images/delete_remove_bin_icon-icons.com_72400%20(1).png"
+                                     style={{
+                                         height: "3vh",
+                                         marginLeft: "2px",
+                                         paddingBottom: "1.5px"
+                                }} onClick={() => handleDeleteComment(comment.commentId)}/>
+                            </div>
                             {activeCommentId === comment.commentId && (
                                 <Form className="mt-4">
                                     <Form.Group className="mb-3">
