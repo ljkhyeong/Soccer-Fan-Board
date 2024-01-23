@@ -16,13 +16,14 @@ import CreateWikiDoc from "../team/wiki/CreateWikiDoc";
 import DocHistory from "../team/wiki/DocHistory";
 import Players from "../team/players/Players";
 import UpdatePost from "../team/board/UpdatePost";
+import {useAuth} from "../../auth/AuthContext";
 
 const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
 
 const Team = () => {
 
     const {teamCode} = useParams();
-    const [isLogin, setIsLogin] = useState(false);
+    const {isLogin, setIsLogin, setLoginId} = useAuth();
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showJoinModal, setShowJoinModal] = useState(false);
     const [postId, setPostId] = useState(0);
@@ -39,24 +40,6 @@ const Team = () => {
         });
     }, []);
 
-    useEffect(() => {
-        if (!getAccessToken()) {
-            axiosInstance.post('/auth/refresh', {})
-                .then(() => {
-                    if (getAccessToken()) {
-                        setIsLogin(true);
-                    } else {
-                        setIsLogin(false);
-                    }
-                })
-                .catch((e) => {
-                    console.log(e);
-                })
-        } else {
-            setIsLogin(true);
-        }
-    }, [isLogin]);
-
     const toggleModals = (modal) => {
         if (modal === 'login') {
             setShowLoginModal(true);
@@ -68,14 +51,15 @@ const Team = () => {
     }
 
     const handleLogout = () => {
-        axios.delete(SPRING_SERVER_URL + '/auth/refresh',{withCredentials: true})
-            .then(() => {
-                alert("로그아웃되었습니다.");
-            }).catch((e) => {
+        axios.delete(SPRING_SERVER_URL + '/auth/refresh',{withCredentials: true}
+        ).then(() => {
+            logout();
+            setIsLogin(false);
+            setLoginId("");
+            alert("로그아웃되었습니다.");
+        }).catch((e) => {
             console.log(e);
         })
-        logout();
-        setIsLogin(false);
     };
 
 
@@ -100,7 +84,7 @@ const Team = () => {
             <LoginModal show={showLoginModal}
                         onHide={() => setShowLoginModal(false)}
                         toggleModals={toggleModals}
-                        setIsLogin={setIsLogin}/>
+                        />
             <JoinModal show={showJoinModal}
                        onHide={() => setShowJoinModal(false)}
                        toggleModals={toggleModals}/>

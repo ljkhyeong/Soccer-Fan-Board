@@ -4,8 +4,10 @@ import '../../css/LoginModal.css';
 import axios from "axios";
 import {axiosInstance} from "../../service/ApiService";
 import {handleKeyDown, handleInputChange, initStateObject} from "../../service/CommonService";
+import {useAuth} from "../../auth/AuthContext";
 
 const LoginModal = (props) => {
+    const {setIsLogin, setLoginId} = useAuth();
     const [errors, setErrors] = useState({
         noExistError: '',
         loginIdError: '',
@@ -17,13 +19,14 @@ const LoginModal = (props) => {
     })
 
     const handleSignIn = (e) => {
-        axiosInstance.post("/auth/login", loginForm)
-            .then((response) => {
+        axiosInstance.post("/auth/login", loginForm
+        ).then((response) => {
             console.log(response);
+            setLoginId(loginForm.loginId);
             setLoginForm(initStateObject(loginForm));
             setErrors(initStateObject(errors));
-            alert("로그인 되었습니다.")
-            props.setIsLogin(true);
+            alert("로그인 되었습니다.");
+            setIsLogin(true);
             props.onHide();
         }).catch((error) => {
             console.log(error);
