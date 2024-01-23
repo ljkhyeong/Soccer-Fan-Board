@@ -167,7 +167,9 @@ const Comments = () => {
             <div>
                 <Button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 0}>이전</Button>
                 {Array.from({length: totalPage}, (_,index) => (
-                  <Button variant="light" key={index} onClick={() => setCurrentPage(index)}>{index+1}</Button>
+                  <Button variant="light" key={index}
+                          onClick={() => setCurrentPage(index)}
+                          disabled={index===currentPage}>{index+1}</Button>
                 ))}
                 <Button onClick={() => setCurrentPage(currentPage + 1)} disabled={comments.length < 10}>다음</Button>
             </div>
