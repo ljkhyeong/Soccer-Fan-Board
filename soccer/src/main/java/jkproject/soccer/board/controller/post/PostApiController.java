@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jkproject.soccer.board.data.dto.post.request.PostCreateRequestDto;
 import jkproject.soccer.board.data.dto.post.request.PostUpdateRequestDto;
@@ -52,10 +53,11 @@ public class PostApiController {
 
 	@PostMapping("/{teamCode}/posts")
 	public Response<Void> createPost(@PathVariable String teamCode,
-		@RequestBody @Valid PostCreateRequestDto requestDto,
-		Errors errors, @AuthenticationPrincipal UserAuthenticationDto userDto) {
+		@RequestBody @Valid PostCreateRequestDto requestDto, Errors errors,
+		@AuthenticationPrincipal UserAuthenticationDto userDto,
+		HttpServletRequest request) {
 		//TODO 회원가입 상태면 회원 닉네임, 아니면 IP와 임시닉네임을 사용하도록
-		postService.createPost(teamCode, requestDto, userDto, errors);
+		postService.createPost(teamCode, requestDto, userDto, errors, request);
 		return Response.success();
 	}
 
@@ -68,8 +70,9 @@ public class PostApiController {
 	@PutMapping("/{teamCode}/posts/{postId}")
 	public Response<Void> updatePost(@PathVariable String teamCode, @PathVariable Long postId,
 		@AuthenticationPrincipal UserAuthenticationDto userDto,
-		@RequestBody @Valid PostUpdateRequestDto requestDto, Errors errors) {
-		postService.updatePost(postId, userDto, requestDto, errors);
+		@RequestBody @Valid PostUpdateRequestDto requestDto, Errors errors,
+		HttpServletRequest request) {
+		postService.updatePost(postId, userDto, requestDto, errors, request);
 		return Response.success();
 	}
 

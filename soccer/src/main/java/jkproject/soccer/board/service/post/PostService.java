@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jkproject.soccer.board.data.dto.post.request.PostCreateRequestDto;
 import jkproject.soccer.board.data.dto.post.request.PostUpdateRequestDto;
 import jkproject.soccer.board.data.dto.post.request.SearchCondition;
@@ -53,15 +54,16 @@ public class PostService {
 
 	@Transactional
 	public void createPost(String teamCode, PostCreateRequestDto requestDto,
-		UserAuthenticationDto userDto, Errors errors) {
+		UserAuthenticationDto userDto, Errors errors,
+		HttpServletRequest request) {
 
 		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_CREATE_POST);
-		User user = userRepository.findByLoginId(userDto.getLoginId())
-			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
+		String clientIp = request.getRemoteAddr();
 		Team team = teamRepository.findByCode(teamCode)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_CODE));
+		Post post = createEntity(team, requestDto, userDto, clientIp);
+
 		// TODO 사용자 검증로직 분리하자.
-		Post post = requestDto.toEntity(team, user);
 		postRepository.save(post);
 	}
 
@@ -76,14 +78,17 @@ public class PostService {
 	}
 
 	@Transactional
-	public void updatePost(Long postId, UserAuthenticationDto userDto, PostUpdateRequestDto requestDto, Errors errors) {
+	public void updatePost(Long postId, UserAuthenticationDto userDto, PostUpdateRequestDto requestDto, Errors errors,
+		HttpServletRequest request) {
+
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
+		String clientIp = request.getRemoteAddr();
 
 		checkPermission(post, userDto);
 		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_CREATE_POST);
 
-		post.update(requestDto);
+		post.update(requestDto, clientIp);
 	}
 
 	@Transactional
