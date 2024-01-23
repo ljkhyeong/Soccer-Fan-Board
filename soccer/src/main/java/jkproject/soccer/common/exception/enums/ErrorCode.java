@@ -32,7 +32,8 @@ public enum ErrorCode {
 	NOT_FOUND_TOKEN(HttpStatus.UNAUTHORIZED, "토큰을 찾을 수 없습니다."),
 	INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰"),
 	AUTHENTICATION_ERROR(HttpStatus.UNAUTHORIZED, "인증 중 오류 발생"),
-	AUTHORIZATION_ERROR(HttpStatus.FORBIDDEN, "인가 중 오류 발생");
+	AUTHORIZATION_ERROR(HttpStatus.FORBIDDEN, "인가 중 오류 발생"),
+	INVALID_PERMISSION(HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;
