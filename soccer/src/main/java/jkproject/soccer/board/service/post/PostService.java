@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 
 import jkproject.soccer.board.data.dto.post.request.PostCreateRequestDto;
+import jkproject.soccer.board.data.dto.post.request.PostUpdateRequestDto;
 import jkproject.soccer.board.data.dto.post.request.SearchCondition;
 import jkproject.soccer.board.data.dto.post.response.PostDetailResponseDto;
 import jkproject.soccer.board.data.dto.post.response.PostListResponseDto;
@@ -75,6 +76,17 @@ public class PostService {
 	}
 
 	@Transactional
+	public void updatePost(Long postId, UserAuthenticationDto userDto, PostUpdateRequestDto requestDto, Errors errors) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
+
+		checkPermission(post, userDto);
+		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_CREATE_POST);
+
+		post.update(requestDto);
+	}
+
+	@Transactional
 	public void deletePost(Long postId, UserAuthenticationDto userDto) {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
@@ -89,4 +101,5 @@ public class PostService {
 			throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
 		}
 	}
+
 }

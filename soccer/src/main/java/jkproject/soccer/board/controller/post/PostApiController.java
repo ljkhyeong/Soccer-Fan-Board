@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import jkproject.soccer.board.data.dto.post.request.PostCreateRequestDto;
+import jkproject.soccer.board.data.dto.post.request.PostUpdateRequestDto;
 import jkproject.soccer.board.data.dto.post.request.SearchCondition;
 import jkproject.soccer.board.data.dto.post.response.PostDetailResponseDto;
 import jkproject.soccer.board.data.dto.post.response.PostListResponseDto;
@@ -61,6 +63,14 @@ public class PostApiController {
 	public Response<PostDetailResponseDto> readPost(@PathVariable String teamCode, @PathVariable Long postId) {
 		PostDetailResponseDto responseDto = postService.readPost(postId);
 		return Response.success(responseDto);
+	}
+
+	@PutMapping("/{teamCode}/posts/{postId}")
+	public Response<Void> updatePost(@PathVariable String teamCode, @PathVariable Long postId,
+		@AuthenticationPrincipal UserAuthenticationDto userDto,
+		@RequestBody @Valid PostUpdateRequestDto requestDto, Errors errors) {
+		postService.updatePost(postId, userDto, requestDto, errors);
+		return Response.success();
 	}
 
 	@DeleteMapping("/{teamCode}/posts/{postId}")
