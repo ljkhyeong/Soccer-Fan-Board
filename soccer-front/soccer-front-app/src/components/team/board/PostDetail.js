@@ -2,19 +2,20 @@ import {useEffect, useRef, useState} from "react";
 import {Container, Row, Col, Card, Button} from "react-bootstrap";
 import {axiosInstance, formatDateTime} from "../../../service/ApiService";
 import Comments from "./Comments";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 
 const PostDetail = () => {
     const {teamCode, postId} = useParams();
     const [postDetail, setPostDetail] = useState({});
+    const navigate = useNavigate();
 
     useEffect(() => {
         renderPostDetail();
     }, []);
 
     const renderPostDetail = () => {
-        axiosInstance.get(`${teamCode}/posts/${postId}`
+        axiosInstance.get(`/${teamCode}/posts/${postId}`
         ).then(response => {
                 console.log(response);
                 setPostDetail(response.data.result);
@@ -31,6 +32,18 @@ const PostDetail = () => {
                     ...prevDetails,
                     heartCount : prevDetails.heartCount+1
                 }))
+        }).catch(error => {
+            console.log(error);
+            alert(error.response.data.result);
+        })
+    }
+
+    const handleDeletePost = () => {
+        axiosInstance.delete(`/${teamCode}/posts/${postId}`
+        ).then(response => {
+            console.log(response);
+            navigate(`../board`);
+            alert("삭제되었습니다.");
         }).catch(error => {
             console.log(error);
             alert(error.response.data.result);
@@ -60,8 +73,11 @@ const PostDetail = () => {
                           </Button>
                           </div>
                       </Card.Body>
-
                   </Card>
+                  <div style={{display:'flex', justifyContent: "right"}}>
+                  <Button variant="outline-success">수정</Button>
+                  <Button onClick={handleDeletePost} variant="outline-danger">삭제</Button>
+                  </div>
                   <Comments />
               </Col>
           </Row>
