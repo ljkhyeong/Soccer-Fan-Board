@@ -58,6 +58,9 @@ const PostDetail = () => {
                       <Card.Header as="h3">{postDetail.title}</Card.Header>
                       <Card.Header>
                           작성일: {formatDateTime(postDetail.createdAt)}
+                          {formatDateTime(postDetail.createdAt) !== formatDateTime(postDetail.modifiedAt) && (
+                          " | 수정일: " + formatDateTime(postDetail.modifiedAt)
+                          )}
                       </Card.Header>
                       <Card.Body>
                       <Card.Title style={{ textAlign: 'right' }}>작성자 : {postDetail.writer}</Card.Title>
@@ -75,8 +78,9 @@ const PostDetail = () => {
                       </Card.Body>
                   </Card>
                   <div style={{display:'flex', justifyContent: "right"}}>
-                  <Button variant="outline-success">수정</Button>
-                  <Button onClick={handleDeletePost} variant="outline-danger">삭제</Button>
+                      <Button onClick={() => navigate('./update')} variant="outline-success">수정</Button>
+                      <Button onClick={handleDeletePost} variant="outline-danger">삭제</Button>
+                      <Button onClick={() => navigate("../board")} variant="outline-secondary">목록으로</Button>
                   </div>
                   <Comments />
               </Col>
