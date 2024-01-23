@@ -1,5 +1,7 @@
 package jkproject.soccer.board.service.comment;
 
+import java.util.Objects;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -59,4 +61,21 @@ public class CommentService {
 
 		commentRepository.save(comment);
 	}
+
+	@Transactional
+	public void deleteComment(Long commentId, UserAuthenticationDto userDto) {
+		Comment comment = commentRepository.findById(commentId)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_COMMENT_ID));
+
+		checkPermission(comment, userDto);
+
+		comment.remove();
+	}
+
+	private void checkPermission(Comment comment, UserAuthenticationDto userDto) {
+		if (userDto == null || !Objects.equals(comment.getCommenter(), userDto.getNickname())) {
+			throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+		}
+	}
+
 }

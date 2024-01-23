@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +43,16 @@ public class CommentApiController {
 
 		// TODO ID 혹은 IP가 뜨도록
 		commentService.createComment(postId, requestDto, userDto, errors);
+
+		return Response.success();
+	}
+
+	@DeleteMapping("/{teamCode}/posts/{postId}/comment/{commentId}")
+	public Response<Void> deleteComment(@PathVariable String teamCode, @PathVariable Long postId,
+		@PathVariable Long commentId,
+		@AuthenticationPrincipal UserAuthenticationDto userDto) {
+
+		commentService.deleteComment(commentId, userDto);
 
 		return Response.success();
 	}
