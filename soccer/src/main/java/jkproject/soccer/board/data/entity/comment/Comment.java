@@ -63,4 +63,8 @@ public class Comment extends BaseTimeEntity {
 	public boolean isReply() {
 		return this.parent != null;
 	}
+
+	public void remove() {
+		this.Removed = true;
+	}
 }
