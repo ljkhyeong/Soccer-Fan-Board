@@ -40,13 +40,14 @@ public class Post extends BaseTimeEntity {
 	private String content;
 	@Column(nullable = false)
 	private String writer;
+	private String ipAddress;
 	private Long viewCount = 0L;
 	private Long heartCount = 0L;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "team_id")
 	private Team team;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "user_id")
 	private User user;
 	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -55,10 +56,11 @@ public class Post extends BaseTimeEntity {
 	private List<Comment> comments;
 
 	@Builder
-	public Post(String title, String content, String writer, Team team, User user) {
+	public Post(String title, String content, String writer, String ipAddress, Team team, User user) {
 		this.title = title;
 		this.content = content;
 		this.writer = writer;
+		this.ipAddress = ipAddress;
 		this.team = team;
 		this.user = user;
 	}
@@ -71,9 +73,10 @@ public class Post extends BaseTimeEntity {
 		this.hearts.add(heart);
 	}
 
-	public void update(PostUpdateRequestDto requestDto) {
+	public void update(PostUpdateRequestDto requestDto, String ipAddress) {
 		this.title = requestDto.getTitle();
 		this.content = requestDto.getContent();
+		this.ipAddress = ipAddress;
 	}
 }
 
