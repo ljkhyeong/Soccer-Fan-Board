@@ -107,4 +107,16 @@ public class PostService {
 		}
 	}
 
+	private Post createEntity(Team team, PostCreateRequestDto requestDto, UserAuthenticationDto userDto,
+		String clientIp) {
+		User user = null;
+
+		if (userDto != null) {
+			user = userRepository.findByLoginId(userDto.getLoginId())
+				.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
+		}
+
+		return requestDto.toEntity(team, user, clientIp);
+	}
+
 }
