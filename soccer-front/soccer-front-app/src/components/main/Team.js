@@ -15,6 +15,7 @@ import WikiDoc from "../team/wiki/WikiDoc";
 import CreateWikiDoc from "../team/wiki/CreateWikiDoc";
 import DocHistory from "../team/wiki/DocHistory";
 import Players from "../team/players/Players";
+import UpdatePost from "../team/board/UpdatePost";
 
 const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
 
@@ -136,6 +137,7 @@ const Team = () => {
                         <Route path="board" element={<Board />} />
                         <Route path="board/create" element={<CreatePost />} />
                         <Route path="board/:postId" element={<PostDetail />} />
+                        <Route path="board/:postId/update" element={<UpdatePost/>} />
                     </Routes>
                 </Container>
             </Col>
