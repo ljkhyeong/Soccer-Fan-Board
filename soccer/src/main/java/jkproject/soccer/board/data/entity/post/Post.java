@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jkproject.soccer.board.data.dto.post.request.PostUpdateRequestDto;
 import jkproject.soccer.board.data.entity.comment.Comment;
 import jkproject.soccer.board.data.entity.heart.Heart;
 import jkproject.soccer.common.data.entity.BaseTimeEntity;
@@ -68,6 +69,11 @@ public class Post extends BaseTimeEntity {
 
 	public void addHeart(Heart heart) {
 		this.hearts.add(heart);
+	}
+
+	public void update(PostUpdateRequestDto requestDto) {
+		this.title = requestDto.getTitle();
+		this.content = requestDto.getContent();
 	}
 }
 
