@@ -24,17 +24,18 @@ public class Heart {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "heart_id")
 	private Long heartId;
-
+	@Column
+	private boolean notHeart;
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-
 	@ManyToOne
 	@JoinColumn(name = "post_id")
 	private Post post;
 
 	@Builder
-	public Heart(User user, Post post) {
+	public Heart(boolean notHeart, User user, Post post) {
+		this.notHeart = notHeart;
 		this.user = user;
 		this.post = post;
 	}
