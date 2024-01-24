@@ -10,7 +10,7 @@ const CreatePost = (props) => {
     const {isLogin, loginId} = useAuth();
     const {teamCode} = useParams();
     const [postForm, setPostForm] = useState({
-        tempNickname: loginId,
+        tempNickname : loginId ? loginId : '비회원',
         title:'',
         content:''
     })
@@ -24,7 +24,7 @@ const CreatePost = (props) => {
     useEffect(() => {
         setPostForm(prevState => ({
             ...prevState,
-            tempNickname: loginId
+            tempNickname: loginId ? loginId : '비회원'
         }));
     }, [loginId]);
 
