@@ -43,6 +43,7 @@ public class Post extends BaseTimeEntity {
 	private String ipAddress;
 	private Long viewCount = 0L;
 	private Long heartCount = 0L;
+	private Long notHeartCount = 0L;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "team_id")
