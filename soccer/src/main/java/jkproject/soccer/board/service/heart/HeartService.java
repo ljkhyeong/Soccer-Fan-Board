@@ -36,26 +36,24 @@ public class HeartService {
 			throw new ApplicationException(ErrorCode.INVALID_CREATE_HEART);
 		}
 
-		postRepository.updateHeartCount(post, true);
+		postRepository.updateHeartCount(post, requestDto.isNotHeart());
 		Heart heart = requestDto.toEntity(user, post);
 		post.addHeart(heart);
 		heartRepository.save(heart);
 	}
 
-	public void deleteHeart(Long postId, UserAuthenticationDto userDto) {
-		Post post = postRepository.findById(postId)
-			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
-
-		User user = userRepository.findByLoginId(userDto.getLoginId())
-			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
-
-		Heart heart = heartRepository.findByUserAndPost(user, post)
-			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_HEART_BY_USER_AND_POST));
-
-		postRepository.updateHeartCount(post, false);
-
-		heartRepository.delete(heart);
-	}
+	// public void deleteHeart(Long postId, UserAuthenticationDto userDto) {
+	// 	Post post = postRepository.findById(postId)
+	// 		.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
+	//
+	// 	User user = userRepository.findByLoginId(userDto.getLoginId())
+	// 		.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
+	//
+	// 	Heart heart = heartRepository.findByUserAndPost(user, post)
+	// 		.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_HEART_BY_USER_AND_POST));
+	//
+	// 	heartRepository.delete(heart);
+	// }
 
 	public long getHeartCount(Long postId) {
 		Post post = postRepository.findById(postId)

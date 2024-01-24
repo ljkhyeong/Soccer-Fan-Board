@@ -32,7 +32,7 @@ public class HeartApiController {
 	@DeleteMapping("/{teamCode}/posts/{postId}/heart")
 	public Response<Void> deleteHeart(@PathVariable String teamCode, @PathVariable Long postId,
 		@AuthenticationPrincipal UserAuthenticationDto userDto) {
-		heartService.deleteHeart(postId, userDto);
+		// heartService.deleteHeart(postId, userDto);
 		return Response.success();
 	}
 

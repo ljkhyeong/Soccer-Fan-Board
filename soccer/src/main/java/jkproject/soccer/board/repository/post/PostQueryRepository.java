@@ -8,7 +8,7 @@ import jkproject.soccer.board.data.entity.post.Post;
 import jkproject.soccer.team.data.entity.Team;
 
 public interface PostQueryRepository {
-	void updateHeartCount(Post post, boolean notClicked);
+	void updateHeartCount(Post post, boolean notHeart);
 
 	Page<Post> findAllByTeam(Team team, SearchCondition condition, Pageable pageable);
 
