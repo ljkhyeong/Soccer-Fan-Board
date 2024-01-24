@@ -28,15 +28,17 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public void updateHeartCount(Post post1, boolean notClicked) {
-		if (notClicked) {
+	public void updateHeartCount(Post post1, boolean notHeart) {
+		if (!notHeart) {
 			queryFactory.update(post)
 				.set(post.heartCount, post.heartCount.add(1))
 				.where(post.eq(post1))
 				.execute();
-		} else {
+		}
+
+		if (notHeart) {
 			queryFactory.update(post)
-				.set(post.heartCount, post.heartCount.subtract(1))
+				.set(post.notHeartCount, post.notHeartCount.add(1))
 				.where(post.eq(post1))
 				.execute();
 		}
@@ -68,7 +70,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 			.orderBy(orderSpecifiers)
 			.limit(pageable.getPageSize())
 			.fetch();
-		
+
 		Long count = queryFactory.select(post.count())
 			.from(post)
 			.where(searchCondition)
