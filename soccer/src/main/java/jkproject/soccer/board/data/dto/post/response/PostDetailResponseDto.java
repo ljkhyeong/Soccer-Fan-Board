@@ -15,6 +15,7 @@ public class PostDetailResponseDto {
 	private String writer;
 	private Long viewCount;
 	private Long heartCount;
+	private Long notHeartCount;
 	private LocalDateTime createdAt;
 	private LocalDateTime modifiedAt;
 
@@ -26,9 +27,10 @@ public class PostDetailResponseDto {
 			.writer(post.getWriter())
 			.viewCount(post.getViewCount())
 			.heartCount(post.getHeartCount())
+			.notHeartCount(post.getNotHeartCount())
 			.createdAt(post.getCreatedAt())
 			.modifiedAt(post.getModifiedAt())
 			.build();
 	}
-	
+
 }
