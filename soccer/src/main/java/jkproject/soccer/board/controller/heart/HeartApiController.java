@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jkproject.soccer.board.data.dto.heart.request.HeartCreateRequestDto;
 import jkproject.soccer.board.service.heart.HeartService;
 import jkproject.soccer.common.data.dto.response.Response;
 import jkproject.soccer.user.data.dto.UserAuthenticationDto;
@@ -22,8 +23,9 @@ public class HeartApiController {
 
 	@PostMapping("/{teamCode}/posts/{postId}/heart")
 	public Response<Void> createHeart(@PathVariable String teamCode, @PathVariable Long postId,
+		HeartCreateRequestDto requestDto,
 		@AuthenticationPrincipal UserAuthenticationDto userDto) {
-		heartService.createHeart(postId, userDto);
+		heartService.createHeart(postId, requestDto, userDto);
 		return Response.success();
 	}
 
