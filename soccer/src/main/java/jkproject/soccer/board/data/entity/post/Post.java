@@ -12,7 +12,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jkproject.soccer.board.data.dto.post.request.PostUpdateRequestDto;
 import jkproject.soccer.board.data.entity.comment.Comment;
 import jkproject.soccer.board.data.entity.heart.Heart;
@@ -56,6 +58,9 @@ public class Post extends BaseTimeEntity {
 	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Comment> comments;
 
+	@Transient
+	private boolean isUpdated = false;
+
 	@Builder
 	public Post(String title, String content, String writer, String ipAddress, Team team, User user) {
 		this.title = title;
@@ -68,16 +73,26 @@ public class Post extends BaseTimeEntity {
 
 	public void increaseViewCount() {
 		this.viewCount++;
+		this.isUpdated = false;
 	}
 
 	public void addHeart(Heart heart) {
 		this.hearts.add(heart);
+		this.isUpdated = false;
 	}
 
 	public void update(PostUpdateRequestDto requestDto, String ipAddress) {
 		this.title = requestDto.getTitle();
 		this.content = requestDto.getContent();
 		this.ipAddress = ipAddress;
+		this.isUpdated = true;
+	}
+
+	@PreUpdate
+	protected void onPreUpdate() {
+		if (this.isUpdated) {
+			modifiedAtUpdate();
+		}
 	}
 }
 
