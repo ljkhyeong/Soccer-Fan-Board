@@ -25,8 +25,9 @@ const PostDetail = () => {
     }
 
     const handleLike = () => {
-        axiosInstance.post(`/${teamCode}/posts/${postId}/heart`
-        ).then(response => {
+        axiosInstance.post(`/${teamCode}/posts/${postId}/heart`, {
+            notHeart: false
+        }).then(response => {
                 console.log(response);
                 setPostDetail(prevDetails => ({
                     ...prevDetails,
@@ -49,6 +50,21 @@ const PostDetail = () => {
             alert(error.response.data.result);
         })
     }
+
+    const handleDislike = () => {
+        axiosInstance.post(`/${teamCode}/posts/${postId}/heart`, {
+            notHeart: true
+        }).then(response => {
+            console.log(response);
+            setPostDetail(prevDetails => ({
+                ...prevDetails,
+                notHeartCount : prevDetails.notHeartCount+1
+            }))
+        }).catch(error => {
+            console.log(error);
+            alert(error.response.data.result);
+        })
+    };
 
     return (
       <Container>
@@ -74,13 +90,18 @@ const PostDetail = () => {
                           >
                               좋아요: {postDetail.heartCount}
                           </Button>
+                              <Button onClick={handleDislike}
+                                      variant="outline-secondary"
+                              >
+                                  싫어요: {postDetail.notHeartCount}
+                              </Button>
                           </div>
                       </Card.Body>
                   </Card>
                   <div style={{display:'flex', justifyContent: "right"}}>
                       <Button onClick={() => navigate('./update')} variant="outline-success">수정</Button>
                       <Button onClick={handleDeletePost} variant="outline-danger">삭제</Button>
-                      <Button onClick={() => navigate("../board")} variant="outline-secondary">목록으로</Button>
+                      <Button onClick={() => navigate("../board")} variant="outline-dark">목록으로</Button>
                   </div>
                   <Comments />
               </Col>
