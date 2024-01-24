@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jkproject.soccer.board.data.dto.comment.request.CommentCreateRequestDto;
 import jkproject.soccer.board.data.dto.comment.response.CommentListResponseDto;
@@ -39,10 +40,11 @@ public class CommentApiController {
 	@PostMapping("/{teamCode}/posts/{postId}/comment")
 	public Response<Void> createComment(@PathVariable String teamCode, @PathVariable Long postId,
 		@RequestBody @Valid CommentCreateRequestDto requestDto, Errors errors,
-		@AuthenticationPrincipal UserAuthenticationDto userDto) {
+		@AuthenticationPrincipal UserAuthenticationDto userDto,
+		HttpServletRequest request) {
 
 		// TODO ID 혹은 IP가 뜨도록
-		commentService.createComment(postId, requestDto, userDto, errors);
+		commentService.createComment(postId, requestDto, userDto, errors, request);
 
 		return Response.success();
 	}

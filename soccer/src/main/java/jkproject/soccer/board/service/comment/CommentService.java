@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jkproject.soccer.board.data.dto.comment.request.CommentCreateRequestDto;
 import jkproject.soccer.board.data.dto.comment.response.CommentListResponseDto;
 import jkproject.soccer.board.data.entity.comment.Comment;
@@ -40,24 +41,15 @@ public class CommentService {
 
 	@Transactional
 	public void createComment(Long postId, CommentCreateRequestDto requestDto,
-		UserAuthenticationDto userDto, Errors errors) {
+		UserAuthenticationDto userDto, Errors errors, HttpServletRequest request) {
 		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_CREATE_COMMENT);
 
+		String clientIp = request.getRemoteAddr();
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
-		User user = userRepository.findByLoginId(userDto.getLoginId())
-			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
-
 		Long parentId = requestDto.getParentId();
-		Comment comment;
 
-		if (parentId == null) {
-			comment = requestDto.toEntity(null, user, post);
-		} else {
-			Comment parent = commentRepository.findById(parentId)
-				.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_COMMENT_ID));
-			comment = requestDto.toEntity(parent, user, post);
-		}
+		Comment comment = createEntity(parentId, requestDto, userDto, post, clientIp);
 
 		commentRepository.save(comment);
 	}
@@ -76,6 +68,24 @@ public class CommentService {
 		if (userDto == null || !Objects.equals(comment.getCommenter(), userDto.getNickname())) {
 			throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
 		}
+	}
+
+	private Comment createEntity(Long parentId, CommentCreateRequestDto requestDto, UserAuthenticationDto userDto,
+		Post post, String clientIp) {
+		User user = null;
+		Comment parent = null;
+
+		if (userDto != null) {
+			user = userRepository.findByLoginId(userDto.getLoginId())
+				.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
+		}
+
+		if (parentId != null) {
+			parent = commentRepository.findById(parentId)
+				.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_COMMENT_ID));
+		}
+
+		return requestDto.toEntity(parent, user, post, clientIp);
 	}
 
 }
