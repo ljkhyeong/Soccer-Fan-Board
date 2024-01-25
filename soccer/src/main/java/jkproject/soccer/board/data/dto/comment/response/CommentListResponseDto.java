@@ -14,6 +14,7 @@ public class CommentListResponseDto {
 	private String commenter;
 	private String comment;
 	private boolean isReply;
+	private boolean isRemoved;
 	private LocalDateTime createdAt;
 
 	public static CommentListResponseDto from(Comment comment) {
@@ -23,6 +24,7 @@ public class CommentListResponseDto {
 			.commenter(comment.getCommenter())
 			.comment(comment.isRemoved() ? "삭제된 댓글입니다." : comment.getComment())
 			.isReply(comment.isReply())
+			.isRemoved(comment.isRemoved())
 			.createdAt(comment.getCreatedAt())
 			.build();
 
