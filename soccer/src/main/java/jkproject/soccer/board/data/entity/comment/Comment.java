@@ -39,7 +39,7 @@ public class Comment extends BaseTimeEntity {
 	private String comment;
 	private String ipAddress;
 	@Column(nullable = false)
-	private boolean Removed = false;
+	private boolean removed = false;
 
 	@ManyToOne
 	@JoinColumn(name = "parent_id")
@@ -67,6 +67,6 @@ public class Comment extends BaseTimeEntity {
 	}
 
 	public void remove() {
-		this.Removed = true;
+		this.removed = true;
 	}
 }
