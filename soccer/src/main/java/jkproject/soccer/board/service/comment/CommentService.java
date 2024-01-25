@@ -83,6 +83,10 @@ public class CommentService {
 		if (parentId != null) {
 			parent = commentRepository.findById(parentId)
 				.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_COMMENT_ID));
+
+			if (parent.isRemoved()) {
+				throw new ApplicationException(ErrorCode.REMOVED_PARENT_COMMENT);
+			}
 		}
 
 		return requestDto.toEntity(parent, user, post, clientIp);
