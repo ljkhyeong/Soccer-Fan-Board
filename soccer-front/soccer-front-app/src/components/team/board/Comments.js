@@ -197,7 +197,7 @@ const Comments = () => {
                         </ListGroup.Item>
                         :
                         <ListGroup.Item key={comment.commentId}>
-                            <div onClick={() => handleReplyOpen(comment.commentId)} style={{cursor: 'pointer'}}>
+                            <div onClick={() => handleReplyOpen(comment.commentId)} style={{cursor: !comment.removed ? 'pointer' : 'default'}}>
                                 {index + 1} . {comment.commenter} - {comment.comment} - {formatDateTime(comment.createdAt)}
                                 <img src="/images/delete_remove_bin_icon-icons.com_72400%20(1).png"
                                      style={{
@@ -206,7 +206,7 @@ const Comments = () => {
                                          paddingBottom: "1.5px"
                                 }} onClick={() => handleDeleteComment(comment.commentId)}/>
                             </div>
-                            {activeCommentId === comment.commentId && (
+                            {activeCommentId === comment.commentId && !comment.removed && (
                                 <Form className="mt-4">
                                     <Form.Group className="mb-3">
                                         {!isLogin && (
