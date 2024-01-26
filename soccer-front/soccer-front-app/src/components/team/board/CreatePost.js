@@ -44,11 +44,18 @@ const CreatePost = (props) => {
             const errorResult = error.response.data.result;
             setErrors({
                 nicknameError: errorResult.valid_tempNickname,
+                passwordError: errorResult.valid_password,
                 titleError: errorResult.valid_title,
                 contentError: errorResult.valid_content
             })
         })
     };
+
+    const handlePrevent = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
+    }
 
     return (
         <Container>
@@ -61,6 +68,7 @@ const CreatePost = (props) => {
                         type="text"
                         placeholder="제목을 입력하세요"
                         onChange={(e) => handleInputChange(e,postForm,setPostForm)}
+                        onKeyDown={(e) => handlePrevent(e)}
                         required
                     />
                     { errors.titleError && <Form.Text className="valid-error" style={{marginLeft: '10px', marginTop: '10px'}}>{errors.titleError}</Form.Text>}
