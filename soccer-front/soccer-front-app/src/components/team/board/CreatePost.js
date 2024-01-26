@@ -11,11 +11,13 @@ const CreatePost = (props) => {
     const {teamCode} = useParams();
     const [postForm, setPostForm] = useState({
         tempNickname : loginId ? loginId : '비회원',
+        password : loginId ? loginId : '',
         title:'',
         content:''
     })
     const [errors, setErrors] = useState({
         nicknameError:'',
+        passwordError:'',
         titleError:'',
         contentError:''
     })
@@ -24,7 +26,8 @@ const CreatePost = (props) => {
     useEffect(() => {
         setPostForm(prevState => ({
             ...prevState,
-            tempNickname: loginId ? loginId : '비회원'
+            tempNickname: loginId ? loginId : '비회원',
+            password: loginId ? loginId : ''
         }));
     }, [loginId]);
 
@@ -66,17 +69,27 @@ const CreatePost = (props) => {
                 { !isLogin && (
                 <Form.Group>
                     <div style={{display: 'flex', justifyItems: 'center'}}>
-                    <Form.Label>작성자</Form.Label>
-                    <Form.Control
-                        name="tempNickname"
-                        placeholder="임시닉네임"
-                        type="text"
-                        value={postForm.tempNickname}
-                        onChange={(e) => handleInputChange(e,postForm,setPostForm)}
-                        required
-                        style={{marginLeft: '2vw', height: '5vh', width: '95px'}}
-                    />
+                        <Form.Label>작성자</Form.Label>
+                        <Form.Control
+                            name="tempNickname"
+                            placeholder="임시닉네임"
+                            type="text"
+                            value={postForm.tempNickname}
+                            onChange={(e) => handleInputChange(e,postForm,setPostForm)}
+                            required
+                            style={{marginLeft: '2vw', height: '5vh', width: '95px'}}
+                        />
                         { errors.nicknameError && <Form.Text className="valid-error" style={{marginLeft: '10px'}}>{errors.nicknameError}</Form.Text>}
+                        <Form.Control
+                            name="password"
+                            placeholder="비밀번호"
+                            type="password"
+                            value={postForm.password}
+                            onChange={e => handleInputChange(e,postForm,setPostForm)}
+                            required
+                            style={{marginLeft: '2vw', height: '5vh', width: '120px'}}
+                        />
+                        { errors.passwordError && <Form.Text className="valid-error" style={{marginLeft: '10px'}}>{errors.passwordError}</Form.Text>}
                     </div>
                 </Form.Group>
                 )
