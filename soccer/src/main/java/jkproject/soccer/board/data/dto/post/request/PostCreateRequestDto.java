@@ -12,8 +12,9 @@ import lombok.Data;
 @Data
 public class PostCreateRequestDto {
 
-	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
+	private boolean loginState;
 	private String tempNickname;
+	private String password;
 	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
 	private String title;
 	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
@@ -21,7 +22,7 @@ public class PostCreateRequestDto {
 
 	public Post toEntity(Team team, @Nullable User user, String ipAddress) {
 		// TODO 로컬테스트 환경에서는 IPv6 반환 -> IPv4로 코드 수정 필요
-		String writerNickname = (user != null) ? user.getNickname() :
+		String writerNickname = loginState ? user.getNickname() :
 			(tempNickname + ("(" + ipAddress.split(":")[0] + "." + ipAddress.split(":")[1]) + ")");
 		return Post.builder()
 			.title(title)

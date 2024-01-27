@@ -34,6 +34,12 @@ import lombok.RequiredArgsConstructor;
 public class PostApiController {
 
 	private final PostService postService;
+	private final CreatePostValidator createPostValidator;
+
+	@InitBinder
+	public void createValidatorBinder(WebDataBinder binder) {
+		binder.addValidators(createPostValidator);
+	}
 
 	@GetMapping("/{teamCode}/posts")
 	public Response<Page<PostListResponseDto>> lookupAllPosts(@PathVariable String teamCode,
