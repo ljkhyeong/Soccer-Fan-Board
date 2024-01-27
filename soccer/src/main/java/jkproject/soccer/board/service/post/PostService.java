@@ -35,6 +35,7 @@ public class PostService {
 	private final UserRepository userRepository;
 	private final ValidationResultHandler validationResultHandler;
 	private final TeamRepository teamRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	public Page<PostListResponseDto> lookupAllPosts(String teamCode, SearchCondition condition, Pageable pageable) {
 		Team team = teamRepository.findByCode(teamCode)
@@ -56,14 +57,17 @@ public class PostService {
 	public void createPost(String teamCode, PostCreateRequestDto requestDto,
 		UserAuthenticationDto userDto, Errors errors,
 		HttpServletRequest request) {
-
 		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_CREATE_POST);
+
 		String clientIp = request.getRemoteAddr();
 		Team team = teamRepository.findByCode(teamCode)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_CODE));
 		Post post = createEntity(team, requestDto, userDto, clientIp);
 
-		// TODO 사용자 검증로직 분리하자.
+		if (userDto == null) {
+			post.convertPassword(passwordEncoder.encode(requestDto.getPassword()));
+		}
+
 		postRepository.save(post);
 	}
 
