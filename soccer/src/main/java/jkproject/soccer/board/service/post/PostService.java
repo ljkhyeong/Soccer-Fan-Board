@@ -4,12 +4,15 @@ import java.util.Objects;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jkproject.soccer.board.data.dto.post.request.PostAuthorityRequestDto;
 import jkproject.soccer.board.data.dto.post.request.PostCreateRequestDto;
+import jkproject.soccer.board.data.dto.post.request.PostDeleteRequestDto;
 import jkproject.soccer.board.data.dto.post.request.PostUpdateRequestDto;
 import jkproject.soccer.board.data.dto.post.request.SearchCondition;
 import jkproject.soccer.board.data.dto.post.response.PostDetailResponseDto;
@@ -84,30 +87,61 @@ public class PostService {
 	@Transactional
 	public void updatePost(Long postId, UserAuthenticationDto userDto, PostUpdateRequestDto requestDto, Errors errors,
 		HttpServletRequest request) {
+		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_UPDATE_POST);
 
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
+		if (requestDto.isNonUserPost()) {
+			if (requestDto.getPassword() == null ||
+				!passwordEncoder.matches(requestDto.getPassword(), post.getPassword())) {
+				throw new ApplicationException(ErrorCode.INVALID_PASSWORD);
+			}
+		}
+		if (!requestDto.isNonUserPost()) {
+			if (userDto == null || !Objects.equals(userDto.getNickname(), post.getWriter())) {
+				throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+			}
+		}
 		String clientIp = request.getRemoteAddr();
-
-		checkPermission(post, userDto);
-		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_CREATE_POST);
 
 		post.update(requestDto, clientIp);
 	}
 
+	// TODO 현재 코드는 수정 시 두번이나 post를 조회해야한다.(권한 체크 후 재요청) 개선할 수 있는 지 확인 필요
 	@Transactional
-	public void deletePost(Long postId, UserAuthenticationDto userDto) {
+	public void deletePost(Long postId, UserAuthenticationDto userDto, PostDeleteRequestDto requestDto) {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
 
-		checkPermission(post, userDto);
+		if (requestDto.isNonUserPost()) {
+			if (requestDto.getPassword() == null ||
+				!passwordEncoder.matches(requestDto.getPassword(), post.getPassword())) {
+				throw new ApplicationException(ErrorCode.INVALID_PASSWORD);
+			}
+		}
+		if (!requestDto.isNonUserPost()) {
+			if (userDto == null || !Objects.equals(userDto.getNickname(), post.getWriter())) {
+				throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+			}
+		}
 
 		postRepository.delete(post);
 	}
 
-	private void checkPermission(Post post, UserAuthenticationDto userDto) {
-		if (userDto == null || !Objects.equals(post.getWriter(), userDto.getNickname())) {
-			throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+	public void checkAuthority(Long postId, UserAuthenticationDto userDto, PostAuthorityRequestDto requestDto) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
+
+		// getUser null 여부로 체크하면 해당 유저 삭제 시 판단이 어려워질 수 있으므로
+		if (post.getWriter().contains("(")) {
+			if (requestDto.getPassword() == null ||
+				!passwordEncoder.matches(requestDto.getPassword(), post.getPassword())) {
+				throw new ApplicationException(ErrorCode.INVALID_PASSWORD);
+			}
+		} else {
+			if (userDto == null || !Objects.equals(userDto.getNickname(), post.getWriter())) {
+				throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+			}
 		}
 	}
 

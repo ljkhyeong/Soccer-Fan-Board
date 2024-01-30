@@ -18,6 +18,7 @@ public class PostDetailResponseDto {
 	private Long notHeartCount;
 	private LocalDateTime createdAt;
 	private LocalDateTime modifiedAt;
+	private boolean nonUserPost;
 
 	public static PostDetailResponseDto from(Post post) {
 		return PostDetailResponseDto.builder()
@@ -30,6 +31,7 @@ public class PostDetailResponseDto {
 			.notHeartCount(post.getNotHeartCount())
 			.createdAt(post.getCreatedAt())
 			.modifiedAt(post.getModifiedAt())
+			.nonUserPost(post.getWriter().contains("(") ? true : false)
 			.build();
 	}
 

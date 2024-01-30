@@ -43,6 +43,7 @@ public class Post extends BaseTimeEntity {
 	@Column(nullable = false)
 	private String writer;
 	private String ipAddress;
+	private String password;
 	private Long viewCount = 0L;
 	private Long heartCount = 0L;
 	private Long notHeartCount = 0L;
@@ -62,11 +63,12 @@ public class Post extends BaseTimeEntity {
 	private boolean isUpdated = false;
 
 	@Builder
-	public Post(String title, String content, String writer, String ipAddress, Team team, User user) {
+	public Post(String title, String content, String writer, String ipAddress, String password, Team team, User user) {
 		this.title = title;
 		this.content = content;
 		this.writer = writer;
 		this.ipAddress = ipAddress;
+		this.password = password;
 		this.team = team;
 		this.user = user;
 	}
@@ -93,6 +95,10 @@ public class Post extends BaseTimeEntity {
 		if (this.isUpdated) {
 			modifiedAtUpdate();
 		}
+	}
+
+	public void convertPassword(String password) {
+		this.password = password;
 	}
 }
 

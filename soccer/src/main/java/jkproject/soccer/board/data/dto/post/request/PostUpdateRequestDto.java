@@ -6,6 +6,8 @@ import lombok.Data;
 
 @Data
 public class PostUpdateRequestDto {
+	private boolean nonUserPost;
+	private String password;
 	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
 	private String title;
 	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
