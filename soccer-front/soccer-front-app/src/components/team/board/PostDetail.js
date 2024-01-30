@@ -3,12 +3,15 @@ import {Container, Row, Col, Card, Button} from "react-bootstrap";
 import {axiosInstance, formatDateTime} from "../../../service/ApiService";
 import Comments from "./Comments";
 import {useNavigate, useParams} from "react-router-dom";
+import PasswordModal from "../../modal/PasswordModal";
 
 
 const PostDetail = () => {
     const {teamCode, postId} = useParams();
     const [postDetail, setPostDetail] = useState({});
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
+    const [currentAction, setCurrentAction] = useState(null);
 
     useEffect(() => {
         renderPostDetail();
@@ -39,18 +42,6 @@ const PostDetail = () => {
         })
     }
 
-    const handleDeletePost = () => {
-        axiosInstance.delete(`/${teamCode}/posts/${postId}`
-        ).then(response => {
-            console.log(response);
-            navigate(`../board`);
-            alert("삭제되었습니다.");
-        }).catch(error => {
-            console.log(error);
-            alert(error.response.data.result);
-        })
-    }
-
     const handleDislike = () => {
         axiosInstance.post(`/${teamCode}/posts/${postId}/heart`, {
             notHeart: true
@@ -60,6 +51,70 @@ const PostDetail = () => {
                 ...prevDetails,
                 notHeartCount : prevDetails.notHeartCount+1
             }))
+        }).catch(error => {
+            console.log(error);
+            alert(error.response.data.result);
+        })
+    };
+
+    const handleDeleteButton = () => {
+        if (postDetail.nonUserPost) {
+            setCurrentAction('delete');
+            setShowModal(true);
+        } else {
+            handleDelete();
+        };
+    }
+
+    const handleUpdateButton = () => {
+        if (postDetail.nonUserPost) {
+            setCurrentAction('update');
+            setShowModal(true);
+        } else {
+            handleUpdate();
+        }
+    }
+
+    const handlePasswordSubmit = (password) => {
+
+        setShowModal(false);
+        if (currentAction === 'update') {
+            handleUpdate(password);
+        }
+        if (currentAction === 'delete') {
+            handleDelete(password);
+        }
+
+        setCurrentAction(null);
+    }
+
+    const handleUpdate = (password) => {
+        axiosInstance.post(`/${teamCode}/posts/${postId}/permission`,{
+            password: password
+            }
+        ).then(response => {
+            console.log(response);
+            navigate('./update' ,{
+                state: {
+                    nonUserPost: postDetail.nonUserPost,
+                    password: password,
+                    title: postDetail.title,
+                    content: postDetail.content
+                }});
+        }).catch(error => {
+            console.log(error);
+            alert(error.response.data.result);
+        })
+    }
+
+    const handleDelete = (password) => {
+        axiosInstance.post(`/${teamCode}/posts/${postId}/delete`, {
+            nonUserPost: postDetail.nonUserPost,
+            password: password
+        }).then(response => {
+            console.log(response);
+            navigate("../board");
+            alert("삭제되었습니다");
         }).catch(error => {
             console.log(error);
             alert(error.response.data.result);
@@ -99,13 +154,18 @@ const PostDetail = () => {
                       </Card.Body>
                   </Card>
                   <div style={{display:'flex', justifyContent: "right"}}>
-                      <Button onClick={() => navigate('./update')} variant="outline-success">수정</Button>
-                      <Button onClick={handleDeletePost} variant="outline-danger">삭제</Button>
+                      <Button onClick={handleUpdateButton} variant="outline-success">수정</Button>
+                      <Button onClick={handleDeleteButton} variant="outline-danger">삭제</Button>
                       <Button onClick={() => navigate("../board")} variant="outline-dark">목록으로</Button>
                   </div>
                   <Comments />
               </Col>
           </Row>
+          <PasswordModal
+              show={showModal}
+              onHide={() => setShowModal(false)}
+              onPasswordSubmit={handlePasswordSubmit}
+          />
       </Container>
     );
 };

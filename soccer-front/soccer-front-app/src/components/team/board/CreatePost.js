@@ -7,11 +7,12 @@ import {useAuth} from "../../../auth/AuthContext";
 
 const CreatePost = (props) => {
 
-    const {isLogin, loginId} = useAuth();
+    const {isLogin} = useAuth();
     const {teamCode} = useParams();
     const [postForm, setPostForm] = useState({
-        tempNickname : loginId ? loginId : '비회원',
-        password : loginId ? loginId : '',
+        loginState : isLogin ? true : false,
+        tempNickname : isLogin ? '' : '비회원',
+        password : '',
         title:'',
         content:''
     })
@@ -24,12 +25,16 @@ const CreatePost = (props) => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        console.log(isLogin)
         setPostForm(prevState => ({
             ...prevState,
-            tempNickname: loginId ? loginId : '비회원',
-            password: loginId ? loginId : ''
+            loginState: isLogin,
+            tempNickname: isLogin ? '' : '비회원',
+            password: ''
         }));
-    }, [loginId]);
+
+        console.log(postForm.loginState);
+    }, [isLogin]);
 
     const handlePostSubmit = (e) => {
         e.preventDefault();
@@ -110,6 +115,7 @@ const CreatePost = (props) => {
                         rows={10}
                         placeholder="내용을 입력하세요"
                         onChange={(e) => handleInputChange(e,postForm,setPostForm)}
+                        onKeyDown={e => handlePrevent(e)}
                         required
                     />
                     { errors.contentError && <Form.Text className="valid-error">{errors.contentError}</Form.Text>}

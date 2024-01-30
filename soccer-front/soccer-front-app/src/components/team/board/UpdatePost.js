@@ -2,15 +2,17 @@ import {useEffect, useState} from "react";
 import {Container, Form, Button} from "react-bootstrap";
 import {axiosInstance} from "../../../service/ApiService";
 import {handleInputChange, handleKeyDown, initStateObject} from "../../../service/CommonService";
-import {useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 
 const UpdatePost = (props) => {
-
+    const location = useLocation();
     const {teamCode, postId} = useParams();
     const [postForm, setPostForm] = useState({
-        title:'',
-        content:''
+        nonUserPost: location.state?.nonUserPost,
+        password: location.state?.password,
+        title: location.state?.title,
+        content: location.state?.content
     })
     const [errors, setErrors] = useState({
         titleError:'',
@@ -18,19 +20,6 @@ const UpdatePost = (props) => {
     })
     const navigate = useNavigate();
 
-    useEffect(() => {
-        axiosInstance.get(`/${teamCode}/posts/${postId}`
-        ).then(response => {
-            console.log(response);
-            const postInfo = response.data.result;
-            setPostForm({
-                title: postInfo.title,
-                content: postInfo.content
-            })
-        }).catch(error => {
-            console.log(error);
-        })
-    }, [teamCode, postId]);
     const handlePostUpdate = (e) => {
         e.preventDefault();
         axiosInstance.put(`/${teamCode}/posts/${postId}`, postForm)
