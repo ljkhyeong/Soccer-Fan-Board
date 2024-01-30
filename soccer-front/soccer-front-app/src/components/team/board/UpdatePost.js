@@ -1,46 +1,48 @@
-import {useEffect, useState} from "react";
-import {Container, Form, Button} from "react-bootstrap";
-import {axiosInstance} from "../../../service/ApiService";
-import {handleInputChange, handleKeyDown, initStateObject} from "../../../service/CommonService";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
-import axios from "axios";
+import { useEffect, useState } from 'react';
+import { Container, Form, Button } from 'react-bootstrap';
+import { axiosInstance } from '../../../service/ApiService';
+import { handleInputChange, handleKeyDown, initStateObject } from '../../../service/CommonService';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const UpdatePost = (props) => {
     const location = useLocation();
-    const {teamCode, postId} = useParams();
+    const { teamCode, postId } = useParams();
     const [postForm, setPostForm] = useState({
         nonUserPost: location.state?.nonUserPost,
         password: location.state?.password,
         title: location.state?.title,
-        content: location.state?.content
-    })
+        content: location.state?.content,
+    });
     const [errors, setErrors] = useState({
-        titleError:'',
-        contentError:''
-    })
+        titleError: '',
+        contentError: '',
+    });
     const navigate = useNavigate();
 
     const handlePostUpdate = (e) => {
         e.preventDefault();
-        axiosInstance.put(`/${teamCode}/posts/${postId}`, postForm)
-            .then(response => {
-            console.log(response);
-            setErrors(initStateObject(errors));
-            alert("게시글 수정 성공");
-            navigate(`../board/${postId}`);
-        }).catch(error => {
-            console.log(error);
-            const errorResult = error.response.data.result;
+        axiosInstance
+            .put(`/${teamCode}/posts/${postId}`, postForm)
+            .then((response) => {
+                console.log(response);
+                setErrors(initStateObject(errors));
+                alert('게시글 수정 성공');
+                navigate(`../board/${postId}`);
+            })
+            .catch((error) => {
+                console.log(error);
+                const errorResult = error.response.data.result;
 
-            if (!errorResult.valid_title && !errorResult.valid_content) {
-                alert(errorResult);
-            } else {
-                setErrors({
-                    titleError: errorResult.valid_title,
-                    contentError: errorResult.valid_content
-                })
-            }
-        })
+                if (!errorResult.valid_title && !errorResult.valid_content) {
+                    alert(errorResult);
+                } else {
+                    setErrors({
+                        titleError: errorResult.valid_title,
+                        contentError: errorResult.valid_content,
+                    });
+                }
+            });
     };
 
     return (
@@ -53,10 +55,12 @@ const UpdatePost = (props) => {
                         type="text"
                         value={postForm.title}
                         placeholder="제목을 입력하세요"
-                        onChange={(e) => handleInputChange(e,postForm,setPostForm)}
+                        onChange={(e) => handleInputChange(e, postForm, setPostForm)}
                         required
                     />
-                    { errors.titleError && <Form.Text className="valid-error">{errors.titleError}</Form.Text>}
+                    {errors.titleError && (
+                        <Form.Text className="valid-error">{errors.titleError}</Form.Text>
+                    )}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formContent">
                     <Form.Label>내용</Form.Label>
@@ -66,12 +70,16 @@ const UpdatePost = (props) => {
                         rows={10}
                         value={postForm.content}
                         placeholder="내용을 입력하세요"
-                        onChange={(e) => handleInputChange(e,postForm,setPostForm)}
+                        onChange={(e) => handleInputChange(e, postForm, setPostForm)}
                         required
                     />
-                    { errors.contentError && <Form.Text className="valid-error">{errors.contentError}</Form.Text>}
+                    {errors.contentError && (
+                        <Form.Text className="valid-error">{errors.contentError}</Form.Text>
+                    )}
                 </Form.Group>
-                <Button variant="outline-success" onClick={handlePostUpdate}>수정</Button>
+                <Button variant="outline-success" onClick={handlePostUpdate}>
+                    수정
+                </Button>
             </Form>
         </Container>
     );

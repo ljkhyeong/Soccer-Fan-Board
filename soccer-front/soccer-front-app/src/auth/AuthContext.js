@@ -1,17 +1,18 @@
-import {createContext, useContext, useEffect, useState} from "react";
-import {axiosInstance, getAccessToken} from "../service/ApiService";
+import { createContext, useContext, useEffect, useState } from 'react';
+import { axiosInstance, getAccessToken } from '../service/ApiService';
 
 const AuthContext = createContext(null);
 
 export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = ({ children }) => {
     const [isLogin, setIsLogin] = useState(false);
-    const [loginId, setLoginId] = useState("");
+    const [loginId, setLoginId] = useState('');
 
     useEffect(() => {
         if (!getAccessToken()) {
-            axiosInstance.post('/auth/refresh', {})
+            axiosInstance
+                .post('/auth/refresh', {})
                 .then(() => {
                     if (getAccessToken()) {
                         setIsLogin(true);
@@ -21,14 +22,14 @@ export const AuthProvider = ({children}) => {
                 })
                 .catch((e) => {
                     console.log(e);
-                })
+                });
         } else {
             setIsLogin(true);
         }
     }, [isLogin]);
 
     return (
-        <AuthContext.Provider value={{ isLogin, setIsLogin, loginId, setLoginId}}>
+        <AuthContext.Provider value={{ isLogin, setIsLogin, loginId, setLoginId }}>
             {children}
         </AuthContext.Provider>
     );

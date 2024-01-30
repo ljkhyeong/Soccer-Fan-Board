@@ -1,108 +1,125 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SFN</title>
-    <style>
-        body {
-            display:flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SFN</title>
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
 
-        #google-logo {
-            width: 272px;
-            height: 92px;
-            margin-bottom: 20px;
-        }
+            #google-logo {
+                width: 272px;
+                height: 92px;
+                margin-bottom: 20px;
+            }
 
-        #search-form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+            #search-form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
-        input[type="text"] {
-            padding: 10px;
-            width: 300px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+            input[type='text'] {
+                padding: 10px;
+                width: 300px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
 
-        input[type="submit"] {
-            padding: 10px 20px;
-            background-color: #4285F4;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+            input[type='submit'] {
+                padding: 10px 20px;
+                background-color: #4285f4;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
 
-        #national-logos {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-        }
+            #national-logos {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+            }
 
-        .country {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 10px;
-        }
+            .country {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 10px;
+            }
 
-        .country img:hover {
-            transform: scale(1.1);
-        }
-    </style>
-</head>
-<body>
-    <div id="google-logo">
-        <h2>SFN - Soccer For Noob</h2>
-    </div>
-    
-    <div id="search-form">
-        <form action="https://www.google.com/search" method="GET" target="_blank">
-            <input type="text" name="q" placeholder="팀 검색">
-            <input type="submit" value="검색">
-        </form>
-    </div>
-
-    National Team
-    <div id="national-logos">
-        <div class="country">
-            <img src="../soccer/customicondesign-flags-png/png/32/England-flag.png" alt="Aland Islands">
-            <p>England</p>
+            .country img:hover {
+                transform: scale(1.1);
+            }
+        </style>
+    </head>
+    <body>
+        <div id="google-logo">
+            <h2>SFN - Soccer For Noob</h2>
         </div>
-        <div class="country">
-            <img src="../soccer/customicondesign-flags-png/png/32/Spain-flag.png" alt="Aland Islands">
-            <p>Spain</p>
-        </div>
-        <div class="country">
-            <img src="../soccer/customicondesign-flags-png/png/32/Germany-flag.png" alt="Aland Islands">
-            <p>Germany</p>
-        </div>
-    </div>
 
-    League
-    <div id="national-logos">
-        <div class="country">
-            <img src="../soccer/customicondesign-flags-png/png/32/England-flag.png" alt="Aland Islands">
-            <p>England</p>
+        <div id="search-form">
+            <form action="https://www.google.com/search" method="GET" target="_blank">
+                <input type="text" name="q" placeholder="팀 검색" />
+                <input type="submit" value="검색" />
+            </form>
         </div>
-        <div class="country">
-            <img src="../soccer/customicondesign-flags-png/png/32/Spain-flag.png" alt="Aland Islands">
-            <p>Spain</p>
-        </div>
-        <div class="country">
-            <img src="../soccer/customicondesign-flags-png/png/32/Germany-flag.png" alt="Aland Islands">
-            <p>Germany</p>
-        </div>
-    </div>
 
-</body>
+        National Team
+        <div id="national-logos">
+            <div class="country">
+                <img
+                    src="../soccer/customicondesign-flags-png/png/32/England-flag.png"
+                    alt="Aland Islands"
+                />
+                <p>England</p>
+            </div>
+            <div class="country">
+                <img
+                    src="../soccer/customicondesign-flags-png/png/32/Spain-flag.png"
+                    alt="Aland Islands"
+                />
+                <p>Spain</p>
+            </div>
+            <div class="country">
+                <img
+                    src="../soccer/customicondesign-flags-png/png/32/Germany-flag.png"
+                    alt="Aland Islands"
+                />
+                <p>Germany</p>
+            </div>
+        </div>
+
+        League
+        <div id="national-logos">
+            <div class="country">
+                <img
+                    src="../soccer/customicondesign-flags-png/png/32/England-flag.png"
+                    alt="Aland Islands"
+                />
+                <p>England</p>
+            </div>
+            <div class="country">
+                <img
+                    src="../soccer/customicondesign-flags-png/png/32/Spain-flag.png"
+                    alt="Aland Islands"
+                />
+                <p>Spain</p>
+            </div>
+            <div class="country">
+                <img
+                    src="../soccer/customicondesign-flags-png/png/32/Germany-flag.png"
+                    alt="Aland Islands"
+                />
+                <p>Germany</p>
+            </div>
+        </div>
+    </body>
 </html>

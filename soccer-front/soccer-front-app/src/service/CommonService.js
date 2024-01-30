@@ -1,4 +1,3 @@
-
 export const handleKeyDown = (event, callback) => {
     if (event.key === 'Enter') {
         if (event.nativeEvent.isComposing === false) {
@@ -6,26 +5,26 @@ export const handleKeyDown = (event, callback) => {
             callback();
         }
     }
-}
+};
 
 export const handleInputChange = (e, data, setData) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setData({
         ...data,
-        [name] : value
+        [name]: value,
     });
 };
 
 export const initStateObject = (state) => {
     const resetState = {};
     for (const key in state) {
-        resetState[key] = "";
+        resetState[key] = '';
     }
     return resetState;
 };
 
 export const resetStates = (...setters) => {
-    setters.forEach(setter => {
+    setters.forEach((setter) => {
         setter('');
     });
 };
