@@ -109,8 +109,8 @@ const Comments = () => {
             .post(`/${teamCode}/posts/${postId}/comment`, replyForm)
             .then((response) => {
                 console.log(response);
+                setReplyErrors(initStateObject(replyErrors));
                 initCommentForm();
-                setReplyForm(initStateObject(replyForm));
                 setActiveCommentId(null);
                 setReload(!reload);
             })
