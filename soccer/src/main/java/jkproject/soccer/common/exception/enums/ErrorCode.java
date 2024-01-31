@@ -28,6 +28,7 @@ public enum ErrorCode {
 	INVALID_CREATE_POST(HttpStatus.BAD_REQUEST, "유효하지 않은 게시물 작성"),
 	INVALID_UPDATE_POST(HttpStatus.BAD_REQUEST, "유효하지 않은 게시물 수정"),
 	INVALID_REMOVE_POST(HttpStatus.BAD_REQUEST, "유효하지 않은 게시물 삭제"),
+	ALREADY_REMOVED_COMMENT(HttpStatus.BAD_REQUEST, "이미 삭제된 댓글입니다."),
 	INVALID_CREATE_COMMENT(HttpStatus.BAD_REQUEST, "유효하지 않은 댓글 작성"),
 	INVALID_CREATE_HEART(HttpStatus.BAD_REQUEST, "이미 해당 글에 좋아요 혹은 싫어요를 누른 상태입니다."),
 	INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "유효하지 않은 비밀번호"),
