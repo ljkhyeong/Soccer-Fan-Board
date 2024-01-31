@@ -10,32 +10,40 @@ import {
 import { formatDateTime } from '../../../service/ApiService';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../../../auth/AuthContext';
+import PasswordModal from "../../modal/PasswordModal";
 const Comments = () => {
     const { teamCode, postId } = useParams();
-    const { loginId, isLogin } = useAuth();
+    const { isLogin } = useAuth();
     const [comments, setComments] = useState([]);
     const [commentForm, setCommentForm] = useState({
+        loginState: isLogin,
         parentId: '',
-        tempNickname: loginId ? loginId : '비회원',
+        tempNickname: isLogin ? '' : '비회원',
+        password: '',
         comment: '',
     });
     const [replyForm, setReplyForm] = useState({
+        loginState: isLogin,
         parentId: '',
-        tempNickname: loginId ? loginId : '비회원',
+        tempNickname: isLogin ? '' : '비회원',
+        password: '',
         comment: '',
     });
     const [errors, setErrors] = useState({
         valid_tempNickname: '',
+        valid_password: '',
         valid_comment: '',
     });
     const [replyErrors, setReplyErrors] = useState({
         valid_tempNickname: '',
+        valid_password: '',
         valid_comment: '',
     });
     const [activeCommentId, setActiveCommentId] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
     const [reload, setReload] = useState(true);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         renderCommentList();
@@ -44,14 +52,18 @@ const Comments = () => {
     useEffect(() => {
         setCommentForm((prevState) => ({
             ...prevState,
-            tempNickname: loginId ? loginId : '비회원',
+            loginState: isLogin,
+            tempNickname: isLogin ? '' : '비회원',
+            password: ''
         }));
 
         setReplyForm((prevState) => ({
             ...prevState,
-            tempNickname: loginId ? loginId : '비회원',
+            loginState: isLogin,
+            tempNickname: isLogin ? '' : '비회원',
+            password: ''
         }));
-    }, [loginId]);
+    }, [isLogin]);
 
     const renderCommentList = () => {
         axiosInstance
@@ -86,6 +98,7 @@ const Comments = () => {
                 const errorResult = error.response.data.result;
                 setErrors({
                     valid_tempNickname: errorResult.valid_tempNickname,
+                    valid_password: errorResult.valid_password,
                     valid_comment: errorResult.valid_comment,
                 });
             });
@@ -106,6 +119,7 @@ const Comments = () => {
                 const errorResult = error.response.data.result;
                 setReplyErrors({
                     valid_tempNickname: errorResult.valid_tempNickname,
+                    valid_password: errorResult.valid_password,
                     valid_comment: errorResult.valid_comment,
                 });
             });
@@ -114,8 +128,10 @@ const Comments = () => {
     const handleReplyOpen = (commentId) => {
         setActiveCommentId(commentId);
         setReplyForm({
+            loginState: isLogin,
             parentId: commentId,
-            tempNickname: loginId ? loginId : '비회원',
+            tempNickname: isLogin ? '' : '비회원',
+            password: '',
             comment: '',
         });
     };
@@ -175,6 +191,21 @@ const Comments = () => {
                             {errors.valid_tempNickname && (
                                 <Form.Text className="valid-error" style={{ marginLeft: '10px' }}>
                                     {errors.valid_tempNickname}
+                                </Form.Text>
+                            )}
+                            <Form.Control
+                                name="password"
+                                placeholder="비밀번호"
+                                type="password"
+                                value={commentForm.password}
+                                onChange={e => handleInputChange(e, commentForm, setCommentForm)}
+                                onKeyDown={(e) => handleKeyDown(e, handleCommentSubmit)}
+                                required
+                                style={{marginLeft: '2vw', height: '5vh', width: '120px' }}
+                            />
+                            {errors.valid_password && (
+                                <Form.Text className="valid-error" style={{ marginLeft:'10px'}}>
+                                    {errors.valid_password}
                                 </Form.Text>
                             )}
                         </div>
@@ -280,6 +311,23 @@ const Comments = () => {
                                                         style={{ marginLeft: '10px' }}
                                                     >
                                                         {replyErrors.valid_tempNickname}
+                                                    </Form.Text>
+                                                )}
+                                                <Form.Control
+                                                    name="password"
+                                                    placeholder="비밀번호"
+                                                    type="password"
+                                                    value={replyForm.password}
+                                                    onChange={e => handleInputChange(e, replyForm, setReplyForm)}
+                                                    onKeyDown={(e) =>
+                                                        handleKeyDown(e, handleReplySubmit)
+                                                    }
+                                                    required
+                                                    style={{marginLeft: '2vw', height: '5vh', width: '120px' }}
+                                                />
+                                                {replyErrors.valid_password && (
+                                                    <Form.Text className="valid-error" style={{ marginLeft:'10px'}}>
+                                                        {replyErrors.valid_password}
                                                     </Form.Text>
                                                 )}
                                             </div>
