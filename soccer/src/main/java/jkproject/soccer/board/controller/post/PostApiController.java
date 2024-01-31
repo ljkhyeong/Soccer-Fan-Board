@@ -63,11 +63,11 @@ public class PostApiController {
 
 	@PostMapping("/{teamCode}/posts")
 	public Response<Void> createPost(@PathVariable String teamCode,
-		@RequestBody @Valid PostCreateRequestDto createRequestDto, Errors errors,
+		@RequestBody @Valid PostCreateRequestDto requestDto, Errors errors,
 		@AuthenticationPrincipal UserAuthenticationDto userDto,
 		HttpServletRequest request) {
 
-		postService.createPost(teamCode, createRequestDto, userDto, errors, request);
+		postService.createPost(teamCode, requestDto, userDto, errors, request);
 		return Response.success();
 	}
 

@@ -49,11 +49,11 @@ public class CommentApiController {
 
 	@PostMapping("/{teamCode}/posts/{postId}/comment")
 	public Response<Void> createComment(@PathVariable String teamCode, @PathVariable Long postId,
-		@RequestBody @Valid CommentCreateRequestDto createCommentRequestDto, Errors errors,
+		@RequestBody @Valid CommentCreateRequestDto requestDto, Errors errors,
 		@AuthenticationPrincipal UserAuthenticationDto userDto,
 		HttpServletRequest request) {
 
-		commentService.createComment(postId, createCommentRequestDto, userDto, errors, request);
+		commentService.createComment(postId, requestDto, userDto, errors, request);
 		return Response.success();
 	}
 

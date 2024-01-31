@@ -11,6 +11,11 @@ import jkproject.soccer.common.validator.AbstractValidator;
 public class CreateCommentValidator extends AbstractValidator<CommentCreateRequestDto> {
 
 	@Override
+	public boolean supports(Class<?> clazz) {
+		return CommentCreateRequestDto.class.isAssignableFrom(clazz);
+	}
+
+	@Override
 	protected void doValidate(CommentCreateRequestDto dto, Errors errors) {
 		if (!dto.isLoginState()) {
 			if (dto.getTempNickname() == null || dto.getTempNickname().isBlank()) {

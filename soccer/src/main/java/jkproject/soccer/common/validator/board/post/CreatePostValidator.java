@@ -9,6 +9,12 @@ import jkproject.soccer.common.validator.AbstractValidator;
 
 @Component
 public class CreatePostValidator extends AbstractValidator<PostCreateRequestDto> {
+
+	@Override
+	public boolean supports(Class<?> clazz) {
+		return PostCreateRequestDto.class.isAssignableFrom(clazz);
+	}
+
 	@Override
 	protected void doValidate(PostCreateRequestDto dto, Errors errors) {
 		if (!dto.isLoginState()) {
