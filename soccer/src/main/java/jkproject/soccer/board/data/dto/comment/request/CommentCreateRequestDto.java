@@ -12,13 +12,15 @@ import lombok.Data;
 @Data
 public class CommentCreateRequestDto {
 
+	private boolean loginState;
 	private Long parentId;
-	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
 	private String tempNickname;
+	private String password;
 	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
 	private String comment;
 
 	public Comment toEntity(@Nullable Comment parent, @Nullable User user, Post post, String ipAddress) {
+		// TODO 로컬테스트 환경에서는 IPv6 반환 -> IPv4로 코드 수정 필요
 		String commenter = (user != null) ? user.getNickname() :
 			(tempNickname + ("(" + ipAddress.split(":")[0] + "." + ipAddress.split(":")[1]) + ")");
 

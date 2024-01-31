@@ -40,8 +40,8 @@ public class PostApiController {
 	private final PostService postService;
 	private final CreatePostValidator createPostValidator;
 
-	@InitBinder(value = "createRequestDto")
-	public void createValidatorBinder(WebDataBinder binder) {
+	@InitBinder
+	public void createPostValidatorBinder(WebDataBinder binder) {
 		binder.addValidators(createPostValidator);
 	}
 
@@ -66,7 +66,7 @@ public class PostApiController {
 		@RequestBody @Valid PostCreateRequestDto createRequestDto, Errors errors,
 		@AuthenticationPrincipal UserAuthenticationDto userDto,
 		HttpServletRequest request) {
-		//TODO 회원가입 상태면 회원 닉네임, 아니면 IP와 임시닉네임을 사용하도록
+
 		postService.createPost(teamCode, createRequestDto, userDto, errors, request);
 		return Response.success();
 	}
