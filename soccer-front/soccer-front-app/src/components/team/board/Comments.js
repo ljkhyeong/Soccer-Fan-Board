@@ -77,16 +77,7 @@ const Comments = () => {
             .then((response) => {
                 console.log(response);
                 setErrors(initStateObject(errors));
-                setCommentForm({
-                    parentId: '',
-                    tempNickname: loginId ? loginId : '비회원',
-                    comment: '',
-                });
-                setReplyForm({
-                    parentId: '',
-                    tempNickname: loginId ? loginId : '비회원',
-                    comment: '',
-                });
+                initCommentForm();
                 setActiveCommentId(null);
                 setReload(!reload);
             })
@@ -105,16 +96,7 @@ const Comments = () => {
             .post(`/${teamCode}/posts/${postId}/comment`, replyForm)
             .then((response) => {
                 console.log(response);
-                setReplyErrors({
-                    parentId: '',
-                    tempNickname: loginId ? loginId : '비회원',
-                    comment: '',
-                });
-                setCommentForm({
-                    parentId: '',
-                    tempNickname: loginId ? loginId : '비회원',
-                    comment: '',
-                });
+                initCommentForm();
                 setReplyForm(initStateObject(replyForm));
                 setActiveCommentId(null);
                 setReload(!reload);
@@ -150,6 +132,27 @@ const Comments = () => {
                 console.log(error);
                 alert(error.response.data.result);
             });
+    };
+
+    const handlePasswordSubmit = (password) => {
+        setShowModal(false);
+    };
+
+    const initCommentForm = () => {
+        setCommentForm({
+            loginState: isLogin,
+            parentId: '',
+            tempNickname: isLogin ? '' : '비회원',
+            password: '',
+            comment: '',
+        });
+        setReplyForm({
+            loginState: isLogin,
+            parentId: '',
+            tempNickname: isLogin ? '' : '비회원',
+            password: '',
+            comment: '',
+        });
     };
 
     return (
