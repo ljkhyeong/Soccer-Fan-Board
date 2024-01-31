@@ -38,6 +38,7 @@ public class Comment extends BaseTimeEntity {
 	@Column(nullable = false)
 	private String comment;
 	private String ipAddress;
+	private String password;
 	@Column(nullable = false)
 	private boolean removed = false;
 
@@ -53,10 +54,12 @@ public class Comment extends BaseTimeEntity {
 	private Post post;
 
 	@Builder
-	public Comment(String commenter, String comment, String ipAddress, Comment parent, User user, Post post) {
+	public Comment(String commenter, String comment, String ipAddress, String password, Comment parent, User user,
+		Post post) {
 		this.commenter = commenter;
 		this.comment = comment;
 		this.ipAddress = ipAddress;
+		this.password = password;
 		this.parent = parent;
 		this.user = user;
 		this.post = post;
@@ -68,5 +71,9 @@ public class Comment extends BaseTimeEntity {
 
 	public void remove() {
 		this.removed = true;
+	}
+
+	public void savePassword(String password) {
+		this.password = password;
 	}
 }

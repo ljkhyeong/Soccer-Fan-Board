@@ -97,7 +97,7 @@ public class Post extends BaseTimeEntity {
 		}
 	}
 
-	public void convertPassword(String password) {
+	public void savePassword(String password) {
 		this.password = password;
 	}
 }

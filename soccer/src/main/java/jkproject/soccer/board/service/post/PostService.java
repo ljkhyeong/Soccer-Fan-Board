@@ -68,7 +68,7 @@ public class PostService {
 		Post post = createEntity(team, requestDto, userDto, clientIp);
 
 		if (userDto == null) {
-			post.convertPassword(passwordEncoder.encode(requestDto.getPassword()));
+			post.savePassword(passwordEncoder.encode(requestDto.getPassword()));
 		}
 
 		postRepository.save(post);
