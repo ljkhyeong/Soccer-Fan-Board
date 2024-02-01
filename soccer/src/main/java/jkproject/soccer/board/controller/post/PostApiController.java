@@ -40,7 +40,7 @@ public class PostApiController {
 	private final PostService postService;
 	private final CreatePostValidator createPostValidator;
 
-	@InitBinder
+	@InitBinder("postCreateRequestDto")
 	public void createPostValidatorBinder(WebDataBinder binder) {
 		binder.addValidators(createPostValidator);
 	}

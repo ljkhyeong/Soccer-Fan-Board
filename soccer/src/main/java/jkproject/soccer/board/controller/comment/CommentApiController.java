@@ -32,7 +32,7 @@ public class CommentApiController {
 	private final CommentService commentService;
 	private final CreateCommentValidator createCommentValidator;
 
-	@InitBinder("createRequestDto")
+	@InitBinder("commentCreateRequestDto")
 	public void createCommentValidatorBinder(WebDataBinder binder) {
 		binder.addValidators(createCommentValidator);
 	}
@@ -48,11 +48,11 @@ public class CommentApiController {
 
 	@PostMapping("/{teamCode}/posts/{postId}/comment")
 	public Response<Void> createComment(@PathVariable String teamCode, @PathVariable Long postId,
-		@RequestBody @Valid CommentCreateRequestDto createRequestDto, Errors errors,
+		@RequestBody @Valid CommentCreateRequestDto requestDto, Errors errors,
 		@AuthenticationPrincipal UserAuthenticationDto userDto,
 		HttpServletRequest request) {
 
-		commentService.createComment(postId, createRequestDto, userDto, errors, request);
+		commentService.createComment(postId, requestDto, userDto, errors, request);
 		return Response.success();
 	}
 
