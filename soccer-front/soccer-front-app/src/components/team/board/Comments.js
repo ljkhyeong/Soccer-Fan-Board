@@ -10,7 +10,7 @@ import {
 import { formatDateTime } from '../../../service/ApiService';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../../../auth/AuthContext';
-import PasswordModal from "../../modal/PasswordModal";
+import PasswordModal from '../../modal/PasswordModal';
 const Comments = () => {
     const { teamCode, postId } = useParams();
     const { isLogin } = useAuth();
@@ -55,14 +55,14 @@ const Comments = () => {
             ...prevState,
             loginState: isLogin,
             tempNickname: isLogin ? '' : '비회원',
-            password: ''
+            password: '',
         }));
 
         setReplyForm((prevState) => ({
             ...prevState,
             loginState: isLogin,
             tempNickname: isLogin ? '' : '비회원',
-            password: ''
+            password: '',
         }));
     }, [isLogin]);
 
@@ -144,13 +144,13 @@ const Comments = () => {
         } else {
             handleDeleteComment(commentId, false, '');
         }
-    }
+    };
 
     const handleDeleteComment = (commentId, nonUserComment, password) => {
         axiosInstance
             .post(`/${teamCode}/posts/${postId}/comment/${commentId}/delete`, {
-                nonUserComment : nonUserComment,
-                password: password
+                nonUserComment: nonUserComment,
+                password: password,
             })
             .then((response) => {
                 console.log(response);
@@ -191,8 +191,8 @@ const Comments = () => {
             <Form className="mt-4">
                 <Form.Group className="mb-3">
                     {!isLogin && (
-                        <div style={{display: 'flex', justifyItems: 'center'}}>
-                            <Form.Label style={{marginTop: '5px'}}>작성자 :</Form.Label>
+                        <div style={{ display: 'flex', justifyItems: 'center' }}>
+                            <Form.Label style={{ marginTop: '5px' }}>작성자 :</Form.Label>
                             <Form.Control
                                 name="tempNickname"
                                 placeholder="임시닉네임"
@@ -201,10 +201,10 @@ const Comments = () => {
                                 onChange={(e) => handleInputChange(e, commentForm, setCommentForm)}
                                 onKeyDown={(e) => handleKeyDown(e, handleCommentSubmit)}
                                 required
-                                style={{marginLeft: '1vw', height: '5vh', width: '95px'}}
+                                style={{ marginLeft: '1vw', height: '5vh', width: '95px' }}
                             />
                             {errors.valid_tempNickname && (
-                                <Form.Text className="valid-error" style={{marginLeft: '10px'}}>
+                                <Form.Text className="valid-error" style={{ marginLeft: '10px' }}>
                                     {errors.valid_tempNickname}
                                 </Form.Text>
                             )}
@@ -213,13 +213,13 @@ const Comments = () => {
                                 placeholder="비밀번호"
                                 type="password"
                                 value={commentForm.password}
-                                onChange={e => handleInputChange(e, commentForm, setCommentForm)}
+                                onChange={(e) => handleInputChange(e, commentForm, setCommentForm)}
                                 onKeyDown={(e) => handleKeyDown(e, handleCommentSubmit)}
                                 required
-                                style={{marginLeft: '2vw', height: '5vh', width: '120px'}}
+                                style={{ marginLeft: '2vw', height: '5vh', width: '120px' }}
                             />
                             {errors.valid_password && (
-                                <Form.Text className="valid-error" style={{marginLeft: '10px'}}>
+                                <Form.Text className="valid-error" style={{ marginLeft: '10px' }}>
                                     {errors.valid_password}
                                 </Form.Text>
                             )}
@@ -259,33 +259,46 @@ const Comments = () => {
                             <div>
                                 {index + 1} . {comment.commenter} - {comment.comment} -{' '}
                                 {formatDateTime(comment.createdAt)}
-                                {!comment.removed && <img
-                                    src="/images/delete_remove_bin_icon-icons.com_72400%20(1).png"
-                                    style={{
-                                        height: '3vh',
-                                        marginLeft: '2px',
-                                        paddingBottom: '1.5px',
-                                    }}
-                                    onClick={() => handleDeleteButton(comment.nonUserComment, comment.commentId)}
-                                />}
-                            </div>
-                        </ListGroup.Item>
-                    ) : (
-                        <ListGroup.Item key={comment.commentId}>
-                            <div
-                                onClick={() => handleReplyOpen(comment.commentId)}
-                                style={{cursor: !comment.removed ? 'pointer' : 'default'}}
-                            >
-                                {index + 1} . {comment.commenter} - {comment.comment} -{' '}
-                                {formatDateTime(comment.createdAt)}
-                                { !comment.removed  && (<img
+                                {!comment.removed && (
+                                    <img
                                         src="/images/delete_remove_bin_icon-icons.com_72400%20(1).png"
                                         style={{
                                             height: '3vh',
                                             marginLeft: '2px',
                                             paddingBottom: '1.5px',
                                         }}
-                                        onClick={() => handleDeleteButton(comment.nonUserComment, comment.commentId)}
+                                        onClick={() =>
+                                            handleDeleteButton(
+                                                comment.nonUserComment,
+                                                comment.commentId,
+                                            )
+                                        }
+                                    />
+                                )}
+                            </div>
+                        </ListGroup.Item>
+                    ) : (
+                        <ListGroup.Item key={comment.commentId}>
+                            <div
+                                onClick={() => handleReplyOpen(comment.commentId)}
+                                style={{ cursor: !comment.removed ? 'pointer' : 'default' }}
+                            >
+                                {index + 1} . {comment.commenter} - {comment.comment} -{' '}
+                                {formatDateTime(comment.createdAt)}
+                                {!comment.removed && (
+                                    <img
+                                        src="/images/delete_remove_bin_icon-icons.com_72400%20(1).png"
+                                        style={{
+                                            height: '3vh',
+                                            marginLeft: '2px',
+                                            paddingBottom: '1.5px',
+                                        }}
+                                        onClick={() =>
+                                            handleDeleteButton(
+                                                comment.nonUserComment,
+                                                comment.commentId,
+                                            )
+                                        }
                                     />
                                 )}
                             </div>
@@ -294,9 +307,9 @@ const Comments = () => {
                                     <Form.Group className="mb-3">
                                         {!isLogin && (
                                             <div
-                                                style={{display: 'flex', justifyItems: 'center'}}
+                                                style={{ display: 'flex', justifyItems: 'center' }}
                                             >
-                                                <Form.Label style={{marginTop: '5px'}}>
+                                                <Form.Label style={{ marginTop: '5px' }}>
                                                     작성자 :
                                                 </Form.Label>
                                                 <Form.Control
@@ -324,7 +337,7 @@ const Comments = () => {
                                                 {replyErrors.valid_tempNickname && (
                                                     <Form.Text
                                                         className="valid-error"
-                                                        style={{marginLeft: '10px'}}
+                                                        style={{ marginLeft: '10px' }}
                                                     >
                                                         {replyErrors.valid_tempNickname}
                                                     </Form.Text>
@@ -334,15 +347,28 @@ const Comments = () => {
                                                     placeholder="비밀번호"
                                                     type="password"
                                                     value={replyForm.password}
-                                                    onChange={e => handleInputChange(e, replyForm, setReplyForm)}
+                                                    onChange={(e) =>
+                                                        handleInputChange(
+                                                            e,
+                                                            replyForm,
+                                                            setReplyForm,
+                                                        )
+                                                    }
                                                     onKeyDown={(e) =>
                                                         handleKeyDown(e, handleReplySubmit)
                                                     }
                                                     required
-                                                    style={{marginLeft: '2vw', height: '5vh', width: '120px'}}
+                                                    style={{
+                                                        marginLeft: '2vw',
+                                                        height: '5vh',
+                                                        width: '120px',
+                                                    }}
                                                 />
                                                 {replyErrors.valid_password && (
-                                                    <Form.Text className="valid-error" style={{marginLeft: '10px'}}>
+                                                    <Form.Text
+                                                        className="valid-error"
+                                                        style={{ marginLeft: '10px' }}
+                                                    >
                                                         {replyErrors.valid_password}
                                                     </Form.Text>
                                                 )}
@@ -379,7 +405,7 @@ const Comments = () => {
                 >
                     이전
                 </Button>
-                {Array.from({length: totalPage}, (_, index) => (
+                {Array.from({ length: totalPage }, (_, index) => (
                     <Button
                         variant="light"
                         key={index}

@@ -9,7 +9,7 @@ const PasswordModal = (props) => {
             e.preventDefault();
             props.onPasswordSubmit(password);
         }
-    }
+    };
 
     return (
         <Modal show={props.show} onHide={props.onHide} centered>
