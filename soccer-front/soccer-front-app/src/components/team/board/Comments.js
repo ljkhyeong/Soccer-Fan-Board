@@ -40,6 +40,7 @@ const Comments = () => {
         valid_comment: '',
     });
     const [activeCommentId, setActiveCommentId] = useState(0);
+    const [removalActiveCommentId, setRemovalActiveCommentId] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
     const [reload, setReload] = useState(true);
@@ -136,9 +137,21 @@ const Comments = () => {
         });
     };
 
-    const handleDeleteComment = (commentId) => {
+    const handleDeleteButton = (nonUserComment, commentId) => {
+        if (nonUserComment) {
+            setRemovalActiveCommentId(commentId);
+            setShowModal(true);
+        } else {
+            handleDeleteComment(commentId, false, '');
+        }
+    }
+
+    const handleDeleteComment = (commentId, nonUserComment, password) => {
         axiosInstance
-            .delete(`/${teamCode}/posts/${postId}/comment/${commentId}`)
+            .post(`/${teamCode}/posts/${postId}/comment/${commentId}/delete`, {
+                nonUserComment : nonUserComment,
+                password: password
+            })
             .then((response) => {
                 console.log(response);
                 alert('삭제되었습니다.');
@@ -148,10 +161,12 @@ const Comments = () => {
                 console.log(error);
                 alert(error.response.data.result);
             });
+        setRemovalActiveCommentId(0);
     };
 
     const handlePasswordSubmit = (password) => {
         setShowModal(false);
+        handleDeleteComment(removalActiveCommentId, true, password);
     };
 
     const initCommentForm = () => {
@@ -176,8 +191,8 @@ const Comments = () => {
             <Form className="mt-4">
                 <Form.Group className="mb-3">
                     {!isLogin && (
-                        <div style={{ display: 'flex', justifyItems: 'center' }}>
-                            <Form.Label style={{ marginTop: '5px' }}>작성자 :</Form.Label>
+                        <div style={{display: 'flex', justifyItems: 'center'}}>
+                            <Form.Label style={{marginTop: '5px'}}>작성자 :</Form.Label>
                             <Form.Control
                                 name="tempNickname"
                                 placeholder="임시닉네임"
@@ -186,10 +201,10 @@ const Comments = () => {
                                 onChange={(e) => handleInputChange(e, commentForm, setCommentForm)}
                                 onKeyDown={(e) => handleKeyDown(e, handleCommentSubmit)}
                                 required
-                                style={{ marginLeft: '1vw', height: '5vh', width: '95px' }}
+                                style={{marginLeft: '1vw', height: '5vh', width: '95px'}}
                             />
                             {errors.valid_tempNickname && (
-                                <Form.Text className="valid-error" style={{ marginLeft: '10px' }}>
+                                <Form.Text className="valid-error" style={{marginLeft: '10px'}}>
                                     {errors.valid_tempNickname}
                                 </Form.Text>
                             )}
@@ -201,10 +216,10 @@ const Comments = () => {
                                 onChange={e => handleInputChange(e, commentForm, setCommentForm)}
                                 onKeyDown={(e) => handleKeyDown(e, handleCommentSubmit)}
                                 required
-                                style={{marginLeft: '2vw', height: '5vh', width: '120px' }}
+                                style={{marginLeft: '2vw', height: '5vh', width: '120px'}}
                             />
                             {errors.valid_password && (
-                                <Form.Text className="valid-error" style={{ marginLeft:'10px'}}>
+                                <Form.Text className="valid-error" style={{marginLeft: '10px'}}>
                                     {errors.valid_password}
                                 </Form.Text>
                             )}
@@ -309,7 +324,7 @@ const Comments = () => {
                                                 {replyErrors.valid_tempNickname && (
                                                     <Form.Text
                                                         className="valid-error"
-                                                        style={{ marginLeft: '10px' }}
+                                                        style={{marginLeft: '10px'}}
                                                     >
                                                         {replyErrors.valid_tempNickname}
                                                     </Form.Text>
@@ -324,10 +339,10 @@ const Comments = () => {
                                                         handleKeyDown(e, handleReplySubmit)
                                                     }
                                                     required
-                                                    style={{marginLeft: '2vw', height: '5vh', width: '120px' }}
+                                                    style={{marginLeft: '2vw', height: '5vh', width: '120px'}}
                                                 />
                                                 {replyErrors.valid_password && (
-                                                    <Form.Text className="valid-error" style={{ marginLeft:'10px'}}>
+                                                    <Form.Text className="valid-error" style={{marginLeft: '10px'}}>
                                                         {replyErrors.valid_password}
                                                     </Form.Text>
                                                 )}
@@ -364,7 +379,7 @@ const Comments = () => {
                 >
                     이전
                 </Button>
-                {Array.from({ length: totalPage }, (_, index) => (
+                {Array.from({length: totalPage}, (_, index) => (
                     <Button
                         variant="light"
                         key={index}
@@ -381,6 +396,11 @@ const Comments = () => {
                     다음
                 </Button>
             </div>
+            <PasswordModal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                onPasswordSubmit={handlePasswordSubmit}
+            />
         </>
     );
 };
