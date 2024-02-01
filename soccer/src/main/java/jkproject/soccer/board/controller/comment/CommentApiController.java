@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +32,7 @@ public class CommentApiController {
 	private final CommentService commentService;
 	private final CreateCommentValidator createCommentValidator;
 
-	@InitBinder
+	@InitBinder("createRequestDto")
 	public void createCommentValidatorBinder(WebDataBinder binder) {
 		binder.addValidators(createCommentValidator);
 	}
@@ -49,15 +48,15 @@ public class CommentApiController {
 
 	@PostMapping("/{teamCode}/posts/{postId}/comment")
 	public Response<Void> createComment(@PathVariable String teamCode, @PathVariable Long postId,
-		@RequestBody @Valid CommentCreateRequestDto requestDto, Errors errors,
+		@RequestBody @Valid CommentCreateRequestDto createRequestDto, Errors errors,
 		@AuthenticationPrincipal UserAuthenticationDto userDto,
 		HttpServletRequest request) {
 
-		commentService.createComment(postId, requestDto, userDto, errors, request);
+		commentService.createComment(postId, createRequestDto, userDto, errors, request);
 		return Response.success();
 	}
 
-	@DeleteMapping("/{teamCode}/posts/{postId}/comment/{commentId}")
+	@PostMapping("/{teamCode}/posts/{postId}/comment/{commentId}/delete")
 	public Response<Void> deleteComment(@PathVariable String teamCode, @PathVariable Long postId,
 		@PathVariable Long commentId,
 		@AuthenticationPrincipal UserAuthenticationDto userDto,

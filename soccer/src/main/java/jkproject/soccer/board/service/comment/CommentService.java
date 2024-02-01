@@ -4,12 +4,14 @@ import java.util.Objects;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jkproject.soccer.board.data.dto.comment.request.CommentCreateRequestDto;
+import jkproject.soccer.board.data.dto.comment.request.CommentDeleteRequestDto;
 import jkproject.soccer.board.data.dto.comment.response.CommentListResponseDto;
 import jkproject.soccer.board.data.entity.comment.Comment;
 import jkproject.soccer.board.data.entity.post.Post;
@@ -32,6 +34,7 @@ public class CommentService {
 	private final PostRepository postRepository;
 	private final UserRepository userRepository;
 	private final ValidationResultHandler validationResultHandler;
+	private final PasswordEncoder passwordEncoder;
 
 	public Page<CommentListResponseDto> readComments(Long postId, Pageable pageable) {
 		Page<Comment> comments = commentRepository.findAllByPostId(postId, pageable);
@@ -51,22 +54,38 @@ public class CommentService {
 
 		Comment comment = createEntity(parentId, requestDto, userDto, post, clientIp);
 
+		if (userDto == null) {
+			comment.savePassword(passwordEncoder.encode(requestDto.getPassword()));
+		}
+
 		commentRepository.save(comment);
 	}
 
 	@Transactional
-	public void deleteComment(Long commentId, UserAuthenticationDto userDto) {
+	public void deleteComment(Long commentId, UserAuthenticationDto userDto, CommentDeleteRequestDto requestDto) {
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_COMMENT_ID));
 
-		checkPermission(comment, userDto);
+		checkDeletePermission(comment, userDto, requestDto);
 
+		if (comment.isRemoved()) {
+			throw new ApplicationException(ErrorCode.ALREADY_REMOVED_COMMENT);
+		}
 		comment.remove();
 	}
 
-	private void checkPermission(Comment comment, UserAuthenticationDto userDto) {
-		if (userDto == null || !Objects.equals(comment.getCommenter(), userDto.getNickname())) {
-			throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+	private void checkDeletePermission(Comment comment, UserAuthenticationDto userDto,
+		CommentDeleteRequestDto requestDto) {
+		if (requestDto.isNonUserComment()) {
+			if (requestDto.getPassword() == null ||
+				!passwordEncoder.matches(requestDto.getPassword(), comment.getPassword())) {
+				throw new ApplicationException(ErrorCode.INVALID_PASSWORD);
+			}
+		}
+		if (!requestDto.isNonUserComment()) {
+			if (userDto == null || !Objects.equals(userDto.getNickname(), comment.getCommenter())) {
+				throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+			}
 		}
 	}
 

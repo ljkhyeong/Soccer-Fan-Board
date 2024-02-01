@@ -16,6 +16,7 @@ public class CommentListResponseDto {
 	private boolean isReply;
 	private boolean isRemoved;
 	private LocalDateTime createdAt;
+	private boolean nonUserComment;
 
 	public static CommentListResponseDto from(Comment comment) {
 
@@ -26,6 +27,7 @@ public class CommentListResponseDto {
 			.isReply(comment.isReply())
 			.isRemoved(comment.isRemoved())
 			.createdAt(comment.getCreatedAt())
+			.nonUserComment(comment.getCommenter().contains("(") ? true : false)
 			.build();
 
 	}
