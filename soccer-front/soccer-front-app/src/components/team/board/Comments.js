@@ -244,43 +244,44 @@ const Comments = () => {
                             <div>
                                 {index + 1} . {comment.commenter} - {comment.comment} -{' '}
                                 {formatDateTime(comment.createdAt)}
-                                <img
+                                {!comment.removed && <img
                                     src="/images/delete_remove_bin_icon-icons.com_72400%20(1).png"
                                     style={{
                                         height: '3vh',
                                         marginLeft: '2px',
                                         paddingBottom: '1.5px',
                                     }}
-                                    onClick={() => handleDeleteComment(comment.commentId)}
-                                />
+                                    onClick={() => handleDeleteButton(comment.nonUserComment, comment.commentId)}
+                                />}
                             </div>
                         </ListGroup.Item>
                     ) : (
                         <ListGroup.Item key={comment.commentId}>
                             <div
                                 onClick={() => handleReplyOpen(comment.commentId)}
-                                style={{ cursor: !comment.removed ? 'pointer' : 'default' }}
+                                style={{cursor: !comment.removed ? 'pointer' : 'default'}}
                             >
                                 {index + 1} . {comment.commenter} - {comment.comment} -{' '}
                                 {formatDateTime(comment.createdAt)}
-                                <img
-                                    src="/images/delete_remove_bin_icon-icons.com_72400%20(1).png"
-                                    style={{
-                                        height: '3vh',
-                                        marginLeft: '2px',
-                                        paddingBottom: '1.5px',
-                                    }}
-                                    onClick={() => handleDeleteComment(comment.commentId)}
-                                />
+                                { !comment.removed  && (<img
+                                        src="/images/delete_remove_bin_icon-icons.com_72400%20(1).png"
+                                        style={{
+                                            height: '3vh',
+                                            marginLeft: '2px',
+                                            paddingBottom: '1.5px',
+                                        }}
+                                        onClick={() => handleDeleteButton(comment.nonUserComment, comment.commentId)}
+                                    />
+                                )}
                             </div>
                             {activeCommentId === comment.commentId && !comment.removed && (
                                 <Form className="mt-4">
                                     <Form.Group className="mb-3">
                                         {!isLogin && (
                                             <div
-                                                style={{ display: 'flex', justifyItems: 'center' }}
+                                                style={{display: 'flex', justifyItems: 'center'}}
                                             >
-                                                <Form.Label style={{ marginTop: '5px' }}>
+                                                <Form.Label style={{marginTop: '5px'}}>
                                                     작성자 :
                                                 </Form.Label>
                                                 <Form.Control
