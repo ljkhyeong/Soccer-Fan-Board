@@ -4,6 +4,13 @@ import { useState } from 'react';
 const PasswordModal = (props) => {
     const [password, setPassword] = useState('');
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            props.onPasswordSubmit(password);
+        }
+    }
+
     return (
         <Modal show={props.show} onHide={props.onHide} centered>
             <Modal.Header>비밀번호</Modal.Header>
@@ -15,6 +22,7 @@ const PasswordModal = (props) => {
                             type="password"
                             required
                             onChange={(e) => setPassword(e.target.value)}
+                            onKeyDown={(e) => handleKeyDown(e)}
                         />
                         <Button
                             variant="primary"
