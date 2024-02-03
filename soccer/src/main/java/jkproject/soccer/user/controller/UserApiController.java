@@ -1,5 +1,6 @@
 package jkproject.soccer.user.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import jkproject.soccer.common.data.dto.response.Response;
-import jkproject.soccer.user.service.UserService;
+import jkproject.soccer.common.validator.user.CheckLoginIdValidator;
+import jkproject.soccer.common.validator.user.CheckNicknameValidator;
+import jkproject.soccer.common.validator.user.UpdateUserValidator;
 import jkproject.soccer.user.data.dto.UserAuthenticationDto;
 import jkproject.soccer.user.data.dto.request.UserCreateRequestDto;
 import jkproject.soccer.user.data.dto.request.UserUpdateRequestDto;
-import jkproject.soccer.common.validator.ValidationResultHandler;
-import jkproject.soccer.common.validator.user.CheckLoginIdValidator;
-import jkproject.soccer.common.validator.user.CheckNicknameValidator;
+import jkproject.soccer.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -27,14 +28,19 @@ import lombok.RequiredArgsConstructor;
 public class UserApiController {
 
 	private final UserService userService;
-	private final ValidationResultHandler validationProvider;
 	private final CheckLoginIdValidator checkLoginIdValidator;
 	private final CheckNicknameValidator checkNicknameValidator;
+	private final UpdateUserValidator updateUserValidator;
 
-	@InitBinder
-	public void validatorBinder(WebDataBinder binder) {
+	@InitBinder("userCreateRequestDto")
+	public void createValidatorBinder(WebDataBinder binder) {
 		binder.addValidators(checkLoginIdValidator);
 		binder.addValidators(checkNicknameValidator);
+	}
+
+	@InitBinder("userUpdateRequestDto")
+	public void updateValidatorBinder(WebDataBinder binder) {
+		binder.addValidators(updateUserValidator);
 	}
 
 	@PostMapping
@@ -45,8 +51,9 @@ public class UserApiController {
 	}
 
 	@PutMapping
-	public Response<Void> updateUser(@RequestBody UserUpdateRequestDto requestDto, UserAuthenticationDto userDto) {
-		userService.updateUser(requestDto, userDto);
+	public Response<Void> updateUser(@Valid @RequestBody UserUpdateRequestDto requestDto, Errors errors,
+		@AuthenticationPrincipal UserAuthenticationDto userDto) {
+		userService.updateUser(requestDto, errors, userDto);
 		return Response.success();
 	}
 

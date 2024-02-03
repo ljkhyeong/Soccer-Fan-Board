@@ -8,7 +8,9 @@ import lombok.Data;
 public class UserUpdateRequestDto {
 
 	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
-	private String password;
-	@NotBlank(message = ValidationMessage.Messages.NOT_NULL)
+	private String type;
+	private String currentPassword;
+	private String newPassword;
+	private String confirmNewPassword;
 	private String nickname;
 }

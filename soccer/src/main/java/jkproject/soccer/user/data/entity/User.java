@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jkproject.soccer.common.data.entity.BaseTimeEntity;
-import jkproject.soccer.user.data.dto.request.UserUpdateRequestDto;
 import jkproject.soccer.user.data.enums.UserRole;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -49,9 +48,8 @@ public class User extends BaseTimeEntity {
 		this.role = role;
 	}
 
-	public void updateUserData(UserUpdateRequestDto requestDto) {
-		nickname = requestDto.getNickname();
-		password = requestDto.getPassword();
+	public void updateNickname(String nickname) {
+		this.nickname = nickname;
 	}
 
 	public void updatePassword(String password) {
