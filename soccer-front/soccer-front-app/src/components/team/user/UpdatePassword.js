@@ -3,7 +3,7 @@ import {useState} from "react";
 import {handleInputChange, handleKeyDown} from "../../../service/CommonService";
 import {axiosInstance} from "../../../service/ApiService";
 
-const UpdateUser = () => {
+const UpdatePassword = () => {
 
     const [passwordForm, setPasswordForm] = useState({
         type:'password',
@@ -21,6 +21,7 @@ const UpdateUser = () => {
         axiosInstance.put(`user`, passwordForm
         ).then(response => {
             console.log(response);
+            alert("수정되었습니다.");
         }).catch(error => {
             console.log(error);
             const errorResult = error.response.data.result
@@ -93,4 +94,4 @@ const UpdateUser = () => {
     );
 }
 
-export default UpdateUser;
+export default UpdatePassword;

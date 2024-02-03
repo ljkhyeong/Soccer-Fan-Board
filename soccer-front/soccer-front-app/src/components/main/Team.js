@@ -17,7 +17,8 @@ import DocHistory from '../team/wiki/DocHistory';
 import Players from '../team/players/Players';
 import UpdatePost from '../team/board/UpdatePost';
 import { useAuth } from '../../auth/AuthContext';
-import UpdateUser from "../team/user/UpdateUser";
+import UpdatePassword from "../team/user/UpdatePassword";
+import UpdateNickname from "../team/user/UpdateNickname";
 
 const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
 
@@ -142,8 +143,8 @@ const Team = () => {
                                     </Nav.Link>
                                 )}
                                 {isLogin && <NavDropdown title="회원정보" id="navbarDropdown">
-                                    <NavDropdown.Item onClick={() => navigate("./update")}>수정</NavDropdown.Item>
-                                    <NavDropdown.Item href="#!">Another action</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={() => navigate("./user/update/password")}>비밀번호 수정</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={() => navigate("./user/update/nickname")}>닉네임 수정</NavDropdown.Item>
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item href="#!">
                                         Something else here
@@ -165,7 +166,8 @@ const Team = () => {
                         <Route path="board/create" element={<CreatePost />} />
                         <Route path="board/:postId" element={<PostDetail />} />
                         <Route path="board/:postId/update" element={<UpdatePost />} />
-                        <Route path="update" element={<UpdateUser/>} />
+                        <Route path="user/update/password" element={<UpdatePassword/>} />
+                        <Route path="user/update/nickname" element={<UpdateNickname/>} />
                     </Routes>
                 </Container>
             </Col>
