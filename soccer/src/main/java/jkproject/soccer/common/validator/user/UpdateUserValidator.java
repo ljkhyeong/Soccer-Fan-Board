@@ -25,5 +25,12 @@ public class UpdateUserValidator extends AbstractValidator<UserUpdateRequestDto>
 					ValidationMessage.CANNOT_BE_NULL.getMessage());
 			}
 		}
+
+		if (dto.getType().equals("nickname")) {
+			if (dto.getNickname() == null || dto.getNickname().isBlank()) {
+				errors.rejectValue("nickname", ValidationMessage.CANNOT_BE_NULL.name(),
+					ValidationMessage.CANNOT_BE_NULL.getMessage());
+			}
+		}
 	}
 }

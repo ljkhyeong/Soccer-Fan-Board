@@ -51,6 +51,13 @@ public class UserService {
 			user.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
 		}
 
+		if (requestDto.getType().equals("nickname")) {
+			if (userRepository.existsByNickname(requestDto.getNickname())) {
+				throw new ApplicationException(ErrorCode.ALREADY_EXISTENT_NICKNAME);
+			}
+			user.updateNickname(requestDto.getNickname());
+		}
+
 		//TODO 캡챠도 넣자.
 	}
 

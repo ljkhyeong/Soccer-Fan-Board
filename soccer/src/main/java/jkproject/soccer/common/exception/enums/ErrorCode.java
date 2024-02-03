@@ -14,6 +14,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
 
+	ALREADY_EXISTENT_NICKNAME(HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다."),
 	NON_EXISTENT_TEAM_CODE(HttpStatus.BAD_REQUEST, "존재하지 않는 팀 코드"),
 	NON_EXISTENT_TEAM_NAME(HttpStatus.BAD_REQUEST, "존재하지 않는 팀 이름"),
 	NON_EXISTENT_USER_ID(HttpStatus.BAD_REQUEST, "존재하지 않는 회원"),
