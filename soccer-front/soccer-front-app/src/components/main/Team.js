@@ -17,12 +17,13 @@ import DocHistory from '../team/wiki/DocHistory';
 import Players from '../team/players/Players';
 import UpdatePost from '../team/board/UpdatePost';
 import { useAuth } from '../../auth/AuthContext';
+import UpdateUser from "../team/user/UpdateUser";
 
 const SPRING_SERVER_URL = process.env.REACT_APP_SPRING_SERVER_URL;
 
 const Team = () => {
     const { teamCode } = useParams();
-    const { isLogin, setIsLogin, setLoginId } = useAuth();
+    const { isLogin, setIsLogin, setLoginId, loginId } = useAuth();
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showJoinModal, setShowJoinModal] = useState(false);
     const [postId, setPostId] = useState(0);
@@ -140,14 +141,14 @@ const Team = () => {
                                         Login
                                     </Nav.Link>
                                 )}
-                                <NavDropdown title="Dropdown" id="navbarDropdown">
-                                    <NavDropdown.Item href="#!">Action</NavDropdown.Item>
+                                {isLogin && <NavDropdown title="회원정보" id="navbarDropdown">
+                                    <NavDropdown.Item onClick={() => navigate("./update")}>수정</NavDropdown.Item>
                                     <NavDropdown.Item href="#!">Another action</NavDropdown.Item>
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item href="#!">
                                         Something else here
                                     </NavDropdown.Item>
-                                </NavDropdown>
+                                </NavDropdown>}
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
@@ -164,6 +165,7 @@ const Team = () => {
                         <Route path="board/create" element={<CreatePost />} />
                         <Route path="board/:postId" element={<PostDetail />} />
                         <Route path="board/:postId/update" element={<UpdatePost />} />
+                        <Route path="update" element={<UpdateUser/>} />
                     </Routes>
                 </Container>
             </Col>
