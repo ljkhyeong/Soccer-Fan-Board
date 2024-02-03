@@ -42,7 +42,7 @@ public class UserService {
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 
 		if (requestDto.getType().equals("password")) {
-			if (passwordEncoder.matches(requestDto.getCurrentPassword(), user.getPassword())) {
+			if (!passwordEncoder.matches(requestDto.getCurrentPassword(), user.getPassword())) {
 				throw new ApplicationException(ErrorCode.NOT_EQUALS_CURRENT_PASSWORD);
 			}
 			if (!requestDto.getNewPassword().equals(requestDto.getConfirmNewPassword())) {
@@ -50,7 +50,7 @@ public class UserService {
 			}
 			user.updatePassword(passwordEncoder.encode(requestDto.getNewPassword()));
 		}
-		
+
 		//TODO 캡챠도 넣자.
 	}
 
