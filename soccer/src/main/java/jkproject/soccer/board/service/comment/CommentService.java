@@ -95,7 +95,7 @@ public class CommentService {
 		Comment parent = null;
 
 		if (userDto != null) {
-			user = userRepository.findByLoginId(userDto.getLoginId())
+			user = userRepository.findById(userDto.getUserId())
 				.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 		}
 

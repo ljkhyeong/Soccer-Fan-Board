@@ -30,7 +30,7 @@ public class HeartService {
 		if (userDto == null) {
 			throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
 		}
-		User user = userRepository.findByLoginId(userDto.getLoginId())
+		User user = userRepository.findById(userDto.getUserId())
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 		if (heartRepository.existsByUserAndPost(user, post)) {
 			throw new ApplicationException(ErrorCode.INVALID_CREATE_HEART);

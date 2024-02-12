@@ -38,7 +38,7 @@ public class UserService {
 	public void updateUser(UserUpdateRequestDto requestDto, Errors errors, UserAuthenticationDto userDto) {
 		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_UPDATE_USER);
 		//TODO userDto에 longId 필드를 추가하고 찾을때마다 longId로 쓰는게 더 낫지않을까?
-		User user = userRepository.findByLoginId(userDto.getLoginId())
+		User user = userRepository.findById(userDto.getUserId())
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 
 		if (requestDto.getType().equals("password")) {
@@ -62,7 +62,7 @@ public class UserService {
 	}
 
 	public void deleteUser(UserAuthenticationDto userDto) {
-		User foundUser = userRepository.findByLoginId(userDto.getLoginId())
+		User foundUser = userRepository.findById(userDto.getUserId())
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
 
 		userRepository.delete(foundUser);

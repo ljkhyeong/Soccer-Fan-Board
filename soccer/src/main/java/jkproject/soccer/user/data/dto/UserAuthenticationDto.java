@@ -5,8 +5,8 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import jkproject.soccer.user.data.enums.UserRole;
 import jkproject.soccer.user.data.entity.User;
+import jkproject.soccer.user.data.enums.UserRole;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,9 +18,9 @@ import lombok.ToString;
 @ToString(onlyExplicitlyIncluded = true)
 public class UserAuthenticationDto {
 
+	private Long userId;
 	@ToString.Include
 	private String loginId;
-	private String password;
 	@ToString.Include
 	private String nickname;
 	@ToString.Include
@@ -30,8 +30,8 @@ public class UserAuthenticationDto {
 
 	public static UserAuthenticationDto from(User user) {
 		return UserAuthenticationDto.builder()
+			.userId(user.getUserId())
 			.loginId(user.getLoginId())
-			.password(user.getPassword())
 			.nickname(user.getNickname())
 			.email(user.getEmail())
 			.build();
