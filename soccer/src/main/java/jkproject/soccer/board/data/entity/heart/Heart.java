@@ -24,7 +24,7 @@ public class Heart {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "heart_id")
 	private Long heartId;
-	@Column
+	@Column(nullable = false)
 	private boolean notHeart;
 	@ManyToOne
 	@JoinColumn(name = "user_id")

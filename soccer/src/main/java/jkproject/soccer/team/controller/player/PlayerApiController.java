@@ -1,4 +1,4 @@
-package jkproject.soccer.player.controller;
+package jkproject.soccer.team.controller.player;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jkproject.soccer.common.data.dto.response.Response;
-import jkproject.soccer.team.service.player.PlayerService;
 import jkproject.soccer.team.data.dto.player.response.PlayerListResponseDto;
+import jkproject.soccer.team.service.player.PlayerService;
 import lombok.RequiredArgsConstructor;
 
 @RestController

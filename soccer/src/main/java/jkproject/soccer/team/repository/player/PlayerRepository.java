@@ -1,4 +1,4 @@
-package jkproject.soccer.player.repository;
+package jkproject.soccer.team.repository.player;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

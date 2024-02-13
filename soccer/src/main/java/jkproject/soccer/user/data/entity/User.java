@@ -29,10 +29,11 @@ public class User extends BaseTimeEntity {
 	private String loginId;
 	@Column(unique = true, nullable = false)
 	private String password;
-	@Column(nullable = false)
+	@Column(unique = true, nullable = false)
 	private String nickname;
+	@Column(nullable = false)
 	private String email;
-	@Column(name = "phone_number")
+	@Column(name = "phone_number", nullable = false)
 	private String phoneNumber;
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)

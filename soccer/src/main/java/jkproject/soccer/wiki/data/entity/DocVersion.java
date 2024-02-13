@@ -27,7 +27,7 @@ public class DocVersion extends CreationTimeEntity {
 	private Long docVersionId;
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String body;
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private Integer version;
 	@Column(nullable = false)
 	private String writer;

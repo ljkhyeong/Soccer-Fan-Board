@@ -20,7 +20,9 @@ public class Team {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "team_id")
 	private Long teamId;
+	@Column(unique = true, nullable = false)
 	private String code;
+	@Column(unique = true, nullable = false)
 	private String name;
 	private String imagePath;
 
