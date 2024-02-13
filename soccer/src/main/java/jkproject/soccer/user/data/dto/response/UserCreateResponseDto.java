@@ -4,6 +4,7 @@ import jkproject.soccer.user.data.entity.User;
 import lombok.Builder;
 import lombok.Data;
 
+// 테스트코드용
 @Data
 @Builder
 public class UserCreateResponseDto {

@@ -10,8 +10,10 @@ import jkproject.soccer.common.exception.enums.ErrorCode;
 import jkproject.soccer.common.validator.ValidationResultHandler;
 import jkproject.soccer.user.data.dto.UserAuthenticationDto;
 import jkproject.soccer.user.data.dto.request.UserCreateRequestDto;
+import jkproject.soccer.user.data.dto.request.UserFindIdRequestDto;
 import jkproject.soccer.user.data.dto.request.UserUpdateRequestDto;
 import jkproject.soccer.user.data.dto.response.UserCreateResponseDto;
+import jkproject.soccer.user.data.dto.response.UserFindIdResponseDto;
 import jkproject.soccer.user.data.entity.User;
 import jkproject.soccer.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +61,16 @@ public class UserService {
 		}
 
 		//TODO 캡챠도 넣자.
+	}
+
+	@Transactional(readOnly = true)
+	public UserFindIdResponseDto findLoginId(UserFindIdRequestDto requestDto, Errors errors) {
+		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_SEARCH_USER);
+
+		User user = userRepository.findByNicknameAndEmail(requestDto.getNickname(), requestDto.getEmail())
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_BY_NICKNAME_AND_EMAIL));
+
+		return UserFindIdResponseDto.from(user);
 	}
 
 	public void deleteUser(UserAuthenticationDto userDto) {
