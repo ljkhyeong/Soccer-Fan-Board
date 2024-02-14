@@ -4,7 +4,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +19,7 @@ import jkproject.soccer.common.validator.user.UpdateUserValidator;
 import jkproject.soccer.user.data.dto.UserAuthenticationDto;
 import jkproject.soccer.user.data.dto.request.UserCreateRequestDto;
 import jkproject.soccer.user.data.dto.request.UserFindIdRequestDto;
+import jkproject.soccer.user.data.dto.request.UserFindPasswordRequestDto;
 import jkproject.soccer.user.data.dto.request.UserUpdateRequestDto;
 import jkproject.soccer.user.data.dto.response.UserFindIdResponseDto;
 import jkproject.soccer.user.service.UserService;
@@ -60,11 +60,18 @@ public class UserApiController {
 		return Response.success();
 	}
 
-	@GetMapping("/findId")
+	@PostMapping("/findId")
 	public Response<UserFindIdResponseDto> findLoginId(@Valid @RequestBody UserFindIdRequestDto requestDto,
 		Errors errors) {
 		UserFindIdResponseDto responseDto = userService.findLoginId(requestDto, errors);
 		return Response.success(responseDto);
+	}
+
+	@PostMapping("/findPassword")
+	public Response<Void> sendTempPassword(@Valid @RequestBody UserFindPasswordRequestDto requestDto,
+		Errors errors) {
+		userService.sendTempPassword(requestDto, errors);
+		return Response.success();
 	}
 
 	@DeleteMapping

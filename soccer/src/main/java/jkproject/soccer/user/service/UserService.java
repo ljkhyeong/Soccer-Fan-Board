@@ -7,10 +7,13 @@ import org.springframework.validation.Errors;
 
 import jkproject.soccer.common.exception.ApplicationException;
 import jkproject.soccer.common.exception.enums.ErrorCode;
+import jkproject.soccer.common.service.MailService;
+import jkproject.soccer.common.util.CommonUtils;
 import jkproject.soccer.common.validator.ValidationResultHandler;
 import jkproject.soccer.user.data.dto.UserAuthenticationDto;
 import jkproject.soccer.user.data.dto.request.UserCreateRequestDto;
 import jkproject.soccer.user.data.dto.request.UserFindIdRequestDto;
+import jkproject.soccer.user.data.dto.request.UserFindPasswordRequestDto;
 import jkproject.soccer.user.data.dto.request.UserUpdateRequestDto;
 import jkproject.soccer.user.data.dto.response.UserCreateResponseDto;
 import jkproject.soccer.user.data.dto.response.UserFindIdResponseDto;
@@ -26,6 +29,7 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final ValidationResultHandler validationResultHandler;
+	private final MailService mailService;
 
 	public UserCreateResponseDto createUser(UserCreateRequestDto requestDto, Errors errors) {
 		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_JOIN);
@@ -63,6 +67,13 @@ public class UserService {
 		//TODO 캡챠도 넣자.
 	}
 
+	public void deleteUser(UserAuthenticationDto userDto) {
+		User foundUser = userRepository.findById(userDto.getUserId())
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
+
+		userRepository.delete(foundUser);
+	}
+
 	@Transactional(readOnly = true)
 	public UserFindIdResponseDto findLoginId(UserFindIdRequestDto requestDto, Errors errors) {
 		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_SEARCH_USER);
@@ -73,11 +84,16 @@ public class UserService {
 		return UserFindIdResponseDto.from(user);
 	}
 
-	public void deleteUser(UserAuthenticationDto userDto) {
-		User foundUser = userRepository.findById(userDto.getUserId())
-			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_ID));
+	public void sendTempPassword(UserFindPasswordRequestDto requestDto, Errors errors) {
+		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_SEND_MAIL);
 
-		userRepository.delete(foundUser);
+		String email = requestDto.getEmail();
+		String tempPassword = CommonUtils.createTempPassword();
+
+		User user = userRepository.findByEmail(email)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_USER_BY_EMAIL));
+		user.updatePassword(passwordEncoder.encode(tempPassword));
+
+		mailService.sendMessage(email, tempPassword);
 	}
-
 }
