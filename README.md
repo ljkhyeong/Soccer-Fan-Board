@@ -6,6 +6,8 @@
 
 http://ec2-13-125-252-116.ap-northeast-2.compute.amazonaws.com/
 
+* 현재는 배포환경에서의 로그아웃, 게시물 작성 버그 등이 있어서 CI/CD 구성과 함께 버그픽스 예정입니다. 원활한 작동화면은 로컬 테스트 화면 확인 부탁드립니다.
+
 
 <details>
 <summary>
