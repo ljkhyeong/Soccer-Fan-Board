@@ -3,14 +3,13 @@
 <img width="1435" alt="스크린샷 2024-01-16 오전 5 38 07" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/1fa7a90d-7061-4e3d-a8a9-ee135601d994">
 
 ## 배포 (링크)
+
 http://ec2-13-125-252-116.ap-northeast-2.compute.amazonaws.com/
 
 
 <details>
 <summary>
- 
- ### 로컬 환경 테스트
- 
+  로컬 테스트 화면 모음
 </summary>
  
  ### 회원가입/로그인
