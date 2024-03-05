@@ -3,8 +3,8 @@
 <img width="1435" alt="스크린샷 2024-01-16 오전 5 38 07" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/1fa7a90d-7061-4e3d-a8a9-ee135601d994">
 
 ## 배포 (링크)
+http://ec2-13-125-252-116.ap-northeast-2.compute.amazonaws.com/
 
-현재 비용문제로 배포불가하므로, 임시로 로컬환경 테스트 영상으로 대체합니다. 양해 부탁드립니다.
 
 <details>
 <summary>
