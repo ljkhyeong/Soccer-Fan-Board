@@ -47,6 +47,8 @@ http://ec2-13-125-252-116.ap-northeast-2.compute.amazonaws.com/
 <img src="https://img.shields.io/badge/springdatajpa-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
 <img src="https://img.shields.io/badge/hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white">
 <img src="https://img.shields.io/badge/querydsl-003545?style=for-the-badge&logoColor=white">
+<img src="https://img.shields.io/badge/docker-2ECCFA?style=for-the-badge">
+<img src="https://img.shields.io/badge/AWS-F3E2A9?style=for-the-badge">
 
 
 ## 요구사항
