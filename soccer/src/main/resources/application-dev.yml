@@ -1,1 +1,28 @@
+#server:
+#  ssl:
+#    key-store: keystore.p12
+#    key-store-password: 123456
+#    key-store-type: PKCS12
+#    key-alias: tomcat
+jwt:
+  secret:
+    key: TestTestTestTestTestTestTestTestTestJWTKey
 
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: user
+    password: password
