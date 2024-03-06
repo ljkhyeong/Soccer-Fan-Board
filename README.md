@@ -36,7 +36,7 @@ http://13.125.252.116/
 
 ## 개요
 본 프로젝트는 축구 팬들에게 관련 팀 정보(선수단 정보, 경기일정 등)들과 소통 커뮤니티(위키문서, 게시판)를 제공하기 위한 프로젝트다. 
-(현재 epl만 지원, 비용 문제 해결 후 배포 예정)
+(현재 epl만 지원)
 
 ## 기술 스택
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
