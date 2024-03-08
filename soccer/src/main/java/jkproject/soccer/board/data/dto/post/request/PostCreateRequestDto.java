@@ -23,7 +23,7 @@ public class PostCreateRequestDto {
 	public Post toEntity(Team team, @Nullable User user, String ipAddress) {
 		// TODO 로컬테스트 환경에서는 IPv6 반환 -> IPv4로 코드 수정 필요
 		String writerNickname = loginState ? user.getNickname() :
-			(tempNickname + ("(" + ipAddress.split(":")[0] + "." + ipAddress.split(":")[1]) + ")");
+			(tempNickname + ("(" + ipAddress.split("\\.")[0] + ipAddress.split("\\.")[1]) + ")");
 		return Post.builder()
 			.title(title)
 			.content(content)
