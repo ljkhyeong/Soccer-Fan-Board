@@ -31,7 +31,7 @@ public enum TokenType {
 	public ResponseCookie createCookieFrom(String token, long validTimeSec) {
 		return ResponseCookie.from(name, token)
 			.httpOnly(isHttpOnly)
-			.secure(true)
+			.secure(false)
 			.maxAge(validTimeSec)
 			.path("/")
 			.build();
