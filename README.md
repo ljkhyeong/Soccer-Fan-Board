@@ -2,9 +2,11 @@
 
 <img width="1435" alt="스크린샷 2024-01-16 오전 5 38 07" src="https://github.com/ljkhyeong/Soccer-Fan-Board/assets/115821049/1fa7a90d-7061-4e3d-a8a9-ee135601d994">
 
-## 배포 (링크)
+## 관련 링크
 
-http://13.125.252.116/
+프론트엔드 깃허브 : https://github.com/ljkhyeong/Soccer-Fan-Board-frontend
+
+배포 :http://13.125.252.116/
 
 * 서버 불안정 상황을 위해, 원활한 로컬 환경 테스트 GIF를 아래에 첨부했습니다.
 
