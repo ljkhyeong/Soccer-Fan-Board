@@ -63,6 +63,10 @@ const CreatePost = (props) => {
         }
     };
 
+    const imsifunction = () => {
+         const errorResuls = "ll";
+    }
+
     return (
         <Container>
             <Form>
