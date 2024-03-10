@@ -8,4 +8,5 @@ import lombok.NoArgsConstructor;
 public class SearchCondition {
 	private String type;
 	private String keyword;
+	private String temp;
 }
