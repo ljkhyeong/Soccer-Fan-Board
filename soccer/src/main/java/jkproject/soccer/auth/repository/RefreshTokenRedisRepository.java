@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 아이디로 리프레시 토큰을 Redis 저장하는 저장소 구현체
+ */
 @Slf4j
 @Repository
 @RequiredArgsConstructor
