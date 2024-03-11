@@ -53,6 +53,8 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    - uses: actions/checkout@v4
+    
     - name: Download jar artifiact
       uses: actions/download-artifact@v2
       with:
