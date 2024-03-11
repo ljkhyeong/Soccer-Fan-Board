@@ -14,7 +14,7 @@ on:
     branches: [ "main" ]
 
 env:
-  DOCKER_IMAGE_NAME: soccerback
+  DOCKER_IMAGE_NAME: jolri24/soccerback
   EC2_HOST: 13.125.252.116
   EC2_SSH_USER: jolri24
   PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
