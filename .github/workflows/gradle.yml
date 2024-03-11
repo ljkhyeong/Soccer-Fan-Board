@@ -16,7 +16,7 @@ on:
 env:
   DOCKER_IMAGE_NAME: jolri24/soccerback
   EC2_HOST: 13.125.252.116
-  EC2_SSH_USER: ec2-user
+  EC2_SSH_USER: ubuntu
   PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
   
 jobs:
