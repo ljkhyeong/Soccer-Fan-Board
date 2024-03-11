@@ -38,7 +38,7 @@ jobs:
 
     - uses: actions/upload-artifact@v2
       with:
-        name: soccer-jar
+        name: backend
         path: soccer/build/libs/*.jar
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
