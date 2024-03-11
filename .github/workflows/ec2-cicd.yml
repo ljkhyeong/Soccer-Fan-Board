@@ -15,11 +15,12 @@ env:
   
 jobs:
 
-  setting-for-build:
-  
+  setting-for-build: 
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v4
+    
     - name: Set up application.yml
       run: |
         cd ./soccer/src/main/resources/
@@ -27,7 +28,6 @@ jobs:
         echo "${{ secrets.APPLICATION }}" > application-prod.yml
     
   build:
-
     needs: setting-for-build
     runs-on: ubuntu-latest
     permissions:
@@ -55,7 +55,6 @@ jobs:
         path: soccer/build/libs/*.jar
 
   push-docker:
-
     needs: build
     runs-on: ubuntu-latest
     
@@ -78,7 +77,6 @@ jobs:
       run: docker push ${{ env.DOCKER_IMAGE_NAME }}:latest
 
   deploy-to-ec2:
-
     needs: push-docker
     runs-on: ubuntu-latest
 
