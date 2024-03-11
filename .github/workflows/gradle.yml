@@ -16,7 +16,7 @@ on:
 env:
   DOCKER_IMAGE_NAME: jolri24/soccerback
   EC2_HOST: 13.125.252.116
-  EC2_SSH_USER: jolri24
+  EC2_SSH_USER: ec2-user
   PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
   
 jobs:
@@ -96,5 +96,5 @@ jobs:
             sudo docker rm $CONTAINER_ID
           fi
           
-          sudo docker pull ${{ env.DOCKER_HUB }}
-          sudo docker run --name ${{ env.CONTAINER_NAME }} -d -p 8080:8080 ${{ env.DOCKER_HUB }}
+          sudo docker pull ${{ env.DOCKER_IMAGE_NAME }}:latest
+          sudo docker run -d -p 8080:8080 ${{ env.DOCKER_IMAGE_NAME }}
