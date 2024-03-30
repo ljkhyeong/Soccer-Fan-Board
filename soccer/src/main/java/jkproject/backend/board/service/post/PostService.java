@@ -1,9 +1,11 @@
 package jkproject.backend.board.service.post;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +41,7 @@ public class PostService {
 	private final ValidationResultHandler validationResultHandler;
 	private final TeamRepository teamRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final StringRedisTemplate redisTemplate;
 
 	public Page<PostListResponseDto> lookupAllPosts(String teamCode, SearchCondition condition, Pageable pageable) {
 		Team team = teamRepository.findByCode(teamCode)
@@ -74,12 +77,12 @@ public class PostService {
 		postRepository.save(post);
 	}
 
-	@Transactional
 	public PostDetailResponseDto readPost(Long postId) {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
 
-		post.increaseViewCount();
+		// TODO 관심사 분리 필요
+		increaseViewCount(postId);
 
 		return PostDetailResponseDto.from(post);
 	}
@@ -155,6 +158,20 @@ public class PostService {
 		}
 
 		return requestDto.toEntity(team, user, clientIp);
+	}
+
+	private void increaseViewCount(Long postId) {
+		String key = "post:viewCount:" + postId;
+		redisTemplate.opsForValue().increment(key, 1);
+	}
+
+	private Long getViewCount(Long postId) {
+		String key = "post:viewCount:" + postId;
+		Optional<String> value = Optional.ofNullable(redisTemplate.opsForValue().get(key));
+
+		return Long.valueOf(value.orElseGet(() -> String.valueOf(postRepository.findById(postId)
+			.map(Post::getViewCount)
+			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID)))));
 	}
 
 }
