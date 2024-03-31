@@ -73,8 +73,8 @@ public class Post extends BaseTimeEntity {
 		this.user = user;
 	}
 
-	public void updateViewCount(Long viewCount) {
-		this.viewCount = viewCount;
+	public void updateViewCount(Long additionalViewCount) {
+		this.viewCount = this.viewCount + additionalViewCount;
 		this.isUpdated = false;
 	}
 

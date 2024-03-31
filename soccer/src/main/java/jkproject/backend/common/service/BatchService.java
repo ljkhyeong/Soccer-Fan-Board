@@ -26,8 +26,8 @@ public class BatchService {
 				Long postId = extractPostIdFromKey(key);
 				String value = redisTemplate.opsForValue().get(key);
 				if (value != null) {
-					Long viewCount = Long.valueOf(value);
-					postRepository.findById(postId).ifPresent(post -> post.updateViewCount(viewCount));
+					Long additionalViewCount = Long.valueOf(value);
+					postRepository.findById(postId).ifPresent(post -> post.updateViewCount(additionalViewCount));
 				}
 				redisTemplate.delete(key);
 			}
