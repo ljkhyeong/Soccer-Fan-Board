@@ -10,7 +10,7 @@ import jkproject.backend.common.exception.CustomValidationException;
 import jkproject.backend.common.exception.enums.ErrorCode;
 
 @Component
-public class ValidationResultHandler {
+public class ValidationExceptionThrower {
 
 	public void ifErrorsThrow(Errors errors, ErrorCode errorCode) {
 		if (errors.hasErrors()) {

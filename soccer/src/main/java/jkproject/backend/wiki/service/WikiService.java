@@ -8,7 +8,7 @@ import org.springframework.validation.Errors;
 
 import jkproject.backend.common.exception.ApplicationException;
 import jkproject.backend.common.exception.enums.ErrorCode;
-import jkproject.backend.common.validator.ValidationResultHandler;
+import jkproject.backend.common.validator.ValidationExceptionThrower;
 import jkproject.backend.team.data.entity.Team;
 import jkproject.backend.team.repository.TeamRepository;
 import jkproject.backend.user.data.dto.UserAuthenticationDto;
@@ -32,7 +32,7 @@ public class WikiService {
 	private final DocVersionRepository docVersionRepository;
 	private final UserRepository userRepository;
 	private final TeamRepository teamRepository;
-	private final ValidationResultHandler validationResultHandler;
+	private final ValidationExceptionThrower validationExceptionThrower;
 
 	public DocVersionDetailResponseDto getNewDocVersion(String teamCode) {
 		Team team = teamRepository.findByCode(teamCode)
@@ -68,7 +68,7 @@ public class WikiService {
 	public void createNewDocVersion(String teamCode, DocVersionCreateRequestDto requestDto,
 		UserAuthenticationDto userDto, Errors errors) {
 
-		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_LOGIN);
+		validationExceptionThrower.ifErrorsThrow(errors, ErrorCode.INVALID_LOGIN);
 
 		Team team = teamRepository.findByCode(teamCode)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_TEAM_CODE));

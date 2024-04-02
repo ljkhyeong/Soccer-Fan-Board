@@ -13,7 +13,7 @@ import jkproject.backend.auth.data.dto.response.RefreshResponseDto;
 import jkproject.backend.auth.repository.RefreshTokenRepository;
 import jkproject.backend.common.exception.ApplicationException;
 import jkproject.backend.common.exception.enums.ErrorCode;
-import jkproject.backend.common.validator.ValidationResultHandler;
+import jkproject.backend.common.validator.ValidationExceptionThrower;
 import jkproject.backend.user.data.entity.User;
 import jkproject.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +29,10 @@ public class AuthService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final RefreshTokenRepository refreshTokenRepository;
 	private final UserRepository userRepository;
-	private final ValidationResultHandler validationResultHandler;
+	private final ValidationExceptionThrower validationExceptionThrower;
 
 	public LoginResponseDto login(LoginRequestDto requestDto, Errors errors) {
-		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_LOGIN);
+		validationExceptionThrower.ifErrorsThrow(errors, ErrorCode.INVALID_LOGIN);
 
 		User user = validateLoginIdAndPassword(requestDto);
 		String loginId = user.getLoginId();

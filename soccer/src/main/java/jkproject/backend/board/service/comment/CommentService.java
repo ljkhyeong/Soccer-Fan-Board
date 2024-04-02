@@ -19,7 +19,7 @@ import jkproject.backend.board.repository.comment.CommentRepository;
 import jkproject.backend.board.repository.post.PostRepository;
 import jkproject.backend.common.exception.ApplicationException;
 import jkproject.backend.common.exception.enums.ErrorCode;
-import jkproject.backend.common.validator.ValidationResultHandler;
+import jkproject.backend.common.validator.ValidationExceptionThrower;
 import jkproject.backend.user.data.dto.UserAuthenticationDto;
 import jkproject.backend.user.data.entity.User;
 import jkproject.backend.user.repository.UserRepository;
@@ -33,7 +33,7 @@ public class CommentService {
 	private final CommentRepository commentRepository;
 	private final PostRepository postRepository;
 	private final UserRepository userRepository;
-	private final ValidationResultHandler validationResultHandler;
+	private final ValidationExceptionThrower validationExceptionThrower;
 	private final PasswordEncoder passwordEncoder;
 
 	public Page<CommentListResponseDto> readComments(Long postId, Pageable pageable) {
@@ -45,7 +45,7 @@ public class CommentService {
 	@Transactional
 	public void createComment(Long postId, CommentCreateRequestDto requestDto,
 		UserAuthenticationDto userDto, Errors errors, HttpServletRequest request) {
-		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_CREATE_COMMENT);
+		validationExceptionThrower.ifErrorsThrow(errors, ErrorCode.INVALID_CREATE_COMMENT);
 
 		String clientIp = request.getRemoteAddr();
 		Post post = postRepository.findById(postId)

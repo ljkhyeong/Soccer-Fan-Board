@@ -22,7 +22,7 @@ import jkproject.backend.board.repository.post.PostRepository;
 import jkproject.backend.board.service.post.view.ViewCountService;
 import jkproject.backend.common.exception.ApplicationException;
 import jkproject.backend.common.exception.enums.ErrorCode;
-import jkproject.backend.common.validator.ValidationResultHandler;
+import jkproject.backend.common.validator.ValidationExceptionThrower;
 import jkproject.backend.team.data.entity.Team;
 import jkproject.backend.team.repository.TeamRepository;
 import jkproject.backend.user.data.dto.UserAuthenticationDto;
@@ -37,7 +37,7 @@ public class PostService {
 
 	private final PostRepository postRepository;
 	private final UserRepository userRepository;
-	private final ValidationResultHandler validationResultHandler;
+	private final ValidationExceptionThrower validationExceptionThrower;
 	private final TeamRepository teamRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final ViewCountService viewCountService;
@@ -62,7 +62,7 @@ public class PostService {
 	public void createPost(String teamCode, PostCreateRequestDto requestDto,
 		UserAuthenticationDto userDto, Errors errors,
 		HttpServletRequest request) {
-		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_CREATE_POST);
+		validationExceptionThrower.ifErrorsThrow(errors, ErrorCode.INVALID_CREATE_POST);
 
 		String clientIp = request.getRemoteAddr();
 		Team team = teamRepository.findByCode(teamCode)
@@ -88,7 +88,7 @@ public class PostService {
 	@Transactional
 	public void updatePost(Long postId, UserAuthenticationDto userDto, PostUpdateRequestDto requestDto, Errors errors,
 		HttpServletRequest request) {
-		validationResultHandler.ifErrorsThrow(errors, ErrorCode.INVALID_UPDATE_POST);
+		validationExceptionThrower.ifErrorsThrow(errors, ErrorCode.INVALID_UPDATE_POST);
 
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
