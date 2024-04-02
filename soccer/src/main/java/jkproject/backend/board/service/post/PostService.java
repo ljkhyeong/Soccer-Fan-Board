@@ -76,11 +76,16 @@ public class PostService {
 		postRepository.save(post);
 	}
 
+	@Transactional
 	public PostDetailResponseDto readPost(Long postId) {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new ApplicationException(ErrorCode.NON_EXISTENT_POST_ID));
 
-		viewCountService.increaseViewCount(postId);
+		if (post.getHeartCount() >= 1) {
+			viewCountService.increaseViewCount(postId);
+		} else {
+			post.updateViewCount(1L);
+		}
 
 		return PostDetailResponseDto.from(post);
 	}
